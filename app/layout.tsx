@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://your-domain.vercel.app"), // 배포 후 본인 도메인 입력
+  metadataBase: new URL("https://thisnorm.dev"), // 배포 후 본인 도메인 입력
   title: "Dev.Gyubeom | Backend Developer Portfolio",
   description: "진인사대천명. 압도적인 노력으로 결과를 만드는 백엔드 개발자 포트폴리오",
   icons: {
