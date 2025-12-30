@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function AboutSection({ profile }: { profile: any }) {
   const achievements = [
@@ -21,31 +22,47 @@ export default function AboutSection({ profile }: { profile: any }) {
                 WHO AM I?
             </motion.h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:h-[320px]">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:h-[360px]">
+                
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-                    className="md:col-span-2 bg-slate-100 dark:bg-slate-800 rounded-3xl p-6 flex flex-col justify-between"
+                    className="md:col-span-2 bg-slate-100 dark:bg-slate-800 rounded-3xl p-6 flex items-center justify-between relative overflow-hidden"
                 >
-                    <div>
-                        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Profile</span>
-                        <h3 className="text-2xl font-bold mt-2">{profile?.name || "황규범"}</h3>
-                        <p className="text-slate-500 dark:text-slate-400 mt-1">Backend Developer & Leader</p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 mt-6">
+                    <div className="z-10 relative flex-1">
                         <div>
-                            <div className="text-xs text-slate-500 uppercase">Born</div>
-                            <div className="font-bold text-lg">2000 (27세)</div> 
+                            <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Profile</span>
+                            <h3 className="text-2xl font-bold mt-2">{profile?.name || "황규범"}</h3>
+                            <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">Backend Developer & Leader</p>
                         </div>
-                        <div>
-                            <div className="text-xs text-slate-500 uppercase">Location</div>
-                            <div className="font-bold text-lg">Incheon / Daejeon</div>
-                        </div>
-                        <div className="col-span-2">
-                            <div className="text-xs text-slate-500 uppercase">Education</div>
-                            <div className="font-bold text-base leading-tight">
-                                Hongik Univ.<br/>
-                                <span className="text-sm font-medium text-slate-500">Software Convergence & Big Data Biz</span>
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-3 mt-6">
+                            <div>
+                                <div className="text-xs text-slate-500 uppercase">Born</div>
+                                <div className="font-bold text-base">2000 (25세)</div> 
                             </div>
+                            <div>
+                                <div className="text-xs text-slate-500 uppercase">Location</div>
+                                <div className="font-bold text-base">Incheon / Daejeon</div>
+                            </div>
+                            <div className="col-span-2">
+                                <div className="text-xs text-slate-500 uppercase">Education</div>
+                                <div className="font-bold text-sm leading-tight mt-0.5">
+                                    Hongik Univ.<br/>
+                                    <span className="text-xs font-medium text-slate-500">Software Convergence & Big Data Biz</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex-shrink-0 ml-8 relative">
+                        <div className="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-white dark:border-slate-700 shadow-xl bg-white">
+                            <Image 
+                                src="/profile.jpg" 
+                                alt="Hwang Gyubeom"
+                                width={256}
+                                height={256}
+                                className="object-cover w-full h-full"
+                                priority
+                            />
                         </div>
                     </div>
                 </motion.div>

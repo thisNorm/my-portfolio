@@ -22,7 +22,7 @@ export default function ContactSection({ profile }: { profile: any }) {
         </motion.div>
       </div>
       <div className="absolute bottom-6 w-full text-center text-slate-600 text-xs font-mono">
-        © {new Date().getFullYear()} {profile?.name || "Gyubeom Lee"}. Driven by Passion & Logic.
+        © {new Date().getFullYear()} {profile?.name || "Gyubeom Hawng"}. Driven by Passion & Logic.
       </div>
     </section>
   );
