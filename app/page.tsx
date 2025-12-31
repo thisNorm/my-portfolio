@@ -15,8 +15,7 @@ const query = `{
     "profileImageUrl": profileImage.asset->url,
     timeline
   },
-  "projects": *[_type == "project"] | order(_createdAt desc) {
-    _id,
+  "projects": *[_type == "project"] | order(startDate desc) {
     title,
     description,
     "imageUrl": image.asset->url, 
