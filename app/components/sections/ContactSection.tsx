@@ -16,7 +16,7 @@ export default function ContactSection({ profile }: { profile: any }) {
             커피챗이나 협업 제안은 언제든 환영합니다.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <a href="mailto:your-email@example.com" className="px-8 py-4 bg-white text-slate-900 rounded-full font-bold text-lg hover:bg-blue-50 transition-colors shadow-lg shadow-blue-900/20">Send Email →</a>
+            <a href="mailto:kisook2557@gmail.com" className="px-8 py-4 bg-white text-slate-900 rounded-full font-bold text-lg hover:bg-blue-50 transition-colors shadow-lg shadow-blue-900/20">Send Email →</a>
             <a href="https://github.com/thisNorm" target="_blank" className="px-8 py-4 border border-slate-700 text-white rounded-full font-bold text-lg hover:bg-slate-800 transition-colors">GitHub Profile</a>
           </div>
         </motion.div>
