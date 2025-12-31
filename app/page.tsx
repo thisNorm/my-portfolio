@@ -15,15 +15,18 @@ const query = `{
     "profileImageUrl": profileImage.asset->url,
     timeline
   },
-  "projects": *[_type == "project"] | order(startDate desc) {
-    title,
-    description,
-    "imageUrl": image.asset->url, 
-    link,
-    tags, 
-    "slug": slug.current 
+  "projects": *[_type == "project"] | order(startDate desc) { 
+      title,
+      slug,
+      startDate,
+      description,
+      tags[]->title, 
+      content,
+      link,
+      "imageUrl": image.asset->url
+    }
   }
-}`; 
+`;
 
 export default async function Home() {
   // 데이터 페칭 (실패시 빈 객체 반환)

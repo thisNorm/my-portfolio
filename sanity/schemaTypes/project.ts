@@ -42,10 +42,7 @@ export const project = defineType({
       name: 'tags',
       title: '사용 기술 (Tech Stack)',
       type: 'array',
-      of: [{ type: 'string' }],
-      options: {
-        layout: 'tags',
-      },
+      of: [{ type: 'reference', to: [{ type: 'tag' }] }], // 👈 핵심: 참조(Reference)로 변경
     }),
     defineField({
       name: 'content',
