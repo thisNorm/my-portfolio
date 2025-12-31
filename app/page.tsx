@@ -4,6 +4,7 @@ import TechStackSection from "./components/sections/TechStackSection";
 import AboutSection from "./components/sections/AboutSection";
 import ProjectsSection from "./components/sections/ProjectsSection";
 import ContactSection from "./components/sections/ContactSection";
+import VisitorCounter from "./components/VisitorCounter";
 
 export const dynamic = "force-dynamic";
 
@@ -33,12 +34,15 @@ export default async function Home() {
   const { profile, projects } = data;
 
   return (
-    <div className="snap-container bg-slate-950 text-slate-100">
+    <div className="snap-container bg-slate-950 text-slate-100 relative">
+      <VisitorCounter />
       <HeroSection profile={profile} />
       <TechStackSection />
       <AboutSection profile={profile} />
       <ProjectsSection projects={projects} />
-      <ContactSection profile={profile} />
+      <div className="relative z-30 bg-slate-950">
+        <ContactSection profile={profile} />
+      </div>
     </div>
   );
 }
