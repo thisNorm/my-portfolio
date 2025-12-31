@@ -7,7 +7,6 @@ import ContactSection from "./components/sections/ContactSection";
 
 export const dynamic = "force-dynamic";
 
-// Sanity 쿼리 (혹시 데이터가 없어도 에러 안 나게 처리됨)
 const query = `{
   "profile": *[_type == "profile"][0]{
     name,
@@ -20,7 +19,7 @@ const query = `{
       slug,
       startDate,
       description,
-      tags[]->title, 
+      "tags": tags[]->title,
       content,
       link,
       "imageUrl": image.asset->url
@@ -29,7 +28,6 @@ const query = `{
 `;
 
 export default async function Home() {
-  // 데이터 페칭 (실패시 빈 객체 반환)
   const data = await client.fetch(query).catch(() => ({ profile: null, projects: [] }));
   const { profile, projects } = data;
 
