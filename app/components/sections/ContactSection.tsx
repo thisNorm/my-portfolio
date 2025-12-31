@@ -13,7 +13,7 @@ export default function ContactSection({ profile }: { profile: any }) {
           </h2>
           <p className="text-slate-400 text-lg mb-12 max-w-xl mx-auto">
             데이터의 흐름을 설계하고, 사람과 기술을 연결할 준비가 되어있습니다.<br/>
-            새로운 도전을 시작할 준비가 되었습니다! 면접 제안 및 채용 관련 연락을 기다립니다.
+            새로운 도전을 시작할 준비가 되었습니다! 면접 및 채용 관련 연락을 기다립니다.
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
             <a href="mailto:kisook2557@gmail.com" className="px-8 py-4 bg-white text-slate-900 rounded-full font-bold text-lg hover:bg-blue-50 transition-colors shadow-lg shadow-blue-900/20">Send Email →</a>
