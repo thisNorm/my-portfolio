@@ -15,8 +15,9 @@ const query = `{
     timeline
   },
   "projects": *[_type == "project"] | order(startDate desc) { 
+      _id,
       title,
-      slug,
+      "slug": slug.current,
       startDate,
       description,
       "tags": tags[]->title,
