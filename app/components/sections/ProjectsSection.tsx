@@ -19,29 +19,94 @@ interface ProjectsSectionProps {
   projects: Project[];
 }
 
+const portableTextComponents = {
+  block: {
+    normal: ({ children }: any) => (
+      <p className="whitespace-pre-line leading-relaxed my-4">{children}</p>
+    ),
+    h1: ({ children }: any) => <h1 className="mt-10">{children}</h1>,
+    h2: ({ children }: any) => <h2 className="mt-10">{children}</h2>,
+    h3: ({ children }: any) => <h3 className="mt-8">{children}</h3>,
+    h4: ({ children }: any) => <h4 className="mt-6">{children}</h4>,
+    blockquote: ({ children }: any) => (
+      <blockquote className="border-l-4 border-slate-700 pl-4 italic text-slate-300">
+        {children}
+      </blockquote>
+    ),
+  },
+  
+  list: {
+    bullet: ({ children }: any) => <ul className="list-disc pl-6">{children}</ul>,
+    number: ({ children }: any) => <ol className="list-decimal pl-6">{children}</ol>,
+  },
+  listItem: {
+    bullet: ({ children }: any) => <li className="my-1">{children}</li>,
+    number: ({ children }: any) => <li className="my-1">{children}</li>,
+  },
+  marks: {
+    link: ({ value, children }: any) => {
+      const href = value?.href || "#";
+      const isExternal = /^https?:\/\//.test(href);
+      const blank = value?.blank ?? isExternal;
+
+      return (
+        <a
+          href={href}
+          target={blank ? "_blank" : undefined}
+          rel={blank ? "noopener noreferrer" : undefined}
+        >
+          {children}
+        </a>
+      );
+    },
+    code: ({ children }: any) => (
+      <code className="px-1 py-0.5 rounded bg-slate-800 text-slate-100">
+        {children}
+      </code>
+    ),
+  },
+  types: {
+    codeBlock: ({ value }: any) => (
+      <pre className="bg-slate-900 border border-slate-800 rounded-xl p-4 overflow-x-auto">
+        {value?.filename ? (
+          <div className="text-xs text-slate-400 mb-2">{value.filename}</div>
+        ) : null}
+        <code>{value?.code}</code>
+      </pre>
+    ),
+    // 예전 데이터 호환(_type:"code")
+    code: ({ value }: any) => (
+      <pre className="bg-slate-900 border border-slate-800 rounded-xl p-4 overflow-x-auto">
+        <code>{value?.code}</code>
+      </pre>
+    ),
+  },
+};
+
 export default function ProjectsSection({ projects = [] }: ProjectsSectionProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  
-  // 선택된 프로젝트 찾기
-  const selectedProject = Array.isArray(projects) 
-    ? projects.find((p) => p._id === selectedId) 
+
+  const selectedProject = Array.isArray(projects)
+    ? projects.find((p) => p._id === selectedId)
     : null;
 
-  // 모달 열리면 배경 스크롤 막기
+  // 모달 열리면 배경 스크롤 막기 (렌더 타이밍 충돌 완화)
   useEffect(() => {
-    if (selectedId) {
-      document.body.style.overflow = "hidden";
-    } else {
+    const id = window.setTimeout(() => {
+      document.body.style.overflow = selectedId ? "hidden" : "unset";
+    }, 0);
+
+    return () => {
+      window.clearTimeout(id);
       document.body.style.overflow = "unset";
-    }
-    return () => { document.body.style.overflow = "unset"; };
+    };
   }, [selectedId]);
 
   return (
-    // ✨ 1. h-screen으로 높이를 화면에 딱 맞춤 (스냅 깨짐 방지)
-    // ✨ 2. snap-start로 섹션 시작점에 고정
-    <section id="projects" className="h-screen w-full snap-start flex flex-col relative bg-slate-950 overflow-hidden">
-      
+    <section
+      id="projects"
+      className="h-screen w-full snap-start flex flex-col relative bg-slate-950 overflow-hidden"
+    >
       {/* 제목 영역 (고정) */}
       <div className="pt-24 pb-8 px-6 bg-slate-950/90 z-10 flex-shrink-0">
         <motion.h2
@@ -53,14 +118,11 @@ export default function ProjectsSection({ projects = [] }: ProjectsSectionProps)
         </motion.h2>
 
         <p className="sr-only">
-            백엔드 개발 프로젝트 포트폴리오. 실시간 관제 시스템, API 서버, 인프라 구성, 성능 개선 사례.
+          백엔드 개발 프로젝트 포트폴리오. 실시간 관제 시스템, API 서버, 인프라 구성, 성능 개선 사례.
         </p>
-
       </div>
 
-      {/* ✨ 3. 카드 리스트 영역 (여기만 스크롤 됨) */}
-      {/* flex-grow: 남은 공간 꽉 채움 */}
-      {/* overflow-y-auto: 내용이 넘치면 스크롤 */}
+      {/* 카드 리스트 영역 */}
       <div className="flex-grow overflow-y-auto px-6 pb-24 w-full max-w-6xl mx-auto no-scrollbar scroll-smooth">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {Array.isArray(projects) && projects.length > 0 ? (
@@ -70,7 +132,7 @@ export default function ProjectsSection({ projects = [] }: ProjectsSectionProps)
                 layoutId={`card-container-${project._id}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} // 반복 애니메이션 방지
+                viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 onClick={() => setSelectedId(project._id)}
                 className="group cursor-pointer flex flex-col h-full bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl min-h-[350px]"
@@ -85,32 +147,40 @@ export default function ProjectsSection({ projects = [] }: ProjectsSectionProps)
                       className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-slate-600">No Image</div>
+                    <div className="w-full h-full flex items-center justify-center text-slate-600">
+                      No Image
+                    </div>
                   )}
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors duration-300" />
                 </div>
 
                 {/* 텍스트 내용 */}
                 <div className="p-6 flex flex-col flex-grow">
-                  <motion.h3 
+                  <motion.h3
                     layoutId={`card-title-${project._id}`}
                     className="text-xl font-bold mb-3 text-white group-hover:text-blue-400"
                   >
                     {project.title}
                   </motion.h3>
-                  
-                  <p className="text-slate-400 text-sm mb-4 line-clamp-3 flex-grow">
+
+                  {/* 카드에서는 줄바꿈 유지하면서 3줄 제한 */}
+                  <p className="text-slate-400 text-sm mb-4 line-clamp-3 flex-grow whitespace-pre-line">
                     {project.description}
                   </p>
 
                   <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-slate-800">
                     {project.tags?.slice(0, 3).map((tag, idx) => (
-                      <span key={idx} className="text-[10px] px-2 py-1 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                      <span
+                        key={idx}
+                        className="text-[10px] px-2 py-1 rounded bg-slate-800 text-slate-300 border border-slate-700"
+                      >
                         {tag}
                       </span>
                     ))}
                     {project.tags && project.tags.length > 3 && (
-                      <span className="text-[10px] px-2 py-1 text-slate-500">+{project.tags.length - 3}</span>
+                      <span className="text-[10px] px-2 py-1 text-slate-500">
+                        +{project.tags.length - 3}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -124,7 +194,7 @@ export default function ProjectsSection({ projects = [] }: ProjectsSectionProps)
         </div>
       </div>
 
-      {/* 모달창 영역 (그대로 유지) */}
+      {/* 모달창 영역 */}
       <AnimatePresence>
         {selectedId && selectedProject && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -142,9 +212,11 @@ export default function ProjectsSection({ projects = [] }: ProjectsSectionProps)
               <button
                 onClick={() => setSelectedId(null)}
                 className="absolute top-4 right-4 z-20 p-2 bg-black/50 hover:bg-black/80 rounded-full text-white transition-colors"
+                aria-label="Close"
               >
                 ✕
               </button>
+
               <div className="overflow-y-auto custom-scrollbar h-full no-scrollbar">
                 <div className="w-full h-64 md:h-80 relative bg-slate-900">
                   {selectedProject.imageUrl && (
@@ -156,33 +228,55 @@ export default function ProjectsSection({ projects = [] }: ProjectsSectionProps)
                     />
                   )}
                 </div>
+
                 <div className="p-8 md:p-10">
                   <div className="flex flex-wrap gap-2 mb-6">
                     {selectedProject.tags?.map((tag, idx) => (
-                      <span key={idx} className="px-3 py-1 text-sm font-medium rounded-full bg-blue-900/30 text-blue-300 border border-blue-800/50">
+                      <span
+                        key={idx}
+                        className="px-3 py-1 text-sm font-medium rounded-full bg-blue-900/30 text-blue-300 border border-blue-800/50"
+                      >
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <motion.h2 
+
+                  <motion.h2
                     layoutId={`card-title-${selectedId}`}
                     className="text-3xl md:text-4xl font-bold mb-6 text-white"
                   >
                     {selectedProject.title}
                   </motion.h2>
-                  <p className="text-slate-400 text-lg mb-8">
+
+                  <p className="text-slate-400 text-lg mb-8 whitespace-pre-line">
                     {selectedProject.description}
                   </p>
+
                   <div className="flex gap-4 mb-10">
                     {selectedProject.link && (
-                      <a href={selectedProject.link} target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors shadow-lg">
+                      <a
+                        href={selectedProject.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors shadow-lg"
+                      >
                         Visit Site ↗
                       </a>
                     )}
                   </div>
+
                   <hr className="border-slate-800 mb-10" />
-                  <div className="prose prose-lg prose-invert max-w-none">
-                    {selectedProject.content ? <PortableText value={selectedProject.content} /> : <p className="text-slate-500">상세 내용이 없습니다.</p>}
+
+                  {/* ✅ PortableText 문단 내부 줄바꿈 반영 */}
+                  <div className="prose prose-lg prose-invert max-w-none prose-p:whitespace-pre-line">
+                    {selectedProject.content ? (
+                      <PortableText
+                        value={selectedProject.content}
+                        components={portableTextComponents}
+                      />
+                    ) : (
+                      <p className="text-slate-500">상세 내용이 없습니다.</p>
+                    )}
                   </div>
                 </div>
               </div>
