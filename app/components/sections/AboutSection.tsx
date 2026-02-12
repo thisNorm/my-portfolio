@@ -55,6 +55,12 @@ export default function AboutSection({ profile }: { profile: any }) {
                                     <span className="text-xs font-medium text-slate-500">Software Convergence & Big Data Biz</span>
                                 </div>
                             </div>
+                            <div className="col-span-2">
+                                <div className="text-xs text-slate-500 uppercase">Phone</div>
+                                <div className="font-bold text-sm leading-tight mt-0.5">
+                                    010-2264-2557
+                                </div>
+                            </div>
                         </div>
                     </div>
 
