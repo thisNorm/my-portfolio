@@ -9,7 +9,6 @@ import VisitorCounter from "./components/VisitorCounter";
 
 export const dynamic = "force-dynamic";
 
-// ✅ (권장) 홈 페이지 메타데이터: layout 기본값을 덮어쓰진 않지만, 홈 의도 명확히
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
@@ -21,10 +20,13 @@ const query = `{
     "profileImageUrl": profileImage.asset->url,
     timeline
   },
-  "projects": *[_type == "project"] | order(startDate desc) { 
+  "projects": *[_type == "project"]
+    | order(select(pinned == true => 0, 1) asc, coalesce(order, 9999) asc, startDate desc) {
       _id,
       title,
       "slug": slug.current,
+      pinned,
+      order,
       startDate,
       description,
       "tags": tags[]->title,
@@ -32,20 +34,20 @@ const query = `{
       link,
       "imageUrl": image.asset->url
     }
-  }
-`;
+}`;
 
 export default async function Home() {
   const data = await client
     .fetch(query)
     .catch(() => ({ profile: null, projects: [] as any[] }));
+
   const { profile, projects } = data;
 
   return (
     <div className="snap-container bg-slate-950 text-slate-100 relative">
       <VisitorCounter />
 
-      {/* ✅ UI 영향 없이 검색용 키워드만 추가 */}
+      {/* UI 영향 없이 검색용 키워드만 추가 */}
       <p className="sr-only">
         백엔드 개발자 포트폴리오. Node.js, NestJS, FastAPI 기반 서버 개발과 프로젝트 경험,
         이력서 및 연락처.

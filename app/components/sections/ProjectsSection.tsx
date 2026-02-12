@@ -16,7 +16,7 @@ interface Project {
 }
 
 interface ProjectsSectionProps {
-  projects: Project[];
+  projects?: Project[];
 }
 
 const portableTextComponents = {
@@ -191,6 +191,13 @@ export default function ProjectsSection({ projects = [] }: ProjectsSectionProps)
               <p>불러올 프로젝트가 없습니다.</p>
             </div>
           )}
+        </div>
+      </div>
+      {/* Scroll hint overlay (projects list is scrollable) */}
+      <div className="pointer-events-none absolute bottom-0 left-0 w-full">
+        <div className="h-24 bg-gradient-to-t from-slate-950 to-transparent" />
+        <div className="absolute bottom-6 w-full text-center text-slate-400 text-xs tracking-widest animate-pulse">
+          SCROLL FOR MORE ↓
         </div>
       </div>
 
