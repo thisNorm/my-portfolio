@@ -66,9 +66,15 @@ export async function generateMetadata(
 
 const portableTextComponents = {
   block: {
+    h1: ({ children }: any) => <h1 className="mt-10">{children}</h1>,
     h2: ({ children }: any) => <h2 className="mt-10">{children}</h2>,
     h3: ({ children }: any) => <h3 className="mt-8">{children}</h3>,
     h4: ({ children }: any) => <h4 className="mt-6">{children}</h4>,
+    blockquote: ({ children }: any) => (
+      <blockquote className="border-l-4 border-slate-700 pl-4 italic text-slate-300">
+        {children}
+      </blockquote>
+    ),
   },
   list: {
     bullet: ({ children }: any) => <ul className="list-disc pl-6">{children}</ul>,
@@ -81,12 +87,14 @@ const portableTextComponents = {
   marks: {
     link: ({ value, children }: any) => {
       const href = value?.href || "#";
-      const isExternal = href.startsWith("http");
+      const isExternal = /^https?:\/\//.test(href);
+      const blank = value?.blank ?? isExternal;
+
       return (
         <a
           href={href}
-          target={isExternal ? "_blank" : undefined}
-          rel={isExternal ? "noopener noreferrer" : undefined}
+          target={blank ? "_blank" : undefined}
+          rel={blank ? "noopener noreferrer" : undefined}
         >
           {children}
         </a>
@@ -99,7 +107,17 @@ const portableTextComponents = {
     ),
   },
   types: {
-    // Sanity에서 code 블록을 쓰는 경우(_type: "code")에 대응
+    // ✅ 플러그인 없이 만든 codeBlock(_type: "codeBlock") 대응
+    codeBlock: ({ value }: any) => (
+      <pre className="bg-slate-900 border border-slate-800 rounded-xl p-4 overflow-x-auto">
+        {value?.filename ? (
+          <div className="text-xs text-slate-400 mb-2">{value.filename}</div>
+        ) : null}
+        <code>{value?.code}</code>
+      </pre>
+    ),
+
+    // ✅ 기존에 _type:"code" 데이터가 남아있는 경우도 안전하게 렌더링
     code: ({ value }: any) => (
       <pre className="bg-slate-900 border border-slate-800 rounded-xl p-4 overflow-x-auto">
         <code>{value?.code}</code>
