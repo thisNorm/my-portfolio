@@ -44,7 +44,8 @@ export default function HeroSection({ profile }: { profile: any }) {
           </h1>
 
           <p className="sr-only">
-            백엔드 개발자 황규범 포트폴리오. Node.js, NestJS, FastAPI 기반 서버 개발 경험.
+            백엔드 개발자 포트폴리오. Node.js 백엔드 개발자 황규범의 서버 개발 포트폴리오 사이트.
+            NestJS, FastAPI, 실시간 관제 시스템, AI 영상 처리 프로젝트 경험을 정리한 개발자 포트폴리오.
           </p>
           
           <div className="space-y-6 max-w-lg">
