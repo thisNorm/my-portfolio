@@ -42,6 +42,10 @@ export default function HeroSection({ profile }: { profile: any }) {
               OUTCOME.
             </span>
           </h1>
+
+          <p className="sr-only">
+            백엔드 개발자 황규범 포트폴리오. Node.js, NestJS, FastAPI 기반 서버 개발 경험.
+          </p>
           
           <div className="space-y-6 max-w-lg">
             <div className="pl-5 border-l-2 border-blue-500">

@@ -11,6 +11,11 @@ export default function ContactSection({ profile }: { profile: any }) {
             Let's Make <br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Impact Together.</span>
           </h2>
+
+          <p className="sr-only">
+            백엔드 개발자 채용 연락처. 이메일 및 GitHub 링크 제공.
+          </p>
+          
           <p className="text-slate-400 text-lg mb-12 max-w-xl mx-auto">
             데이터의 흐름을 설계하고, 사람과 기술을 연결할 준비가 되어있습니다.<br/>
             새로운 도전을 시작할 준비가 되었습니다! 면접 및 채용 관련 연락을 기다립니다.

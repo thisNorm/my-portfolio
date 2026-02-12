@@ -51,6 +51,11 @@ export default function ProjectsSection({ projects = [] }: ProjectsSectionProps)
         >
           My Projects
         </motion.h2>
+
+        <p className="sr-only">
+            백엔드 개발 프로젝트 포트폴리오. 실시간 관제 시스템, API 서버, 인프라 구성, 성능 개선 사례.
+        </p>
+
       </div>
 
       {/* ✨ 3. 카드 리스트 영역 (여기만 스크롤 됨) */}

@@ -22,6 +22,11 @@ export default function AboutSection({ profile }: { profile: any }) {
                 WHO AM I?
             </motion.h2>
 
+            {/* 검색용 키워드 */}
+            <p className="sr-only">
+                백엔드 개발자 황규범 소개. Node.js, NestJS, FastAPI 기반 백엔드 개발 포트폴리오.
+            </p>
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:h-[360px]">
                 
                 <motion.div 
