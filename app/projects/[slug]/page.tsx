@@ -64,6 +64,50 @@ export async function generateMetadata(
   };
 }
 
+const portableTextComponents = {
+  block: {
+    h2: ({ children }: any) => <h2 className="mt-10">{children}</h2>,
+    h3: ({ children }: any) => <h3 className="mt-8">{children}</h3>,
+    h4: ({ children }: any) => <h4 className="mt-6">{children}</h4>,
+  },
+  list: {
+    bullet: ({ children }: any) => <ul className="list-disc pl-6">{children}</ul>,
+    number: ({ children }: any) => <ol className="list-decimal pl-6">{children}</ol>,
+  },
+  listItem: {
+    bullet: ({ children }: any) => <li className="my-1">{children}</li>,
+    number: ({ children }: any) => <li className="my-1">{children}</li>,
+  },
+  marks: {
+    link: ({ value, children }: any) => {
+      const href = value?.href || "#";
+      const isExternal = href.startsWith("http");
+      return (
+        <a
+          href={href}
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "noopener noreferrer" : undefined}
+        >
+          {children}
+        </a>
+      );
+    },
+    code: ({ children }: any) => (
+      <code className="px-1 py-0.5 rounded bg-slate-800 text-slate-100">
+        {children}
+      </code>
+    ),
+  },
+  types: {
+    // Sanity에서 code 블록을 쓰는 경우(_type: "code")에 대응
+    code: ({ value }: any) => (
+      <pre className="bg-slate-900 border border-slate-800 rounded-xl p-4 overflow-x-auto">
+        <code>{value?.code}</code>
+      </pre>
+    ),
+  },
+};
+
 export default async function ProjectPage({
   params,
 }: {
@@ -101,7 +145,8 @@ export default async function ProjectPage({
             {project.title}
           </h1>
 
-          <p className="text-xl text-slate-400 mb-8 max-w-2xl leading-relaxed">
+          {/* ✅ 줄바꿈 반영 */}
+          <p className="text-xl text-slate-400 mb-8 max-w-2xl leading-relaxed whitespace-pre-line">
             {project.description}
           </p>
 
@@ -140,7 +185,7 @@ export default async function ProjectPage({
 
         <div className="prose prose-lg prose-invert max-w-none prose-headings:font-bold prose-a:text-blue-400 prose-img:rounded-xl">
           {project.content ? (
-            <PortableText value={project.content} />
+            <PortableText value={project.content} components={portableTextComponents} />
           ) : (
             <p className="text-slate-500">작성된 상세 내용이 없습니다.</p>
           )}

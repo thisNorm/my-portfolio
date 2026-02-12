@@ -47,8 +47,7 @@ export const project = defineType({
     defineField({
       name: 'content',
       title: '상세 설명 (트러블 슈팅 등)',
-      type: 'array', 
-      of: [{ type: 'block' }]
+      type: 'blockContent'
     }),
     defineField({
       name: 'link',
