@@ -2,12 +2,16 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-export default function AboutSection({ profile }: { profile: any }) {
+interface AboutSectionProfile {
+  name?: string;
+}
+
+export default function AboutSection({ profile }: { profile?: AboutSectionProfile | null }) {
   const achievements = [
-    { year: "2026.01 ~", title: "ETRI (한국전자통신연구원)", desc: "자율형IoT연구실 연구원 인턴" },
+    { year: "2026. 04 ~ 05", title: "AI DevOps 교육 수료", desc: "AI DevOps 교육 과정 수료" },
+    { year: "2026. 01 ~ 02", title: "ETRI (한국전자통신연구원)", desc: "자율형 IoT 연구실 연구원 인턴" },
+    { year: "2026. 01", title: "홍익대학교 총장상", desc: "홍익대학교 총장상 수상" },
     { year: "2025.12", title: "대상 (Grand Prize)", desc: "디지털 바이오헬스 종합설계 경진대회" },
-    { year: "2025.11", title: "대상 (Grand Prize)", desc: "충청권 ICT 이노베이션스퀘어 멘토링 S/W 개발" },
-    { year: "2025.09", title: "최우수상 (1st Prize)", desc: "OpenCV Zoo 기반 머신러닝 영상분석 프로젝트" },
   ];
 
   return (
@@ -105,7 +109,7 @@ export default function AboutSection({ profile }: { profile: any }) {
                         <span className="px-3 py-1 bg-white dark:bg-slate-700 rounded-lg text-sm font-bold shadow-sm">🏋️ 헬스</span>
                         <span className="px-3 py-1 bg-white dark:bg-slate-700 rounded-lg text-sm font-bold shadow-sm">🏃 러닝</span>
                      </div>
-                     <p className="text-xs text-slate-500 mt-4">"건강한 신체에 깃드는 긍정 에너지!"</p>
+                     <p className="text-xs text-slate-500 mt-4">&quot;건강한 신체에 깃드는 긍정 에너지!&quot;</p>
                 </motion.div>
             </div>
         </div>
@@ -178,7 +182,7 @@ export default function AboutSection({ profile }: { profile: any }) {
                         Product Mindset
                     </h4>
                     <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                        단순 구현을 넘어 '팔리는 서비스'를 고민합니다. 상경학부의 비즈니스 로직과 광고홍보학부의 사용자 중심 기획력을 개발에 적용합니다.
+                        단순 구현을 넘어 &apos;팔리는 서비스&apos;를 고민합니다. 상경학부의 비즈니스 로직과 광고홍보학부의 사용자 중심 기획력을 개발에 적용합니다.
                     </p>
                 </div>
             </div>
