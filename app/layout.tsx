@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -67,6 +68,7 @@ export default function RootLayout({
           data-allow-localhost={allowLocalhost ? "true" : "false"}
         />
         {children}
+        <Analytics />
       </body>
     </html>
   );
