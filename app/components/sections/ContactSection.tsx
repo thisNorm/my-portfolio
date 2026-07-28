@@ -1,33 +1,64 @@
 "use client";
+
 import { motion } from "framer-motion";
 
-export default function ContactSection({ profile }: { profile: any }) {
+interface Profile {
+  name?: string | null;
+}
+
+export default function ContactSection({
+  profile,
+}: {
+  profile?: Profile | null;
+}) {
   return (
     <section className="snap-section bg-slate-950 text-white relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <p className="text-blue-500 font-bold tracking-widest uppercase mb-4">What's Next?</p>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <p className="text-blue-500 font-bold tracking-widest uppercase mb-4">
+            What?셲 Next?
+          </p>
           <h2 className="text-5xl md:text-7xl font-black mb-8 leading-tight">
-            Let's Make <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Impact Together.</span>
+            Let?셲 Make <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">
+              Impact Together.
+            </span>
           </h2>
 
           <p className="sr-only">
-            백엔드 개발자 채용 연락처. 이메일 및 GitHub 링크 제공.
+            諛깆뿏??媛쒕컻??梨꾩슜 ?곕씫泥? ?대찓??諛?GitHub 留곹겕 ?쒓났.
           </p>
-          
+
           <p className="text-slate-400 text-lg mb-12 max-w-xl mx-auto">
-            데이터의 흐름을 설계하고, 사람과 기술을 연결할 준비가 되어있습니다.<br/>
-            새로운 도전을 시작할 준비가 되었습니다! 면접 및 채용 관련 연락을 기다립니다.
+            ?곗씠?곗쓽 ?먮쫫???ㅺ퀎?섍퀬, ?щ엺怨?湲곗닠???곌껐??以鍮꾧?
+            ?섏뼱?덉뒿?덈떎.
+            <br />
+            ?덈줈???꾩쟾???쒖옉??以鍮꾧? ?섏뿀?듬땲?? 硫댁젒 諛?梨꾩슜 愿???곕씫??            湲곕떎由쎈땲??
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-            <a href="mailto:kisook2557@gmail.com" className="px-8 py-4 bg-white text-slate-900 rounded-full font-bold text-lg hover:bg-blue-50 transition-colors shadow-lg shadow-blue-900/20">Send Email →</a>
-            <a href="https://github.com/thisNorm" target="_blank" className="px-8 py-4 border border-slate-700 text-white rounded-full font-bold text-lg hover:bg-slate-800 transition-colors">GitHub Profile</a>
+            <a
+              href="mailto:kisook2557@gmail.com"
+              className="px-8 py-4 bg-white text-slate-900 rounded-full font-bold text-lg hover:bg-blue-50 transition-colors shadow-lg shadow-blue-900/20"
+            >
+              Send Email ??            </a>
+            <a
+              href="https://github.com/thisNorm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-4 border border-slate-700 text-white rounded-full font-bold text-lg hover:bg-slate-800 transition-colors"
+            >
+              GitHub Profile
+            </a>
           </div>
         </motion.div>
       </div>
       <div className="absolute bottom-6 w-full text-center text-slate-600 text-xs font-mono">
-        © {new Date().getFullYear()} {profile?.name || "Gyubeom Hawng"}. Driven by Passion & Logic.
+        짤 {new Date().getFullYear()} {profile?.name || "Gyubeom Hwang"}.
+        Driven by Passion & Logic.
       </div>
     </section>
   );

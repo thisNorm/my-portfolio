@@ -1,27 +1,33 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { Moon, Sun } from "lucide-react";
 
+const subscribe = () => () => {};
+
 export default function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
+  const mounted = useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
 
-  // 하이드레이션 에러 방지용
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  if (!mounted) {
+    return <span className="inline-block size-9" aria-hidden="true" />;
+  }
 
-  if (!mounted) return null;
+  const isDark = resolvedTheme === "dark";
 
   return (
     <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      type="button"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
       className="p-2 rounded-lg bg-gray-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700 transition-all"
-      aria-label="Toggle Dark Mode"
+      aria-label={isDark ? "?쇱씠??紐⑤뱶濡??꾪솚" : "?ㅽ겕 紐⑤뱶濡??꾪솚"}
     >
-      {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+      {isDark ? <Sun size={20} /> : <Moon size={20} />}
     </button>
   );
 }
