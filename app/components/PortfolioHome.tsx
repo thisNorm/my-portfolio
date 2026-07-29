@@ -42,6 +42,8 @@ type Project = {
   challenge: string;
   lesson: string;
   stack: string[];
+  origin?: string;
+  achievement?: string;
   icon: typeof ShieldCheck;
 };
 
@@ -84,6 +86,8 @@ const projects: Project[] = [
     challenge: "실시간 음성 처리와 온디바이스 추론을 동시에 만족해야 했고, 제한된 모바일 자원 안에서 모델 크기와 속도를 줄이는 일이 핵심이었습니다.",
     lesson: "모델 정확도만큼 배포 환경의 지연, 메모리, 통신 구조가 중요하다는 점을 배웠습니다. 수상 성과보다 팀이 1년간 제품을 완주했다는 경험이 가장 크게 남았습니다.",
     stack: ["ONNX", "TFLite", "FastAPI", "Android"],
+    origin: "메타버스 융합SW 교육",
+    achievement: "1년 팀 프로젝트 · 다수 수상",
     icon: ShieldCheck,
   },
   {
@@ -95,6 +99,7 @@ const projects: Project[] = [
     challenge: "요약, 채널별 문체 변환, 썸네일 생성, 검수와 게시를 하나의 흐름으로 묶되 결과가 매번 지나치게 달라지지 않도록 만드는 일이 필요했습니다.",
     lesson: "B2B 제품보다 개인 생산성을 높이는 작은 서비스도 충분한 가치가 있었습니다. 향후에는 녹음 내용을 Clova 등으로 전사한 뒤 정리와 게시까지 이어지는 흐름으로 확장할 수 있다고 봤습니다.",
     stack: ["Agent", "RAG", "Notion", "Workflow"],
+    origin: "AI를 활용한 CI/CD 자동화 교육",
     icon: Workflow,
   },
   {
@@ -150,6 +155,7 @@ const projects: Project[] = [
     challenge: "로컬 LLM, GitLab, Docker가 허용되어야 했고 Gemma 계열 모델은 YAML을 안정적으로 생성하지 못했습니다. 네트워크가 제한된 Docker 샌드박스에서 생성 결과를 검증하는 과정도 복잡했습니다.",
     lesson: "여러 YAML 예제를 활용한 미세조정이나 더 강한 로컬 모델이 필요했습니다. 생성 결과를 바로 적용하지 않고 격리 환경에서 실행한 뒤 smoke test를 통과한 경우에만 Runner로 넘기는 안전장치가 핵심이었습니다.",
     stack: ["Local LLM", "GitLab CI", "Docker", "Sandbox"],
+    origin: "AI를 활용한 CI/CD 자동화 교육",
     icon: ServerCog,
   },
   {
@@ -161,7 +167,40 @@ const projects: Project[] = [
     challenge: "광원, 재질, 카메라 각도에 따라 반사가 달라 일관된 제거가 어려웠고, 제거 과정에서 원본 정보까지 손상되는 문제가 있었습니다.",
     lesson: "범용 후처리만으로 해결하기 어렵다는 결론에 가까웠습니다. 데이터 수집 조건과 편광 필터 같은 하드웨어, 목적에 맞는 학습 데이터까지 함께 고려해야 하는 문제였습니다.",
     stack: ["OpenCV", "Image Processing", "Vision AI"],
+    origin: "OpenCV Zoo 기반 머신러닝·딥러닝 영상분석 교육",
+    achievement: "교육 연계 프로젝트 수상",
     icon: Eye,
+  },
+];
+
+const appliedLearning = [
+  {
+    title: "메타버스 융합SW 교육",
+    status: "수료",
+    description: "음성 AI, 모바일, 백엔드를 연결하는 장기 팀 프로젝트로 확장했습니다.",
+    projects: ["DeepVoice Shield"],
+    outcome: "1년 팀 프로젝트 · 다수 수상",
+  },
+  {
+    title: "ESG 일경험 교육",
+    status: "수료",
+    description: "업무 환경과 사회적 가치 관점에서 문제를 정의하고 협업하는 경험을 쌓았습니다.",
+    projects: [],
+    outcome: "실무형 협업 경험",
+  },
+  {
+    title: "OpenCV Zoo 기반 머신러닝·딥러닝 영상분석 교육",
+    status: "수료",
+    description: "영상 전처리와 모델 활용을 학습한 뒤 반사광 제거 문제를 직접 실험했습니다.",
+    projects: ["Glare Removal"],
+    outcome: "교육 연계 프로젝트 수상",
+  },
+  {
+    title: "AI를 활용한 CI/CD 자동화 교육",
+    status: "수료",
+    description: "배운 자동화 사례를 개인 생산성과 폐쇄망 DevOps 문제에 각각 적용했습니다.",
+    projects: ["Content Agent", "Air-gapped AutoCI"],
+    outcome: "개인 자동화 · 폐쇄망 자동화",
   },
 ];
 
@@ -244,6 +283,7 @@ export default function PortfolioHome() {
           <a className="active" href="#home"><Home size={17} />Home</a>
           <a href="#experience"><BriefcaseBusiness size={17} />Experience</a>
           <a href="#projects"><Box size={17} />Projects</a>
+          <a href="#learning"><FileText size={17} />Learning</a>
           <a href="#skills"><Layers3 size={17} />Skills & Values</a>
         </nav>
         <div className="side-bottom">
@@ -298,10 +338,29 @@ export default function PortfolioHome() {
             <section className="panel skill-panel"><div className="panel-heading"><h2>Tech Stack<span>.</span></h2></div><div className="skill-list">{skills.map(([label, items]) => <div className="skill-row" key={label}><strong>{label}</strong><div className="tags">{items.map((item) => <span key={item}>{item}</span>)}</div></div>)}</div></section>
             <section className="panel principle-panel"><div className="panel-heading"><h2>How I Explore<span>.</span></h2></div><div className="principle-grid">{principles.map(({ icon: Icon, title, text }) => <article key={title}><Icon size={24} /><div><h3>{title}</h3><p>{text}</p></div></article>)}</div></section>
           </div>
+
+          <section className="panel learning-panel" id="learning">
+            <div className="panel-heading">
+              <div>
+                <h2>Learning to Building<span>.</span></h2>
+                <p className="panel-subtitle">수료에서 끝내지 않고 실제 프로젝트와 결과로 연결한 학습</p>
+              </div>
+            </div>
+            <div className="learning-grid">
+              {appliedLearning.map((item) => (
+                <article key={item.title}>
+                  <div className="learning-top"><span>{item.status}</span><strong>{item.outcome}</strong></div>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                  {item.projects.length > 0 && <div className="tags">{item.projects.map((project) => <span key={project}>{project}</span>)}</div>}
+                </article>
+              ))}
+            </div>
+          </section>
         </section>
       </div>
 
-      {selectedProject && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setSelectedProject(null)}><section className="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title"><button className="modal-close" type="button" aria-label="닫기" onClick={() => setSelectedProject(null)}><X size={20} /></button><p className="project-type">{selectedProject.type}</p><h2 id="project-modal-title">{selectedProject.title}</h2><p className="modal-lead">{selectedProject.description}</p><div className="modal-insights"><article><span>WHY</span><h3>왜 만들었나</h3><p>{selectedProject.motivation}</p></article><article><span>FRICTION</span><h3>어디서 어려웠나</h3><p>{selectedProject.challenge}</p></article><article><span>LEARNED</span><h3>무엇을 배웠나</h3><p>{selectedProject.lesson}</p></article></div><div className="modal-footer"><strong>{selectedProject.result}</strong><div className="tags">{selectedProject.stack.map((tag) => <span key={tag}>{tag}</span>)}</div></div></section></div>}
+      {selectedProject && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setSelectedProject(null)}><section className="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title"><button className="modal-close" type="button" aria-label="닫기" onClick={() => setSelectedProject(null)}><X size={20} /></button><p className="project-type">{selectedProject.type}</p><h2 id="project-modal-title">{selectedProject.title}</h2><p className="modal-lead">{selectedProject.description}</p>{(selectedProject.origin || selectedProject.achievement) && <div className="project-proof">{selectedProject.origin && <span>연계 교육 · {selectedProject.origin}</span>}{selectedProject.achievement && <strong>{selectedProject.achievement}</strong>}</div>}<div className="modal-insights"><article><span>WHY</span><h3>왜 만들었나</h3><p>{selectedProject.motivation}</p></article><article><span>FRICTION</span><h3>어디서 어려웠나</h3><p>{selectedProject.challenge}</p></article><article><span>LEARNED</span><h3>무엇을 배웠나</h3><p>{selectedProject.lesson}</p></article></div><div className="modal-footer"><strong>{selectedProject.result}</strong><div className="tags">{selectedProject.stack.map((tag) => <span key={tag}>{tag}</span>)}</div></div></section></div>}
     </main>
   );
 }
