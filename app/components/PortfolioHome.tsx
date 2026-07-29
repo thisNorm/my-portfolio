@@ -105,7 +105,6 @@ const projects: Project[] = [
     lesson: "B2B 제품보다 개인 생산성을 높이는 작은 서비스도 충분한 가치가 있었습니다. 향후에는 녹음 내용을 Clova 등으로 전사한 뒤 정리와 게시까지 이어지는 흐름으로 확장할 수 있다고 봤습니다.",
     stack: ["Agent", "RAG", "Notion", "Workflow"],
     origin: "AI를 활용한 CI/CD 자동화 교육",
-    thumbnail: "/projects/content-agent.webp",
     icon: Workflow,
   },
   {
@@ -129,7 +128,6 @@ const projects: Project[] = [
     challenge: "플랫폼마다 답변과 인용이 달라지고, 같은 질문도 결과가 자주 바뀌어 일관된 평가 기준을 만들기 어려웠습니다.",
     lesson: "현재 AEO·GEO는 정답이 굳어진 분야라기보다 반복 측정과 실험이 필요한 초기 개념에 가깝다고 느꼈습니다. 단발성 최적화보다 질문 세트와 변화를 계속 추적하는 체계가 중요했습니다.",
     stack: ["AEO", "GEO", "Analytics", "Automation"],
-    thumbnail: "/projects/siteops-radar.webp",
     icon: Sparkles,
   },
   {
@@ -152,7 +150,6 @@ const projects: Project[] = [
     challenge: "에이전트 수가 늘수록 비용과 대화량이 커지고, 낮은 성능의 모델에서는 역할 분담과 기억 유지가 쉽게 무너졌습니다.",
     lesson: "충분한 모델 성능과 예산이 있다면 결과가 좋아질 수 있지만, 개인 환경에서는 좋은 로컬 LLM과 장기 기억 구조를 꾸준히 키우는 방식이 현실적이었습니다. Obsidian이나 NotebookLM처럼 지식을 축적하면 사이드잡을 돕는 개인 팀으로 발전할 가능성을 봤습니다.",
     stack: ["Multi-agent", "Memory", "Tools", "Local LLM"],
-    thumbnail: "/projects/agent-office.webp",
     icon: Bot,
   },
   {
@@ -178,7 +175,6 @@ const projects: Project[] = [
     stack: ["OpenCV", "Image Processing", "Vision AI"],
     origin: "OpenCV Zoo 기반 머신러닝·딥러닝 영상분석 교육",
     achievement: "교육 연계 프로젝트 수상",
-    thumbnail: "/projects/glare-removal.webp",
     icon: Eye,
   },
 ];
