@@ -55,9 +55,9 @@ const experiences: Experience[] = [
     company: "Infovally Korea",
     role: "Backend Engineer",
     description: [
-      "스마트팜 현장의 장치 연결과 엣지 서버 운영",
-      "Node.js 기반 데이터 수집·전송 백엔드 개발",
-      "Linux · Docker · Network 환경 표준화",
+      "스마트팜 엣지 서버와 데이터 파이프라인 아키텍처 설계·개발",
+      "Redis와 프록시 모듈을 활용한 엣지–클라우드 데이터 유실 방지",
+      "현장 네트워크·PC·디바이스 연동과 장애 진단",
     ],
     stack: ["Node.js", "TypeScript", "Docker"],
   },
@@ -68,9 +68,9 @@ const experiences: Experience[] = [
     company: "ETRI Autonomous IoT Lab",
     role: "Research Trainee",
     description: [
-      "폐쇄망 영상 AI 관제 시스템 개발",
-      "YOLOv8 추론 결과 실시간 처리",
-      "Redis 기반 비동기 데이터 파이프라인 구현",
+      "CCTV와 이동형 로봇을 통합한 폐쇄망 AI 관제 시스템 설계",
+      "Redis Queue·DLQ 기반 비동기 이벤트 처리와 장애 복구",
+      "스트리밍·객체 탐지·원격 제어·이벤트 저장 파이프라인 통합",
     ],
     stack: ["Python", "YOLOv8", "Redis"],
   },
@@ -202,6 +202,14 @@ const appliedLearning = [
     projects: ["Content Agent", "Air-gapped AutoCI"],
     outcome: "개인 자동화 · 폐쇄망 자동화",
   },
+];
+
+const awards = [
+  { title: "총장상", organization: "홍익대학교", date: "2026.01", note: "교내외 기술 성과를 통한 학교 명예 기여" },
+  { title: "대상", organization: "디지털 바이오헬스 종합설계 경진대회", date: "2025.12", note: "DeepVoice Shield" },
+  { title: "대상", organization: "충청권 ICT 이노베이션스퀘어 S/W 개발 분과", date: "2025.11", note: "DeepVoice Shield" },
+  { title: "우수상", organization: "지역혁신 인재양성 연합 페스티벌", date: "2025.11", note: "DeepVoice Shield" },
+  { title: "최우수상", organization: "OpenCV Zoo 영상분석 실무 프로젝트", date: "2025.09", note: "Glare Removal" },
 ];
 
 const skills = [
@@ -353,6 +361,23 @@ export default function PortfolioHome() {
                   <h3>{item.title}</h3>
                   <p>{item.description}</p>
                   {item.projects.length > 0 && <div className="tags">{item.projects.map((project) => <span key={project}>{project}</span>)}</div>}
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="panel awards-panel" aria-labelledby="awards-heading">
+            <div className="panel-heading">
+              <div>
+                <h2 id="awards-heading">Honors & Awards<span>.</span></h2>
+                <p className="panel-subtitle">프로젝트 결과를 외부 평가로 검증받은 기록</p>
+              </div>
+            </div>
+            <div className="awards-list">
+              {awards.map((award) => (
+                <article key={`${award.title}-${award.date}`}>
+                  <div><strong>{award.title}</strong><h3>{award.organization}</h3><p>{award.note}</p></div>
+                  <time>{award.date}</time>
                 </article>
               ))}
             </div>
