@@ -246,6 +246,7 @@ export default function PortfolioHome() {
   const [projectPage, setProjectPage] = useState(0);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [visitors, setVisitors] = useState({ total: 0, today: 0 });
+  const [activeSection, setActiveSection] = useState("home");
   const experienceYears = useMemo(() => calculateExperienceYears(experiences), []);
   const pageSize = 3;
   const pageCount = Math.ceil(projects.length / pageSize);
@@ -274,6 +275,26 @@ export default function PortfolioHome() {
     };
   }, [selectedProject]);
 
+  useEffect(() => {
+    const sectionIds = ["home", "experience", "projects", "learning", "skills"];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible?.target.id) setActiveSection(visible.target.id);
+      },
+      { rootMargin: "-20% 0px -65% 0px", threshold: [0.05, 0.2, 0.5] },
+    );
+
+    sectionIds.forEach((id) => {
+      const section = document.getElementById(id);
+      if (section) observer.observe(section);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const metrics = [
     { value: experienceYears, label: "년 개발 경험", note: "경력 기간 자동 계산" },
     { value: String(projects.length), label: "기술 탐색 프로젝트", note: "관심 → 구현 → 회고" },
@@ -286,11 +307,11 @@ export default function PortfolioHome() {
       <aside className="sidebar">
         <a href="#home" className="side-logo">thisnorm<span>.</span></a>
         <nav className="side-nav" aria-label="주요 메뉴">
-          <a className="active" href="#home"><Home size={17} />Home</a>
-          <a href="#experience"><BriefcaseBusiness size={17} />Experience</a>
-          <a href="#projects"><Box size={17} />Projects</a>
-          <a href="#learning"><FileText size={17} />Learning</a>
-          <a href="#skills"><Layers3 size={17} />Skills & Values</a>
+          <a className={activeSection === "home" ? "active" : ""} href="#home"><Home size={17} />Home</a>
+          <a className={activeSection === "experience" ? "active" : ""} href="#experience"><BriefcaseBusiness size={17} />Experience</a>
+          <a className={activeSection === "projects" ? "active" : ""} href="#projects"><Box size={17} />Projects</a>
+          <a className={activeSection === "learning" ? "active" : ""} href="#learning"><FileText size={17} />Learning</a>
+          <a className={activeSection === "skills" ? "active" : ""} href="#skills"><Layers3 size={17} />Skills & Values</a>
         </nav>
         <div className="side-bottom">
           <a className="contact-link" href="mailto:invako@naver.com"><Mail size={16} />Let&apos;s Connect</a>
