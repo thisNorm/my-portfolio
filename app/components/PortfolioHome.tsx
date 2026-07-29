@@ -296,8 +296,8 @@ export default function PortfolioHome() {
   }, []);
 
   const metrics = [
-    { value: experienceYears, label: "년 개발 경험", note: "경력 기간 자동 계산" },
-    { value: String(projects.length), label: "기술 탐색 프로젝트", note: "관심 → 구현 → 회고" },
+    { value: experienceYears, label: "년 개발 경험", note: "ETRI · Infovally Korea" },
+    { value: String(projects.length), label: "프로젝트", note: "직접 만들고 검증한 결과" },
     { value: "91%↓", label: "모델 경량화", note: "DeepVoice Shield" },
     { value: "5", label: "수상 경력", note: "프로젝트 외부 평가" },
   ];
@@ -310,11 +310,11 @@ export default function PortfolioHome() {
           <a className={activeSection === "home" ? "active" : ""} href="#home"><Home size={17} />Home</a>
           <a className={activeSection === "experience" ? "active" : ""} href="#experience"><BriefcaseBusiness size={17} />Experience</a>
           <a className={activeSection === "projects" ? "active" : ""} href="#projects"><Box size={17} />Projects</a>
-          <a className={activeSection === "learning" ? "active" : ""} href="#learning"><FileText size={17} />Learning</a>
-          <a className={activeSection === "skills" ? "active" : ""} href="#skills"><Layers3 size={17} />Skills & Values</a>
+          <a className={activeSection === "learning" ? "active" : ""} href="#learning"><FileText size={17} />Education</a>
+          <a className={activeSection === "skills" ? "active" : ""} href="#skills"><Layers3 size={17} />Skills</a>
         </nav>
         <div className="side-bottom">
-          <a className="contact-link" href="mailto:invako@naver.com"><Mail size={16} />Let&apos;s Connect</a>
+          <a className="contact-link" href="mailto:invako@naver.com"><Mail size={16} />Contact</a>
           <div className="social-row"><a href="https://github.com/thisNorm" target="_blank" rel="noreferrer" aria-label="GitHub"><Github size={17} /></a></div>
           <p>© {new Date().getFullYear()} thisnorm.<br />All rights reserved.</p>
         </div>
@@ -338,10 +338,10 @@ export default function PortfolioHome() {
 
           <div className="hero-visual" aria-label="AI 시스템 레이어 구조">
             <div className="system-stage"><div className="layer layer-top"><Bot size={31} /><b>AI</b></div><div className="layer layer-mid"><Workflow size={28} /></div><div className="layer layer-bottom"><Database size={27} /></div><div className="connector c1" /><div className="connector c2" /><div className="connector c3" /></div>
-            <div className="visual-label label-agent"><Bot size={19} /><div><b>Agent</b><span>Plan · Action · Tools</span></div></div>
-            <div className="visual-label label-workflow"><Workflow size={19} /><div><b>Workflow</b><span>Orchestrate · Automate</span></div></div>
-            <div className="visual-label label-data"><Database size={19} /><div><b>Data & API</b><span>Stream · Store · Serve</span></div></div>
-            <div className="visual-label label-infra"><ServerCog size={19} /><div><b>Infra & Edge</b><span>Cloud · Edge · Monitor</span></div></div>
+            <div className="visual-label label-agent"><Bot size={19} /><div><b>Agent</b><span>판단 · 도구 실행</span></div></div>
+            <div className="visual-label label-workflow"><Workflow size={19} /><div><b>Workflow</b><span>순서 · 재시도 · 승인</span></div></div>
+            <div className="visual-label label-data"><Database size={19} /><div><b>Data & API</b><span>수집 · 저장 · 전달</span></div></div>
+            <div className="visual-label label-infra"><ServerCog size={19} /><div><b>Infra & Edge</b><span>배포 · 운영 · 관제</span></div></div>
           </div>
 
           <div className="metric-panel">{metrics.map((metric) => <div className="metric-item" key={metric.label}><strong>{metric.value}</strong><b>{metric.label}</b><span>{metric.note}</span></div>)}</div>
@@ -350,7 +350,7 @@ export default function PortfolioHome() {
         <section className="content-section" id="experience">
           <div className="content-grid top-grid">
             <section className="panel experience-panel">
-              <div className="panel-heading"><h2>Experience<span>.</span></h2><span className="panel-note">기간 수정 시 상단 경력 수치 자동 반영</span></div>
+              <div className="panel-heading"><h2>Experience<span>.</span></h2></div>
               <div className="timeline-list">{experiences.map((item) => <article className="experience-item" key={item.company}><div className="timeline-mark"><span /></div><div className="experience-content"><div className="experience-top"><div><h3>{item.company}</h3><p>{item.role}</p></div><time>{item.period}</time></div><ul>{item.description.map((line) => <li key={line}>{line}</li>)}</ul><div className="tags">{item.stack.map((tag) => <span key={tag}>{tag}</span>)}</div></div></article>)}</div>
             </section>
 
@@ -363,14 +363,14 @@ export default function PortfolioHome() {
 
           <div className="content-grid bottom-grid" id="skills">
             <section className="panel skill-panel"><div className="panel-heading"><h2>Tech Stack<span>.</span></h2></div><div className="skill-list">{skills.map(([label, items]) => <div className="skill-row" key={label}><strong>{label}</strong><div className="tags">{items.map((item) => <span key={item}>{item}</span>)}</div></div>)}</div></section>
-            <section className="panel principle-panel"><div className="panel-heading"><h2>How I Explore<span>.</span></h2></div><div className="principle-grid">{principles.map(({ icon: Icon, title, text }) => <article key={title}><Icon size={24} /><div><h3>{title}</h3><p>{text}</p></div></article>)}</div></section>
+            <section className="panel principle-panel"><div className="panel-heading"><h2>Working Style<span>.</span></h2></div><div className="principle-grid">{principles.map(({ icon: Icon, title, text }) => <article key={title}><Icon size={24} /><div><h3>{title}</h3><p>{text}</p></div></article>)}</div></section>
           </div>
 
           <section className="panel learning-panel" id="learning">
             <div className="panel-heading">
               <div>
-                <h2>Learning to Building<span>.</span></h2>
-                <p className="panel-subtitle">수료에서 끝내지 않고 실제 프로젝트와 결과로 연결한 학습</p>
+                <h2>Education & Practice<span>.</span></h2>
+                <p className="panel-subtitle">교육에서 배운 내용을 프로젝트로 이어간 기록</p>
               </div>
             </div>
             <div className="learning-grid">
@@ -404,7 +404,7 @@ export default function PortfolioHome() {
         </section>
       </div>
 
-      {selectedProject && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setSelectedProject(null)}><section className="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title"><button className="modal-close" type="button" aria-label="닫기" onClick={() => setSelectedProject(null)}><X size={20} /></button><p className="project-type">{selectedProject.type}</p><h2 id="project-modal-title">{selectedProject.title}</h2><p className="modal-lead">{selectedProject.description}</p>{(selectedProject.origin || selectedProject.achievement) && <div className="project-proof">{selectedProject.origin && <span>연계 교육 · {selectedProject.origin}</span>}{selectedProject.achievement && <strong>{selectedProject.achievement}</strong>}</div>}<div className="modal-insights"><article><span>WHY</span><h3>왜 만들었나</h3><p>{selectedProject.motivation}</p></article><article><span>FRICTION</span><h3>어디서 어려웠나</h3><p>{selectedProject.challenge}</p></article><article><span>LEARNED</span><h3>무엇을 배웠나</h3><p>{selectedProject.lesson}</p></article></div><div className="modal-footer"><strong>{selectedProject.result}</strong><div className="tags">{selectedProject.stack.map((tag) => <span key={tag}>{tag}</span>)}</div></div></section></div>}
+      {selectedProject && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setSelectedProject(null)}><section className="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title"><button className="modal-close" type="button" aria-label="닫기" onClick={() => setSelectedProject(null)}><X size={20} /></button><p className="project-type">{selectedProject.type}</p><h2 id="project-modal-title">{selectedProject.title}</h2><p className="modal-lead">{selectedProject.description}</p>{(selectedProject.origin || selectedProject.achievement) && <div className="project-proof">{selectedProject.origin && <span>연계 교육 · {selectedProject.origin}</span>}{selectedProject.achievement && <strong>{selectedProject.achievement}</strong>}</div>}<div className="modal-insights"><article><span>시작</span><h3>왜 만들었나</h3><p>{selectedProject.motivation}</p></article><article><span>과정</span><h3>어디서 어려웠나</h3><p>{selectedProject.challenge}</p></article><article><span>회고</span><h3>무엇을 배웠나</h3><p>{selectedProject.lesson}</p></article></div><div className="modal-footer"><strong>{selectedProject.result}</strong><div className="tags">{selectedProject.stack.map((tag) => <span key={tag}>{tag}</span>)}</div></div></section></div>}
     </main>
   );
 }
