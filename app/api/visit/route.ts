@@ -1,4 +1,4 @@
-import { createClient } from "next-sanity";
+import { createClient } from "@sanity/client";
 import { NextResponse } from "next/server";
 import { apiVersion, dataset, projectId } from "@/sanity/env";
 
