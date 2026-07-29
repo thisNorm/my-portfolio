@@ -278,9 +278,7 @@ export default function PortfolioHome() {
     { value: experienceYears, label: "년 개발 경험", note: "경력 기간 자동 계산" },
     { value: String(projects.length), label: "기술 탐색 프로젝트", note: "관심 → 구현 → 회고" },
     { value: "91%↓", label: "모델 경량화", note: "DeepVoice Shield" },
-    { value: "Edge", label: "현장 시스템", note: "Linux · Docker · Device" },
-    { value: "Agent", label: "자동화 관심", note: "Workflow · RAG · Tools" },
-    { value: "∞", label: "학습과 개선", note: "Build · Measure · Iterate" },
+    { value: "5", label: "수상 경력", note: "프로젝트 외부 평가" },
   ];
 
   return (
