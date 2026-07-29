@@ -120,7 +120,11 @@ button, input, textarea, select { font: inherit; }
 .featured-list { display: flex; flex-direction: column; gap: 10px; }
 .featured-card { position: relative; width: 100%; min-height: 144px; display: grid; grid-template-columns: 150px 1fr 20px; gap: 18px; align-items: center; padding: 12px; border: 1px solid #e6eaf0; border-radius: 10px; background: #fff; color: inherit; text-align: left; cursor: pointer; transition: .2s ease; }
 .featured-card:hover { transform: translateY(-2px); border-color: #bfd0f3; box-shadow: 0 10px 24px rgba(15,23,42,.05); }
-.featured-thumb { height: 100%; min-height: 118px; display: grid; place-items: center; border-radius: 8px; color: #7ea4ff; background: radial-gradient(circle at 50% 40%,rgba(90,78,220,.35),rgba(14,24,55,.98) 62%), linear-gradient(145deg,#111c36,#0a1222); }
+.featured-thumb { position: relative; height: 100%; min-height: 118px; overflow: hidden; display: grid; place-items: center; border-radius: 8px; color: #7ea4ff; background: radial-gradient(circle at 50% 40%,rgba(90,78,220,.35),rgba(14,24,55,.98) 62%), linear-gradient(145deg,#111c36,#0a1222); }
+.featured-thumb img { object-fit: cover; transition: transform .28s ease; }
+.featured-thumb.contain img { object-fit: contain; padding: 10px; }
+.featured-card:hover .featured-thumb img { transform: scale(1.035); }
+.thumb-label { position: absolute; left: 8px; bottom: 8px; z-index: 2; padding: 4px 6px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(5,10,18,.72); color: #dce7f2; font-size: 8px; font-weight: 700; backdrop-filter: blur(7px); }
 .featured-copy { min-width: 0; }.project-type { color: #7367ef; font-size: 10px; font-weight: 800; }.featured-copy h3 { margin: 5px 0 7px; font-size: 17px; }.featured-copy p { margin: 0; color: #697586; font-size: 11px; line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }.featured-copy b { display: block; margin-top: 8px; font-size: 11px; color: #24427b; }.featured-copy .tags { margin-top: 9px; }.card-arrow { color: #7c8da3; }
 .project-pagination { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px; }
 .project-pagination > div { display: flex; gap: 6px; }
@@ -200,4 +204,5 @@ button, input, textarea, select { font: inherit; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .featured-card { transition: none; }
+  .featured-thumb img { transition: none; }
 }
