@@ -19,6 +19,25 @@ type VisitorDocument = {
   lastUpdated?: string;
 };
 
+export async function GET() {
+  try {
+    const visitor = await writeClient.fetch<VisitorDocument | null>(
+      `*[_type == "visitor"][0]`,
+    );
+    const now = new Date();
+    const kstDate = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+    const todayStr = kstDate.toISOString().split("T")[0];
+
+    return NextResponse.json({
+      today: visitor?.lastUpdated === todayStr ? (visitor?.today ?? 0) : 0,
+      total: visitor?.total ?? 0,
+    });
+  } catch (error) {
+    console.error("Visitor Read Error:", error);
+    return NextResponse.json({ today: 0, total: 0 });
+  }
+}
+
 export async function POST() {
   try {
     const now = new Date();
