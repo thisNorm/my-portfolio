@@ -105,7 +105,6 @@ const projects: Project[] = [
     lesson: "B2B 제품보다 개인 생산성을 높이는 작은 서비스도 충분한 가치가 있었습니다. 향후에는 녹음 내용을 Clova 등으로 전사한 뒤 정리와 게시까지 이어지는 흐름으로 확장할 수 있다고 봤습니다.",
     stack: ["Agent", "RAG", "Notion", "Workflow"],
     origin: "AI를 활용한 CI/CD 자동화 교육",
-    thumbnail: "/projects/content-agent.webp",
     icon: Workflow,
   },
   {
@@ -129,7 +128,6 @@ const projects: Project[] = [
     challenge: "플랫폼마다 답변과 인용이 달라지고, 같은 질문도 결과가 자주 바뀌어 일관된 평가 기준을 만들기 어려웠습니다.",
     lesson: "현재 AEO·GEO는 정답이 굳어진 분야라기보다 반복 측정과 실험이 필요한 초기 개념에 가깝다고 느꼈습니다. 단발성 최적화보다 질문 세트와 변화를 계속 추적하는 체계가 중요했습니다.",
     stack: ["AEO", "GEO", "Analytics", "Automation"],
-    thumbnail: "/projects/siteops-radar.webp",
     icon: Sparkles,
   },
   {
@@ -152,7 +150,6 @@ const projects: Project[] = [
     challenge: "에이전트 수가 늘수록 비용과 대화량이 커지고, 낮은 성능의 모델에서는 역할 분담과 기억 유지가 쉽게 무너졌습니다.",
     lesson: "충분한 모델 성능과 예산이 있다면 결과가 좋아질 수 있지만, 개인 환경에서는 좋은 로컬 LLM과 장기 기억 구조를 꾸준히 키우는 방식이 현실적이었습니다. Obsidian이나 NotebookLM처럼 지식을 축적하면 사이드잡을 돕는 개인 팀으로 발전할 가능성을 봤습니다.",
     stack: ["Multi-agent", "Memory", "Tools", "Local LLM"],
-    thumbnail: "/projects/agent-office.webp",
     icon: Bot,
   },
   {
@@ -178,7 +175,6 @@ const projects: Project[] = [
     stack: ["OpenCV", "Image Processing", "Vision AI"],
     origin: "OpenCV Zoo 기반 머신러닝·딥러닝 영상분석 교육",
     achievement: "교육 연계 프로젝트 수상",
-    thumbnail: "/projects/glare-removal.webp",
     icon: Eye,
   },
 ];
@@ -366,7 +362,7 @@ export default function PortfolioHome() {
 
             <section className="panel project-panel" id="projects">
               <div className="panel-heading"><div><h2>Featured Projects<span>.</span></h2><p className="panel-subtitle">관심에서 시작해 직접 구현하며 확인한 가능성과 한계</p></div><a href="https://github.com/thisNorm" target="_blank" rel="noreferrer">GitHub <ArrowRight size={15} /></a></div>
-              <div className="featured-list">{visibleProjects.map(({ icon: Icon, ...project }) => <button type="button" className="featured-card" key={project.title} onClick={() => setSelectedProject({ ...project, icon: Icon })}><div className={`featured-thumb ${project.thumbnailFit === "contain" ? "contain" : ""}`}>{project.thumbnail ? <><Image src={project.thumbnail} alt={`${project.title} 실제 화면`} fill sizes="150px" /><span className="thumb-label">실제 화면</span></> : <Icon size={31} />}</div><div className="featured-copy"><span className="project-type">{project.type}</span><h3>{project.title}</h3><p>{project.description}</p><b>{project.result}</b><div className="tags">{project.stack.map((tag) => <span key={tag}>{tag}</span>)}</div></div><ArrowRight className="card-arrow" size={18} /></button>)}</div>
+              <div className="featured-list">{visibleProjects.map(({ icon: Icon, ...project }) => <button type="button" className="featured-card" key={project.title} onClick={() => setSelectedProject({ ...project, icon: Icon })}><div className={`featured-thumb ${project.thumbnailFit === "contain" ? "contain" : ""}`}>{project.thumbnail ? <Image src={project.thumbnail} alt={`${project.title} 프로젝트 화면`} fill sizes="150px" /> : <Icon size={31} />}</div><div className="featured-copy"><span className="project-type">{project.type}</span><h3>{project.title}</h3><p>{project.description}</p><b>{project.result}</b><div className="tags">{project.stack.map((tag) => <span key={tag}>{tag}</span>)}</div></div><ArrowRight className="card-arrow" size={18} /></button>)}</div>
               <div className="project-pagination"><button type="button" aria-label="이전 프로젝트" onClick={() => setProjectPage((page) => Math.max(0, page - 1))} disabled={projectPage === 0}><ArrowLeft size={16} /></button><div>{Array.from({ length: pageCount }, (_, index) => <button type="button" aria-label={`${index + 1} 페이지`} className={index === projectPage ? "active" : ""} onClick={() => setProjectPage(index)} key={index}>{index + 1}</button>)}</div><button type="button" aria-label="다음 프로젝트" onClick={() => setProjectPage((page) => Math.min(pageCount - 1, page + 1))} disabled={projectPage === pageCount - 1}><ArrowRight size={16} /></button></div>
             </section>
           </div>
@@ -414,7 +410,7 @@ export default function PortfolioHome() {
         </section>
       </div>
 
-      {selectedProject && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setSelectedProject(null)}><section className="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title"><button className="modal-close" type="button" aria-label="닫기" onClick={() => setSelectedProject(null)}><X size={20} /></button><p className="project-type">{selectedProject.type}</p><h2 id="project-modal-title">{selectedProject.title}</h2><p className="modal-lead">{selectedProject.description}</p>{(selectedProject.origin || selectedProject.achievement) && <div className="project-proof">{selectedProject.origin && <span>연계 교육 · {selectedProject.origin}</span>}{selectedProject.achievement && <strong>{selectedProject.achievement}</strong>}</div>}<div className="modal-insights"><article><span>시작</span><h3>왜 만들었나</h3><p>{selectedProject.motivation}</p></article><article><span>과정</span><h3>어디서 어려웠나</h3><p>{selectedProject.challenge}</p></article><article><span>회고</span><h3>무엇을 배웠나</h3><p>{selectedProject.lesson}</p></article></div><div className="modal-footer"><strong>{selectedProject.result}</strong><div className="tags">{selectedProject.stack.map((tag) => <span key={tag}>{tag}</span>)}</div></div></section></div>}
+      {selectedProject && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setSelectedProject(null)}><section className="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title"><button className="modal-close" type="button" aria-label="닫기" onClick={() => setSelectedProject(null)}><X size={20} /></button>{selectedProject.thumbnail && <div className={`modal-project-image ${selectedProject.thumbnailFit === "contain" ? "contain" : ""}`}><Image src={selectedProject.thumbnail} alt={`${selectedProject.title} 프로젝트 화면`} fill sizes="760px" /></div>}<p className="project-type">{selectedProject.type}</p><h2 id="project-modal-title">{selectedProject.title}</h2><p className="modal-lead">{selectedProject.description}</p>{(selectedProject.origin || selectedProject.achievement) && <div className="project-proof">{selectedProject.origin && <span>연계 교육 · {selectedProject.origin}</span>}{selectedProject.achievement && <strong>{selectedProject.achievement}</strong>}</div>}<div className="modal-insights"><article><span>시작</span><h3>왜 만들었나</h3><p>{selectedProject.motivation}</p></article><article><span>과정</span><h3>어디서 어려웠나</h3><p>{selectedProject.challenge}</p></article><article><span>회고</span><h3>무엇을 배웠나</h3><p>{selectedProject.lesson}</p></article></div><div className="modal-footer"><strong>{selectedProject.result}</strong><div className="tags">{selectedProject.stack.map((tag) => <span key={tag}>{tag}</span>)}</div></div></section></div>}
     </main>
   );
 }
