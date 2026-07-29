@@ -297,8 +297,8 @@ export default function PortfolioHome() {
 
   const metrics = [
     { value: experienceYears, label: "년 개발 경험", note: "ETRI · Infovally Korea" },
-    { value: String(projects.length), label: "프로젝트", note: "직접 만들고 검증한 결과" },
-    { value: "91%↓", label: "모델 경량화", note: "DeepVoice Shield" },
+    { value: "E2E", label: "구현 범위", note: "Device → Edge → Service" },
+    { value: "Edge", label: "현장·폐쇄망 운영", note: "Linux · Docker · Network" },
     { value: "5", label: "수상 경력", note: "프로젝트 외부 평가" },
   ];
 
