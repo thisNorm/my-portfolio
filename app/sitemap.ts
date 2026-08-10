@@ -21,13 +21,12 @@ async function getProjectSlugs(): Promise<string[]> {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = "https://thisnorm.dev";
+  const base = "https://www.thisnorm.dev";
 
   const slugs = await getProjectSlugs();
 
   return [
     { url: `${base}/`, lastModified: new Date() },
-    { url: `${base}/projects`, lastModified: new Date() },
 
     ...slugs.map((slug) => ({
       url: `${base}/projects/${slug}`,

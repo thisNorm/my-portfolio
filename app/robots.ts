@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/studio"],
       },
     ],
-    sitemap: "https://thisnorm.dev/sitemap.xml",
+    sitemap: "https://www.thisnorm.dev/sitemap.xml",
   };
 }

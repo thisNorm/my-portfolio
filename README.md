@@ -6,7 +6,7 @@
 
 ## Portfolio
 
-- Website: https://thisnorm.dev
+- Website: https://www.thisnorm.dev
 - GitHub: https://github.com/thisNorm
 - Contact: invako@naver.com
 

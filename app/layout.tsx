@@ -5,7 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
-const siteUrl = "https://thisnorm.dev";
+const siteUrl = "https://www.thisnorm.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
