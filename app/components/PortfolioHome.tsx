@@ -13,6 +13,7 @@ import {
   Home,
   Layers3,
   Mail,
+  Menu,
   Network,
   ServerCog,
   ShieldCheck,
@@ -22,7 +23,7 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type Experience = {
   start: string;
@@ -257,10 +258,18 @@ export default function PortfolioHome() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [visitors, setVisitors] = useState({ total: 0, today: 0 });
   const [activeSection, setActiveSection] = useState("home");
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const projectTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const modalCloseRef = useRef<HTMLButtonElement | null>(null);
   const experienceYears = useMemo(() => calculateExperienceYears(experiences), []);
   const pageSize = 3;
   const pageCount = Math.ceil(projects.length / pageSize);
   const visibleProjects = projects.slice(projectPage * pageSize, projectPage * pageSize + pageSize);
+
+  const closeProject = useCallback(() => {
+    setSelectedProject(null);
+    window.requestAnimationFrame(() => projectTriggerRef.current?.focus());
+  }, []);
 
   useEffect(() => {
     const key = `portfolio-visit-${new Date().toISOString().slice(0, 10)}`;
@@ -276,14 +285,36 @@ export default function PortfolioHome() {
 
   useEffect(() => {
     if (!selectedProject) return;
-    const close = (event: KeyboardEvent) => event.key === "Escape" && setSelectedProject(null);
+    const dialog = modalCloseRef.current?.closest<HTMLElement>('[role="dialog"]');
+    modalCloseRef.current?.focus();
+    const close = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeProject();
+        return;
+      }
+      if (event.key !== "Tab" || !dialog) return;
+      const focusable = Array.from(dialog.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])',
+      ));
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
     document.addEventListener("keydown", close);
     document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", close);
       document.body.style.overflow = "";
     };
-  }, [selectedProject]);
+  }, [closeProject, selectedProject]);
 
   useEffect(() => {
     const sectionIds = ["home", "experience", "projects", "learning", "skills"];
@@ -314,14 +345,24 @@ export default function PortfolioHome() {
 
   return (
     <main className="portfolio-shell">
-      <aside className="sidebar">
+      <aside className="sidebar" aria-hidden={selectedProject ? true : undefined} inert={selectedProject ? true : undefined}>
         <a href="#home" className="side-logo">thisnorm<span>.</span></a>
-        <nav className="side-nav" aria-label="주요 메뉴">
-          <a className={activeSection === "home" ? "active" : ""} href="#home"><Home size={17} />Home</a>
-          <a className={activeSection === "experience" ? "active" : ""} href="#experience"><BriefcaseBusiness size={17} />Experience</a>
-          <a className={activeSection === "projects" ? "active" : ""} href="#projects"><Box size={17} />Projects</a>
-          <a className={activeSection === "learning" ? "active" : ""} href="#learning"><FileText size={17} />Education</a>
-          <a className={activeSection === "skills" ? "active" : ""} href="#skills"><Layers3 size={17} />Skills</a>
+        <button
+          className="mobile-nav-toggle"
+          type="button"
+          aria-label={mobileNavOpen ? "메뉴 닫기" : "메뉴 열기"}
+          aria-expanded={mobileNavOpen}
+          aria-controls="primary-navigation"
+          onClick={() => setMobileNavOpen((open) => !open)}
+        >
+          {mobileNavOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
+        <nav id="primary-navigation" className={`side-nav ${mobileNavOpen ? "mobile-open" : ""}`} aria-label="주요 메뉴">
+          <a className={activeSection === "home" ? "active" : ""} href="#home" onClick={() => setMobileNavOpen(false)}><Home size={17} />Home</a>
+          <a className={activeSection === "experience" ? "active" : ""} href="#experience" onClick={() => setMobileNavOpen(false)}><BriefcaseBusiness size={17} />Experience</a>
+          <a className={activeSection === "projects" ? "active" : ""} href="#projects" onClick={() => setMobileNavOpen(false)}><Box size={17} />Projects</a>
+          <a className={activeSection === "learning" ? "active" : ""} href="#learning" onClick={() => setMobileNavOpen(false)}><FileText size={17} />Education</a>
+          <a className={activeSection === "skills" ? "active" : ""} href="#skills" onClick={() => setMobileNavOpen(false)}><Layers3 size={17} />Skills</a>
         </nav>
         <div className="side-bottom">
           <a className="contact-link" href="mailto:invako@naver.com"><Mail size={16} />Contact</a>
@@ -330,7 +371,7 @@ export default function PortfolioHome() {
         </div>
       </aside>
 
-      <div className="page-content">
+      <div className="page-content" aria-hidden={selectedProject ? true : undefined} inert={selectedProject ? true : undefined}>
         <section className="hero-section" id="home">
           <div className="visitor-counter" aria-label="방문자 통계">
             <Users size={17} />
@@ -366,7 +407,7 @@ export default function PortfolioHome() {
 
             <section className="panel project-panel" id="projects">
               <div className="panel-heading"><div><h2>Featured Projects<span>.</span></h2><p className="panel-subtitle">관심에서 시작해 직접 구현하며 확인한 가능성과 한계</p></div><a href="https://github.com/thisNorm" target="_blank" rel="noreferrer">GitHub <ArrowRight size={15} /></a></div>
-              <div className="featured-list">{visibleProjects.map(({ icon: Icon, ...project }) => <button type="button" className="featured-card" key={project.title} onClick={() => setSelectedProject({ ...project, icon: Icon })}><div className={`featured-thumb ${project.thumbnailFit === "contain" ? "contain" : ""}`}>{project.thumbnail ? <Image src={project.thumbnail} alt={`${project.title} 프로젝트 화면`} fill sizes="150px" /> : <Icon size={31} />}</div><div className="featured-copy"><span className="project-type">{project.type}</span><h3>{project.title}</h3><p>{project.description}</p><b>{project.result}</b><div className="tags">{project.stack.map((tag) => <span key={tag}>{tag}</span>)}</div></div><ArrowRight className="card-arrow" size={18} /></button>)}</div>
+              <div className="featured-list">{visibleProjects.map(({ icon: Icon, ...project }) => <button ref={projectTriggerRef} type="button" className="featured-card" key={project.title} onClick={() => setSelectedProject({ ...project, icon: Icon })}><div className={`featured-thumb ${project.thumbnailFit === "contain" ? "contain" : ""}`}>{project.thumbnail ? <Image src={project.thumbnail} alt={`${project.title} 프로젝트 화면`} fill sizes="150px" /> : <Icon size={31} />}</div><div className="featured-copy"><span className="project-type">{project.type}</span><h3>{project.title}</h3><p>{project.description}</p><b>{project.result}</b><div className="tags">{project.stack.map((tag) => <span key={tag}>{tag}</span>)}</div></div><ArrowRight className="card-arrow" size={18} /></button>)}</div>
               <div className="project-pagination"><button type="button" aria-label="이전 프로젝트" onClick={() => setProjectPage((page) => Math.max(0, page - 1))} disabled={projectPage === 0}><ArrowLeft size={16} /></button><div>{Array.from({ length: pageCount }, (_, index) => <button type="button" aria-label={`${index + 1} 페이지`} className={index === projectPage ? "active" : ""} onClick={() => setProjectPage(index)} key={index}>{index + 1}</button>)}</div><button type="button" aria-label="다음 프로젝트" onClick={() => setProjectPage((page) => Math.min(pageCount - 1, page + 1))} disabled={projectPage === pageCount - 1}><ArrowRight size={16} /></button></div>
             </section>
           </div>
@@ -414,7 +455,7 @@ export default function PortfolioHome() {
         </section>
       </div>
 
-      {selectedProject && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setSelectedProject(null)}><section className="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title"><button className="modal-close" type="button" aria-label="닫기" onClick={() => setSelectedProject(null)}><X size={20} /></button>{selectedProject.thumbnail && <div className={`modal-project-image ${selectedProject.thumbnailFit === "contain" ? "contain" : ""}`}><Image src={selectedProject.thumbnail} alt={`${selectedProject.title} 프로젝트 화면`} fill sizes="760px" /></div>}<p className="project-type">{selectedProject.type}</p><h2 id="project-modal-title">{selectedProject.title}</h2><p className="modal-lead">{selectedProject.description}</p>{(selectedProject.origin || selectedProject.achievement) && <div className="project-proof">{selectedProject.origin && <span>연계 교육 · {selectedProject.origin}</span>}{selectedProject.achievement && <strong>{selectedProject.achievement}</strong>}</div>}<div className="modal-insights"><article><span>시작</span><h3>왜 만들었나</h3><p>{selectedProject.motivation}</p></article><article><span>과정</span><h3>어디서 어려웠나</h3><p>{selectedProject.challenge}</p></article><article><span>회고</span><h3>무엇을 배웠나</h3><p>{selectedProject.lesson}</p></article></div><div className="modal-footer"><strong>{selectedProject.result}</strong><div className="tags">{selectedProject.stack.map((tag) => <span key={tag}>{tag}</span>)}</div></div></section></div>}
+      {selectedProject && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && closeProject()}><section className="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title"><button ref={modalCloseRef} className="modal-close" type="button" aria-label="닫기" onClick={closeProject}><X size={20} /></button>{selectedProject.thumbnail && <div className={`modal-project-image ${selectedProject.thumbnailFit === "contain" ? "contain" : ""}`}><Image src={selectedProject.thumbnail} alt={`${selectedProject.title} 프로젝트 화면`} fill sizes="760px" /></div>}<p className="project-type">{selectedProject.type}</p><h2 id="project-modal-title">{selectedProject.title}</h2><p className="modal-lead">{selectedProject.description}</p>{(selectedProject.origin || selectedProject.achievement) && <div className="project-proof">{selectedProject.origin && <span>연계 교육 · {selectedProject.origin}</span>}{selectedProject.achievement && <strong>{selectedProject.achievement}</strong>}</div>}<div className="modal-insights"><article><span>시작</span><h3>왜 만들었나</h3><p>{selectedProject.motivation}</p></article><article><span>과정</span><h3>어디서 어려웠나</h3><p>{selectedProject.challenge}</p></article><article><span>회고</span><h3>무엇을 배웠나</h3><p>{selectedProject.lesson}</p></article></div><div className="modal-footer"><strong>{selectedProject.result}</strong><div className="tags">{selectedProject.stack.map((tag) => <span key={tag}>{tag}</span>)}</div></div></section></div>}
     </main>
   );
 }
