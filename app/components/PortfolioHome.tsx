@@ -268,7 +268,7 @@ export default function PortfolioHome() {
 
   const closeProject = useCallback(() => {
     setSelectedProject(null);
-    window.requestAnimationFrame(() => projectTriggerRef.current?.focus());
+    window.setTimeout(() => projectTriggerRef.current?.focus(), 0);
   }, []);
 
   useEffect(() => {
