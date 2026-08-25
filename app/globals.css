@@ -183,6 +183,7 @@ button, input, textarea, select { font: inherit; }
   .learning-grid::before { display: none; }
 }
 @media (max-width: 760px) {
+  .portfolio-shell { flex-direction: column; }
   .sidebar { position: static; width: 100%; min-height: auto; flex-direction: row; align-items: center; justify-content: space-between; padding: 16px 18px; }
   .side-logo { margin: 0; padding: 0; }.side-nav { display: none; }.side-bottom { margin: 0; }.contact-link, .social-row, .side-bottom p { display: none; }
   .page-content { margin-left: 0; width: 100%; }
