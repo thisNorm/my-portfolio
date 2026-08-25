@@ -16,6 +16,7 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #07111f; color: var(--ink); }
+.hero-copy h1, .panel-heading h2, .learning-grid h3, .awards-list h3 { word-break: keep-all; overflow-wrap: break-word; }
 a { color: inherit; text-decoration: none; }
 button, input, textarea, select { font: inherit; }
 
@@ -27,6 +28,7 @@ button, input, textarea, select { font: inherit; }
   border-right: 1px solid rgba(255,255,255,.05); color: #d7e1ec;
 }
 .side-logo { font-size: 21px; font-weight: 800; letter-spacing: -.04em; padding: 0 10px; margin-bottom: 32px; }
+.mobile-nav-toggle { display: none; width: 34px; height: 34px; place-items: center; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: rgba(255,255,255,.04); color: #d7e1ec; cursor: pointer; }
 .side-logo span, .panel-heading h2 span { color: var(--green); }
 .side-nav { display: flex; flex-direction: column; gap: 7px; }
 .side-nav a {
@@ -184,8 +186,8 @@ button, input, textarea, select { font: inherit; }
 }
 @media (max-width: 760px) {
   .portfolio-shell { flex-direction: column; }
-  .sidebar { position: static; width: 100%; min-height: auto; flex-direction: row; align-items: center; justify-content: space-between; padding: 16px 18px; }
-  .side-logo { margin: 0; padding: 0; }.side-nav { display: none; }.side-bottom { margin: 0; }.contact-link, .social-row, .side-bottom p { display: none; }
+  .sidebar { position: relative; width: 100%; min-height: auto; flex-direction: row; align-items: center; justify-content: space-between; padding: 16px 18px; }
+  .side-logo { margin: 0; padding: 0; }.mobile-nav-toggle { display: grid; }.side-nav { display: none; }.side-nav.mobile-open { position: absolute; top: 100%; left: 0; right: 0; z-index: 51; display: flex; padding: 8px 18px 14px; background: linear-gradient(180deg,#0a1421 0%,#0b1522 100%); border-top: 1px solid rgba(255,255,255,.08); box-shadow: 0 14px 24px rgba(0,0,0,.2); }.side-nav.mobile-open a { width: 100%; }.side-bottom { margin: 0; display: flex; align-items: center; gap: 8px; }.social-row, .side-bottom p { display: none; }.contact-link { min-height: 34px; padding: 0 10px; }
   .page-content { margin-left: 0; width: 100%; }
   .hero-section { min-height: auto; padding: 56px 20px 28px; }
   .hero-copy h1 { font-size: 38px; }.hero-text br { display: none; }
