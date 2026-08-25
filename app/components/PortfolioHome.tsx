@@ -9,7 +9,7 @@ import {
   Database,
   Eye,
   FileText,
-  Github,
+  ExternalLink,
   Home,
   Layers3,
   Mail,
@@ -325,7 +325,7 @@ export default function PortfolioHome() {
         </nav>
         <div className="side-bottom">
           <a className="contact-link" href="mailto:invako@naver.com"><Mail size={16} />Contact</a>
-          <div className="social-row"><a href="https://github.com/thisNorm" target="_blank" rel="noreferrer" aria-label="GitHub"><Github size={17} /></a></div>
+          <div className="social-row"><a href="https://github.com/thisNorm" target="_blank" rel="noreferrer" aria-label="GitHub"><ExternalLink size={17} /></a></div>
           <p>© {new Date().getFullYear()} thisnorm.<br />All rights reserved.</p>
         </div>
       </aside>
