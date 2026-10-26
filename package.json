@@ -10,11 +10,11 @@
   },
   "dependencies": {
     "@portabletext/react": "^8.0.1",
-    "@sanity/client": "^8.9.0",
+    "@sanity/client": "^8.10.1",
     "@sanity/image-url": "^2.1.1",
     "@vercel/analytics": "^2.0.1",
-    "framer-motion": "^14.3.0",
-    "lucide-react": "^1.57.0",
+    "framer-motion": "^14.6.0",
+    "lucide-react": "^1.61.0",
     "next": "^16.4.2",
     "next-themes": "^0.4.6",
     "react": "19.3.1",
@@ -29,7 +29,7 @@
     "autoprefixer": "^10.6.1",
     "eslint": "^10",
     "eslint-config-next": "^16.4.2",
-    "postcss": "^8.5.30",
+    "postcss": "^8.5.31",
     "tailwindcss": "^4.3.3",
     "typescript": "^7"
   }
