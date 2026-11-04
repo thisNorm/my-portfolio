@@ -3,49 +3,37 @@ import { Inter } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import { siteDescription, siteTitle, siteUrl } from "./site";
 
 const inter = Inter({ subsets: ["latin"] });
-const siteUrl = "https://www.thisnorm.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
 
   title: {
-    default: "Dev.Gyubeom | Backend Developer Portfolio",
+    default: siteTitle,
     template: "%s | Dev.Gyubeom",
   },
 
-  description: "진인사대천명. 압도적인 노력으로 결과를 만드는 백엔드 개발자 포트폴리오",
-
-  // ✅ 전역 canonical은 빼는 게 안전함 (페이지별로 generateMetadata에서 지정)
-  // alternates: { canonical: "/" },
+  description: siteDescription,
 
   icons: {
     icon: "/favicon.ico",
   },
 
   openGraph: {
-    title: "Dev.Gyubeom | Backend Developer Portfolio",
-    description: "ESFP 리더형 개발자. 기술과 비즈니스를 연결합니다.",
+    title: siteTitle,
+    description: siteDescription,
     url: siteUrl,
     siteName: "Dev.Gyubeom Portfolio",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-      },
-    ],
     locale: "ko_KR",
     type: "website",
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Dev.Gyubeom | Backend Developer Portfolio",
-    description:
-      "진인사대천명. 압도적인 노력으로 결과를 만드는 백엔드 개발자 포트폴리오",
-    images: ["/og-image.png"],
+    title: siteTitle,
+    description: siteDescription,
   },
 };
 

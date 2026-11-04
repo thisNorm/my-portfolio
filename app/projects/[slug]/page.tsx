@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { client } from "@/sanity/lib/client";
 import {
   PortableTextContent,
@@ -43,9 +44,8 @@ export async function generateMetadata({
 
   if (!project) {
     return {
-      title: "?꾨줈?앺듃瑜?李얠쓣 ???놁뒿?덈떎",
-      description: "議댁옱?섏? ?딅뒗 ?꾨줈?앺듃?낅땲??",
-      alternates: { canonical: "/projects" },
+      title: "프로젝트를 찾을 수 없습니다",
+      description: "존재하지 않는 프로젝트입니다.",
     };
   }
 
@@ -76,13 +76,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
   const project = await getProject(slug);
 
-  if (!project) {
-    return (
-      <div className="text-center py-20 text-slate-100">
-        ?꾨줈?앺듃瑜?李얠쓣 ???놁뒿?덈떎.
-      </div>
-    );
-  }
+  if (!project) notFound();
 
   return (
     <article className="min-h-screen bg-slate-950 text-slate-100 pb-20">
@@ -115,13 +109,15 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all shadow-lg shadow-blue-900/20"
               >
-                ?쒕퉬??諛⑸Ц?섍린 ??              </a>
+                서비스 방문하기 →
+              </a>
             )}
             <Link
-              href="/projects"
+              href="/#projects"
               className="inline-flex items-center px-6 py-3 rounded-lg border border-slate-700 hover:bg-slate-800 transition-all text-slate-300"
             >
-              紐⑸줉?쇰줈 ?뚯븘媛湲?            </Link>
+              목록으로 돌아가기
+            </Link>
           </div>
         </div>
       </header>
@@ -143,7 +139,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           {project.content ? (
             <PortableTextContent value={project.content} />
           ) : (
-            <p className="text-slate-500">?묒꽦???곸꽭 ?댁슜???놁뒿?덈떎.</p>
+            <p className="text-slate-500">작성된 상세 내용이 없습니다.</p>
           )}
         </div>
       </div>
