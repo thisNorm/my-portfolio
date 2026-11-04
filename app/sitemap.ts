@@ -1,36 +1,33 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
+import { client } from "@/sanity/lib/client";
 
-type ProjectSlug = { slug: { current: string } };
+export const revalidate = 3600;
 
-async function getProjectSlugs(): Promise<string[]> {
-  // ✅ Sanity 예시
-  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-  const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
+type ProjectEntry = { slug: string; updatedAt: string };
 
-  if (!projectId || !dataset) return [];
-
-  const query = encodeURIComponent(`*[_type=="project" && defined(slug.current)]{ "slug": slug }`);
-  const url = `https://${projectId}.api.sanity.io/v2021-10-21/data/query/${dataset}?query=${query}`;
-
-  const res = await fetch(url, { next: { revalidate: 3600 } });
-  if (!res.ok) return [];
-
-  const data = await res.json();
-  const items: ProjectSlug[] = data?.result ?? [];
-  return items.map((x) => x.slug.current).filter(Boolean);
+async function getProjects(): Promise<ProjectEntry[]> {
+  try {
+    return await client.fetch<ProjectEntry[]>(
+      `*[_type == "project" && defined(slug.current)]{ "slug": slug.current, "updatedAt": _updatedAt }`,
+    );
+  } catch (error) {
+    // Keep serving the home URL rather than failing the whole sitemap.
+    console.error("Sitemap project fetch failed:", error);
+    return [];
+  }
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = "https://www.thisnorm.dev";
 
-  const slugs = await getProjectSlugs();
+  const projects = await getProjects();
 
   return [
     { url: `${base}/`, lastModified: new Date() },
 
-    ...slugs.map((slug) => ({
-      url: `${base}/projects/${slug}`,
-      lastModified: new Date(),
+    ...projects.map((project) => ({
+      url: `${base}/projects/${project.slug}`,
+      lastModified: new Date(project.updatedAt),
     })),
   ];
 }
