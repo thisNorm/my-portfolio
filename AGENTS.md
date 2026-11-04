@@ -10,7 +10,7 @@ Personal portfolio at https://www.thisnorm.dev — Next.js 16 App Router, React 
 - Home content is static in `app/components/portfolioData.ts`; edit copy there, not in JSX.
 - `app/projects/[slug]/page.tsx` renders Sanity `project` documents; unknown slugs must call `notFound()`.
 - `app/api/visit/route.ts` is the visitor counter (Sanity `visitor` document, needs `SANITY_API_TOKEN`).
-- Site-wide title, description, OG and Twitter copy live once in `app/layout.tsx`.
+- Site-wide title and description live once in `app/site.ts`; `app/layout.tsx` and `app/opengraph-image.tsx` (generated OG image, fetches a Noto Sans KR subset at build time) read them.
 - `app/sitemap.ts` and the project page read Sanity through `sanity/lib/client.ts`.
 
 ## Commands
@@ -18,9 +18,11 @@ Personal portfolio at https://www.thisnorm.dev — Next.js 16 App Router, React 
 ```bash
 npm ci
 npm run lint
-node --test tests/*.test.mjs
 npm run build
+npm test
 ```
+
+`npm test` checks the production build output in `.next` (rendered home metadata, OG image, robots, sitemap, redirects) plus a mojibake guard on `app/` sources, so it must run after `npm run build`.
 
 `npm run build` needs `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` (public values; see Vercel project env). Never commit `.env*` or `SANITY_API_TOKEN`.
 
