@@ -97,12 +97,14 @@ npm run start
 
 ```text
 app/
-├─ components/       # 기존 재사용 컴포넌트
-├─ projects/         # 프로젝트 상세 페이지
-├─ studio/           # Sanity Studio
+├─ api/visit/        # 방문자 카운터 API (Sanity)
+├─ components/       # PortfolioHome, 프로젝트 모달, 홈 콘텐츠 데이터
+├─ projects/         # 프로젝트 상세 페이지 (Sanity)
 ├─ globals.css       # 포트폴리오 디자인 시스템
 ├─ layout.tsx        # 전역 레이아웃 및 메타데이터
+├─ sitemap.ts        # 사이트맵
 └─ page.tsx          # 메인 포트폴리오 화면
+sanity/              # Sanity 클라이언트와 환경 변수
 ```
 
 ## Design Concept
