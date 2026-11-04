@@ -11,6 +11,10 @@ updates:
     groups:
       all-dependencies:
         patterns: ["*"]
+    ignore:
+      # typescript-eslint (via eslint-config-next) supports TypeScript <6.1 only.
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
