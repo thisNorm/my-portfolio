@@ -6,7 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/studio"],
       },
     ],
     sitemap: "https://www.thisnorm.dev/sitemap.xml",
