@@ -6,14 +6,14 @@ const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
 test("uses the www origin for indexable metadata", async () => {
   const [layout, page, sitemap, robots, readme] = await Promise.all([
-    read("app/layout.tsx"),
+    read("app/site.ts"),
     read("app/page.tsx"),
     read("app/sitemap.ts"),
     read("app/robots.ts"),
     read("README.md"),
   ]);
 
-  assert.match(layout, /const siteUrl = "https:\/\/www\.thisnorm\.dev"/);
+  assert.match(layout, /export const siteUrl = "https:\/\/www\.thisnorm\.dev"/);
   assert.match(page, /alternates:\s*\{ canonical: "\/" \}/);
   assert.match(sitemap, /const base = "https:\/\/www\.thisnorm\.dev"/);
   assert.doesNotMatch(sitemap, /url: `\$\{base\}\/projects`/);
