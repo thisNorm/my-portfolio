@@ -272,7 +272,9 @@ export default function PortfolioHome() {
   }, []);
 
   useEffect(() => {
-    const key = `portfolio-visit-${new Date().toISOString().slice(0, 10)}`;
+    // KST date, matching the server's daily reset in app/api/visit/route.ts.
+    const kstDate = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    const key = `portfolio-visit-${kstDate}`;
     const method = sessionStorage.getItem(key) ? "GET" : "POST";
     fetch("/api/visit", { method })
       .then((response) => response.json())

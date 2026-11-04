@@ -19,17 +19,18 @@ type VisitorDocument = {
   lastUpdated?: string;
 };
 
+// KST calendar date (YYYY-MM-DD); the client uses the same rule for its dedupe key.
+const kstToday = () =>
+  new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
 export async function GET() {
   try {
     const visitor = await writeClient.fetch<VisitorDocument | null>(
       `*[_type == "visitor"][0]`,
     );
-    const now = new Date();
-    const kstDate = new Date(now.getTime() + 9 * 60 * 60 * 1000);
-    const todayStr = kstDate.toISOString().split("T")[0];
 
     return NextResponse.json({
-      today: visitor?.lastUpdated === todayStr ? (visitor?.today ?? 0) : 0,
+      today: visitor?.lastUpdated === kstToday() ? (visitor?.today ?? 0) : 0,
       total: visitor?.total ?? 0,
     });
   } catch (error) {
@@ -40,53 +41,35 @@ export async function GET() {
 
 export async function POST() {
   try {
-    const now = new Date();
-    const kstOffset = 9 * 60 * 60 * 1000;
-    const kstDate = new Date(now.getTime() + kstOffset);
-    const todayStr = kstDate.toISOString().split("T")[0];
+    const todayStr = kstToday();
 
-    const visitor = await writeClient.fetch<VisitorDocument | null>(
+    let visitor = await writeClient.fetch<VisitorDocument | null>(
       `*[_type == "visitor"][0]`,
     );
 
-    let docId = visitor?._id;
-    const currentTotal = visitor?.total ?? 0;
-    const currentToday = visitor?.today ?? 0;
-    const lastUpdated = visitor?.lastUpdated ?? "";
-
     if (!visitor) {
-      const newDocument = await writeClient.create({
+      visitor = await writeClient.create({
         _type: "visitor",
         total: 0,
         today: 0,
         lastUpdated: todayStr,
       });
-      docId = newDocument._id;
     }
 
-    if (!docId) {
-      throw new Error("Visitor document ID is unavailable");
-    }
-
-    let newToday = currentToday + 1;
-    const newTotal = currentTotal + 1;
-
-    if (lastUpdated !== todayStr) {
-      newToday = 1;
-    }
-
-    await writeClient
-      .patch(docId)
-      .set({
-        total: newTotal,
-        today: newToday,
-        lastUpdated: todayStr,
-      })
-      .commit();
+    // inc() is applied server-side, so concurrent visits are not lost.
+    // shortcut: at the KST day boundary concurrent resets can drop a few "today" counts; total stays exact.
+    const patch = writeClient
+      .patch(visitor._id)
+      .setIfMissing({ total: 0, today: 0 })
+      .inc({ total: 1 });
+    const updated = await (visitor.lastUpdated === todayStr
+      ? patch.inc({ today: 1 })
+      : patch.set({ today: 1, lastUpdated: todayStr })
+    ).commit<VisitorDocument>();
 
     return NextResponse.json({
-      today: newToday,
-      total: newTotal,
+      today: updated.today ?? 0,
+      total: updated.total ?? 0,
     });
   } catch (error) {
     console.error("Visitor Update Error:", error);
