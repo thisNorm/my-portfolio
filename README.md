@@ -8,7 +8,7 @@
 
 - Website: https://www.thisnorm.dev
 - GitHub: https://github.com/thisNorm
-- Contact: invako@naver.com
+- Contact: kisook2557@gmail.com
 
 ## Direction
 
@@ -61,7 +61,7 @@ Agent → Workflow → Data & API → Infra & Edge
 
 ## Experience
 
-### Infovally Korea — Backend Engineer
+### 인포벨리코리아 (INVAKO) — Backend Engineer
 
 스마트팜 현장의 장치 연결, 엣지 서버 운영, 데이터 수집·전송 흐름을 개발하고 있습니다.
 
@@ -98,7 +98,7 @@ npm run start
 ```text
 app/
 ├─ api/visit/        # 방문자 카운터 API (Sanity)
-├─ components/       # PortfolioHome, 프로젝트 모달, 홈 콘텐츠 데이터
+├─ components/       # PortfolioHome, 방문자 수, 홈 콘텐츠 데이터
 ├─ projects/         # 프로젝트 상세 페이지 (Sanity)
 ├─ globals.css       # 포트폴리오 디자인 시스템
 ├─ layout.tsx        # 전역 레이아웃 및 메타데이터
