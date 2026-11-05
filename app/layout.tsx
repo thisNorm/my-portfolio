@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans_KR } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { siteDescription, siteTitle, siteUrl } from "./site";
 
-const inter = Inter({ subsets: ["latin"] });
+const sans = IBM_Plex_Sans_KR({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-sans" });
+const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -46,7 +47,7 @@ export default function RootLayout({
 
   return (
     <html lang="ko" className="!scroll-smooth">
-      <body className={inter.className}>
+      <body className={`${sans.className} ${sans.variable} ${mono.variable}`}>
         {/* ✅ 기존 <script defer ...>와 동일 목적: 분석 스크립트 주입 */}
         <Script
           src="https://datafa.st/js/script.js"
