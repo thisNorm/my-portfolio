@@ -42,7 +42,7 @@ export const experiences: Experience[] = [
     start: "2026-06",
     end: "present",
     period: "2026.06 — Present",
-    company: "Infovally Korea",
+    company: "인포벨리코리아 (INVAKO)",
     role: "Backend Engineer",
     description: [
       "스마트팜 엣지 서버와 데이터 파이프라인 아키텍처 설계·개발",

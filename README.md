@@ -61,7 +61,7 @@ Agent → Workflow → Data & API → Infra & Edge
 
 ## Experience
 
-### Infovally Korea — Backend Engineer
+### 인포벨리코리아 (INVAKO) — Backend Engineer
 
 스마트팜 현장의 장치 연결, 엣지 서버 운영, 데이터 수집·전송 흐름을 개발하고 있습니다.
 
