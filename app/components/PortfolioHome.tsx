@@ -146,7 +146,7 @@ export default function PortfolioHome() {
           <a className={activeSection === "skills" ? "active" : ""} href="#skills" onClick={() => setMobileNavOpen(false)}><Layers3 size={17} />Skills</a>
         </nav>
         <div className="side-bottom">
-          <a className="contact-link" href="mailto:invako@naver.com"><Mail size={16} />Contact</a>
+          <a className="contact-link" href="mailto:kisook2557@gmail.com"><Mail size={16} />Contact</a>
           <div className="social-row"><a href="https://github.com/thisNorm" target="_blank" rel="noreferrer" aria-label="GitHub"><ExternalLink size={17} /></a></div>
           <p>© {new Date().getFullYear()} thisnorm.<br />All rights reserved.</p>
         </div>

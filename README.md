@@ -8,7 +8,7 @@
 
 - Website: https://www.thisnorm.dev
 - GitHub: https://github.com/thisNorm
-- Contact: invako@naver.com
+- Contact: kisook2557@gmail.com
 
 ## Direction
 
