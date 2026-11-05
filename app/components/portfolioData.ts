@@ -57,17 +57,17 @@ export const projects: Project[] = [
 ];
 
 export const tools: Row[] = [
-  { name: "OnlyDM", why: "사무실에서 인스타그램 DM만 가볍게 쓰고 싶어서, DM만 남긴 Windows 메신저 창을 만들었다.", now: "외국 사용자 요청으로 영어 UI 추가, npm으로 업데이트 배포", href: "https://github.com/thisNorm/OnlyDM" },
-  { name: "Tailscale 모니터링", why: "공유 계정이라 누가 장비를 바꿨는지 알 수 없어서, 규칙 위반과 변경 이력을 Slack으로 알리게 했다.", now: "사무실 전원이 사용 중", href: "https://github.com/thisNorm/tailscale-monitor" },
-  { name: "AI POT CBT", why: "프롬프트 엔지니어링 자격증 기출을 반복해서 풀려고, 공개 시험지로 CBT와 오답노트를 만들었다.", now: "문제풀이를 이걸로만 해서 1급 취득", href: "https://github.com/thisNorm/ai-pot-cbt" },
-  { name: "Keydesk", why: "Open API가 늘면서 키 관리가 난잡해져서, 오픈소스 Infisical을 바탕으로 개인용 API 키 보관함을 만들고 있다.", now: "개발 중. API 호출을 모아 호출량과 비용을 관리하는 게이트웨이가 목표" },
-  { name: "thisnorm.dev", why: "이력서만으로는 보여줄 수 없는 것들이 있어서, 도메인을 사서 포트폴리오 사이트를 직접 만들었다.", now: "지금 보고 있는 이 사이트", href: "https://github.com/thisNorm/my-portfolio" },
+  { name: "OnlyDM", why: "사무실에서 인스타그램 DM만 가볍게 쓰려고, DM만 남겨 만든 Windows 메신저 창", now: "외국 사용자 요청으로 영어 UI 추가, npm으로 업데이트 배포", href: "https://github.com/thisNorm/OnlyDM" },
+  { name: "Tailscale 모니터링", why: "공유 계정이라 누가 장비를 바꿨는지 알 수 없어서, 규칙 위반과 변경 이력을 Slack으로 알림", now: "사무실 전원이 사용 중", href: "https://github.com/thisNorm/tailscale-monitor" },
+  { name: "AI POT CBT", why: "프롬프트 엔지니어링 자격증 기출을 반복해서 풀려고, 공개 시험지로 만든 CBT와 오답노트", now: "문제풀이를 이걸로만 해서 1급 취득", href: "https://github.com/thisNorm/ai-pot-cbt" },
+  { name: "Keydesk", why: "Open API가 늘면서 키 관리가 난잡해져서, 오픈소스 Infisical을 바탕으로 만드는 개인용 API 키 보관함", now: "개발 중. API 호출을 모아 호출량과 비용을 관리하는 게이트웨이가 목표" },
+  { name: "thisnorm.dev", why: "이력서만으로는 보여줄 수 없는 것들이 있어서, 도메인을 사서 직접 만든 포트폴리오 사이트", now: "지금 보고 있는 이 사이트", href: "https://github.com/thisNorm/my-portfolio" },
 ];
 
 export const activities: Row[] = [
-  { name: "데일리 AI 브리핑", why: "AI 기업들의 공식 발표와, 새 모델을 먼저 돌려 본 개발자 커뮤니티의 반응을 매일 아침 모아 그림과 함께 Threads·LinkedIn에 공유한다.", now: "매일 오전 9시 게시" },
-  { name: "AINOW AI 세미나 & 네트워킹", why: "AI를 업무에 쓰는 실무자·창업가 모임에 자발적으로 참가해, AI를 업무 자동화에 붙인 사례 강연을 듣고 참가자들과 이야기했다.", now: "2026.10.17 · Intel 후원 행사" },
-  { name: "기술 블로그", why: "Docker·Kubernetes·CI/CD 학습 내용을 정리하고, Content Agent로 발행한다.", now: "thisnorm.tistory.com", href: "https://thisnorm.tistory.com" },
+  { name: "데일리 AI 브리핑", why: "AI 기업들의 공식 발표와 새 모델을 먼저 돌려 본 개발자 커뮤니티의 반응을 매일 아침 모아, 그림과 함께 Threads·LinkedIn에 공유", now: "매일 오전 9시 게시" },
+  { name: "AINOW AI 세미나 & 네트워킹", why: "AI를 업무에 쓰는 실무자·창업가 모임에 자발적으로 참가해, AI를 업무 자동화에 붙인 사례 강연을 듣고 참가자들과 교류", now: "2026.10.17 · Intel 후원 행사" },
+  { name: "기술 블로그", why: "Docker·Kubernetes·CI/CD 학습 내용을 정리해 Content Agent로 발행", now: "thisnorm.tistory.com", href: "https://thisnorm.tistory.com" },
 ];
 
 export const skills = [
