@@ -6,6 +6,7 @@ export default function VisitorCount() {
   const [visitors, setVisitors] = useState<{ today: number; total: number } | null>(null);
 
   useEffect(() => {
+    if (["localhost", "127.0.0.1", "[::1]"].includes(window.location.hostname)) return;
     // KST date, matching the server's daily reset in app/api/visit/route.ts.
     const kstDate = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
     const key = `portfolio-visit-${kstDate}`;

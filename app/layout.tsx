@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, IBM_Plex_Sans_KR } from "next/font/google";
+import localFont from "next/font/local";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { siteDescription, siteTitle, siteUrl } from "./site";
+import { themeBootstrap } from "./components/themePreference";
 
-const sans = IBM_Plex_Sans_KR({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-sans" });
-const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
+const sans = localFont({ src: "./fonts/PretendardVariable.woff2", display: "swap", weight: "45 920", variable: "--font-sans" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -46,8 +46,12 @@ export default function RootLayout({
   const allowLocalhost = process.env.NODE_ENV !== "production";
 
   return (
-    <html lang="ko" className="!scroll-smooth">
-      <body className={`${sans.className} ${sans.variable} ${mono.variable}`}>
+    <html lang="ko" data-theme="light" data-palette="paper" suppressHydrationWarning>
+      <head>
+        <meta name="theme-color" content="#e9e6dd" suppressHydrationWarning />
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+      </head>
+      <body className={`${sans.className} ${sans.variable}`}>
         {/* ✅ 기존 <script defer ...>와 동일 목적: 분석 스크립트 주입 */}
         <Script
           src="https://datafa.st/js/script.js"
