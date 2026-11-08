@@ -758,3 +758,51 @@ dialog{margin:auto}
 @media (min-width: 1051px) and (max-width: 1430px) {
   .hero-scene { width: 850px; right: 0; top: 130px; }
 }
+
+/* Product imagery retains the source application's own colours and identity. */
+.project-identity, .dialog-project-title { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.project-icon { width: 36px; height: 36px; object-fit: contain; flex: none; }
+.dialog-project-title .project-icon { width: 44px; height: 44px; }
+.project-cover.has-product-media img { width: 100%; height: calc(100% - 50px); margin: 0; padding: 0; object-fit: cover; object-position: top; }
+:root[data-palette] .project-cover.has-product-media img { filter: none; mix-blend-mode: normal; }
+.project-cover.has-product-media figcaption { left: 18px; right: 18px; bottom: 12px; }
+.project-cover.cover-pinmate.has-product-media img { object-fit: contain; object-position: center; }
+.tile-tailscale { grid-column: 8 / 13; margin-top: 99px; }
+.cover-tailscale { height: 376px; }
+
+.additional-projects { border-top: 1px solid var(--line); margin-top: 30px; }
+.additional-projects summary { min-height: 48px; padding: 14px 0; font-size: 15px; cursor: pointer; }
+.additional-projects summary > span { margin-left: 12px; color: var(--muted); font-size: 12px; }
+.additional-projects ul { list-style: none; margin: 0; padding: 0; }
+.additional-project-open { display: grid; grid-template-columns: minmax(180px, .8fr) minmax(0, 1.2fr); gap: 6px 32px; padding: 20px 0; border-top: 1px solid var(--line); }
+.additional-project-open strong { font-size: 18px; font-weight: 500; }
+.additional-project-summary { font-size: 14px; color: var(--muted); word-break: keep-all; }
+.additional-project-meta { grid-column: 2; font-size: 12px; color: var(--muted); }
+.tools-preview { max-width: 960px; margin-top: 24px; }
+.tools-preview a { display: block; }
+.tools-preview img { width: 100%; height: auto; }
+.tools-preview figcaption { font-size: 12px; color: var(--muted); margin-top: 10px; }
+.dialog-original + .dialog-original { margin-top: 26px; }
+.dialog-original img { max-height: 680px; object-fit: contain; object-position: top; }
+.dialog-media-phones { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+.dialog-media-phones .dialog-original + .dialog-original { margin-top: 0; }
+.dialog-details > .dialog-foot { display: flex; gap: 18px; }
+.dialog-links { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+
+@media (min-width: 1051px) {
+  .project-gallery .cover-tailscale { height: clamp(376px, 27vw, 520px); }
+}
+@media (min-width: 601px) and (max-width: 1050px) {
+  .cover-tailscale { height: 330px; }
+}
+@media (max-width: 780px) {
+  .additional-project-open { grid-template-columns: minmax(0, 1fr); gap: 5px; }
+  .additional-project-meta { grid-column: 1; }
+}
+@media (max-width: 600px) {
+  .cover-tailscale { height: 310px; }
+  .project-icon { width: 30px; height: 30px; }
+  .dialog-project-title .project-icon { width: 36px; height: 36px; }
+  .dialog-details > .dialog-foot { display: block; }
+  .dialog-links { gap: 0 20px; }
+}

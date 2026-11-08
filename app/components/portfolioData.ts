@@ -1,17 +1,19 @@
 // Approved portfolio copy. Keep project roles and evidence in sync with the resume.
-export type ProjectId = 'finance' | 'facegate' | 'autoci' | 'harnessvault' | 'aegisview' | 'pinmate' | 'content' | 'sns' | 'deepvoice';
+export type ProjectId = 'finance' | 'facegate' | 'autoci' | 'tailscale' | 'harnessvault' | 'aegisview' | 'pinmate' | 'content' | 'sns' | 'deepvoice';
 export type ProjectFilter = 'all' | 'automation' | 'ai' | 'service';
+export type ProjectMedia = { src: string; width: number; height: number; alt: string; caption: string };
 export type Project = {
   id: ProjectId; name: string; category: string; status: string; role: string;
   summary: string; problem: string; solution: string; evidence: string;
   stack: string[]; github: string | null; filter: Exclude<ProjectFilter, 'all'>;
   tagline: string; coverCaption: string;
+  featured?: boolean; icon?: string; media?: ProjectMedia[]; liveUrl?: string;
   metric?: { before: number; after: number; unit: string; label: string };
 };
 export type Award = { date: string; title: string; org: string; note: string; image?: string; imageAlt?: string; imageWidth?: number; imageHeight?: number };
 type Portfolio = {
   projects: Project[];
-  tools: {name: string; problem: string; state: string; github: string | null}[];
+  tools: {name: string; problem: string; state: string; github: string | null; image?: ProjectMedia}[];
   jobs: {company: string; role: string; period: string; summary: string; lines: string[]}[];
   skills: {label: string; items: string}[];
   awards: Award[];
@@ -25,12 +27,12 @@ export const portfolio: Portfolio = {
       "id": "finance",
       "name": "알아서",
       "category": "개인 재무 에이전트",
-      "status": "",
+      "status": "로컬 앱",
       "role": "1인 개발",
-      "summary": "카드·계좌·증권을 모아 결제 방법과 예산 조정안을 제안합니다.",
+      "summary": "수입·지출·보유 자산을 모아 결제 계획과 예산 변경안을 제안하는 개인 재무 도구입니다.",
       "problem": "카드·계좌·증권에 흩어진 정보를 모아 결제 방법과 예산 조정안을 판단할 필요가 있었습니다.",
-      "solution": "계산은 코드로 처리하고 AI는 판단과 제안을 맡습니다. 거래·주문 기능 없이 제안까지만 다룹니다.",
-      "evidence": "계산은 코드가 맡고, AI는 제안까지만 합니다. 주문 기능은 차단했습니다.",
+      "solution": "금액·잔액·할부 계산은 서버 코드가 맡고, AI는 의도 해석·거래 분류·설명을 맡습니다. 대화로 요청한 변경안은 적용 전후를 먼저 비교합니다.",
+      "evidence": "금융 자료는 로컬에 저장합니다. 화면의 금융 데이터는 공개 README에 사용된 예시이며, 계산 결과와 AI 설명을 분리해 처리합니다.",
       "stack": [
         "JavaScript",
         "MCP",
@@ -39,7 +41,25 @@ export const portfolio: Portfolio = {
       "github": "https://github.com/thisNorm/finance-agent",
       "filter": "automation",
       "tagline": "흩어진 재무 정보를 한곳으로.",
-      "coverCaption": "정보를 한곳으로 모으는 개념 그래픽"
+      "coverCaption": "실제 앱 UI · 공개 README의 예시 금융 데이터",
+      "featured": true,
+      "icon": "/portfolio/projects/finance-icon.png",
+      "media": [
+        {
+          "src": "/portfolio/projects/finance-plan.png",
+          "width": 1280,
+          "height": 860,
+          "alt": "이번 달 계획과 대화 기반 예산 변경안을 보여 주는 알아서 앱 화면",
+          "caption": "실제 앱 UI · 공개 README의 예시 금융 데이터"
+        },
+        {
+          "src": "/portfolio/projects/finance-mobile-chat.png",
+          "width": 780,
+          "height": 1688,
+          "alt": "대화로 예산 변경안을 확인하는 알아서 모바일 화면",
+          "caption": "모바일 앱 UI · 예시 금융 데이터"
+        }
+      ]
     },
     {
       "id": "facegate",
@@ -47,15 +67,15 @@ export const portfolio: Portfolio = {
       "category": "현장 엣지 AI",
       "status": "사내 PoC",
       "role": "1인 개발",
-      "summary": "AI팀 얼굴인식 모델을 출입 단말 NPU로 옮겼습니다.",
-      "problem": "AI팀 모델을 출입 단말의 NPU에서 실행할 수 있도록 옮길 필요가 있었습니다.",
-      "solution": "모델을 RKNN·INT8로 변환해 Android 출입 단말에 적용했습니다. 변환 전후 판정을 비교했습니다.",
-      "evidence": "사내 PoC에서 변환 전후 판정이 같았습니다. 처리 시간은 NPU INT8 단말 장면 기준입니다.",
+      "summary": "AI팀 인식 경로를 Android 출입 단말에 통합하고, 얼굴 검출을 NPU로 옮겼습니다.",
+      "problem": "얼굴인식 API와 게이트 제어를 연결하고, 상시 실행되는 얼굴 검출의 단말 CPU 부담을 줄일 필요가 있었습니다.",
+      "solution": "SCRFD 얼굴 검출 모델을 RKNN·INT8로 변환해 Android 단말의 NPU에서 실행합니다. 얼굴 인식은 CPU에 유지하고, 기존 API 형식으로 출입 서버와 연결합니다.",
+      "evidence": "동일 단말의 장면 처리 중앙값이 305ms에서 23ms로 줄었습니다. 저장 장면 44장에서 CPU·NPU의 사람 판정이 같았습니다. 사내 PoC 기록이며, 모든 환경의 정확도를 확정한 결과는 아닙니다.",
       "metric": {
         "before": 305,
         "after": 23,
         "unit": "ms",
-        "label": "단말 장면 처리 · NPU INT8"
+        "label": "얼굴 검출 장면 처리 · NPU INT8"
       },
       "stack": [
         "TypeScript",
@@ -65,13 +85,14 @@ export const portfolio: Portfolio = {
       "github": "https://github.com/thisNorm/facegate",
       "filter": "ai",
       "tagline": "모델의 판단을 출입 단말에서도.",
-      "coverCaption": "변환 전후의 판정도 함께 확인했습니다."
+      "coverCaption": "동일 단말 비교 · 저장 장면 44장 판정 확인",
+      "featured": true
     },
     {
       "id": "autoci",
       "name": "Air-gapped AutoCI",
       "category": "폐쇄망 CI/CD 자동화",
-      "status": "",
+      "status": "PoC",
       "role": "2인 팀 리드",
       "summary": "폐쇄망에서 로컬 LLM으로 CI 설정을 생성합니다.",
       "problem": "폐쇄망에서도 CI 설정 생성부터 검증·반영까지 자동화할 필요가 있었습니다.",
@@ -86,7 +107,40 @@ export const portfolio: Portfolio = {
       "github": "https://github.com/thisNorm/Air-gapped_DevOps",
       "filter": "automation",
       "tagline": "폐쇄망에서도 반복 설정을 줄이도록.",
-      "coverCaption": "샌드박스 검증 흐름의 개념도"
+      "coverCaption": "샌드박스 검증 흐름의 개념도",
+      "featured": true
+    },
+    {
+      "id": "tailscale",
+      "name": "Tailscale 모니터링",
+      "category": "사내 운영 자동화",
+      "status": "사내 사용",
+      "role": "1인 개발",
+      "summary": "장비 이름·태그 규칙과 설정 변경을 확인하고, 이력을 웹과 Slack·Telegram으로 전달합니다.",
+      "problem": "현장과 사무실 장비가 늘면서 이름·태그가 제각각이 되었고, 공유 계정의 설정 변경을 뒤늦게 알게 됐습니다.",
+      "solution": "Tailscale API에서 장비와 설정 변경을 수집해 규칙을 검사합니다. 변경 이력과 알림, 암호화된 연동 설정, 웹 업데이트 흐름을 구현했습니다.",
+      "evidence": "사내 장비 관리에 사용합니다. 공유 계정의 변경자는 해당 계정 단위까지만 식별됩니다. 공개 화면은 실제 사내 장비 대신 저장소의 가상 장비 데모를 사용했습니다.",
+      "stack": [
+        "Node.js",
+        "SQLite",
+        "Tailscale API",
+        "Slack",
+        "Telegram"
+      ],
+      "github": "https://github.com/thisNorm/tailscale-monitor",
+      "filter": "automation",
+      "tagline": "누군가 바꾼 장비 설정, 먼저 알 수 있도록.",
+      "coverCaption": "실제 웹 UI · 가상 장비와 예시 이력",
+      "featured": true,
+      "media": [
+        {
+          "src": "/portfolio/projects/tailscale-demo.png",
+          "width": 1280,
+          "height": 901,
+          "alt": "가상 장비의 태그 위반과 변경 이력을 표시한 Tailscale 모니터링 데모",
+          "caption": "실제 웹 UI · 저장소의 가상 장비 데모"
+        }
+      ]
     },
     {
       "id": "harnessvault",
@@ -107,7 +161,16 @@ export const portfolio: Portfolio = {
       "github": "https://github.com/thisNorm/HarnessVault",
       "filter": "ai",
       "tagline": "AI 하네스를 조직에 남기는 방법.",
-      "coverCaption": "실제 개발 화면 일부 · MVP · 테스트 데이터"
+      "coverCaption": "실제 개발 화면 일부 · MVP · 테스트 데이터",
+      "media": [
+        {
+          "src": "/portfolio/harnessvault-dev.png",
+          "width": 1280,
+          "height": 900,
+          "alt": "HarnessVault 자산 목록의 실제 MVP 개발 화면",
+          "caption": "실제 개발 화면 · MVP · 테스트 데이터"
+        }
+      ]
     },
     {
       "id": "aegisview",
@@ -128,27 +191,49 @@ export const portfolio: Portfolio = {
       "github": "https://github.com/thisNorm/lab-guardian",
       "filter": "ai",
       "tagline": "영상 수집부터 로봇 제어까지, 하나의 시스템에.",
-      "coverCaption": "공개 README의 실제 개발 데모"
+      "coverCaption": "공개 README의 실제 개발 데모",
+      "featured": true,
+      "media": [
+        {
+          "src": "/portfolio/aegisview.png",
+          "width": 3838,
+          "height": 2085,
+          "alt": "CCTV·로봇 통합 관제와 이벤트 처리를 보여 주는 AegisView 개발 데모",
+          "caption": "공개 README의 실제 개발 데모"
+        }
+      ]
     },
     {
       "id": "pinmate",
       "name": "PinMate",
       "category": "팀 웹 서비스",
-      "status": "개발 중",
+      "status": "배포 완료",
       "role": "3인 팀 리드",
       "summary": "친구끼리 맛집 목록을 한 지도에 모으는 웹 서비스입니다.",
       "problem": "친구끼리 가진 맛집 목록을 하나의 지도에서 모아 볼 필요가 있었습니다.",
-      "solution": "맛집 목록을 한 지도에 모으는 서비스를 개발합니다. 주제를 제안하고 브랜치·PR 규칙과 CI를 구성했습니다.",
-      "evidence": "3인 팀 리드로 주제 제안, 브랜치·PR 규칙과 CI 구성을 맡았으며 서비스는 개발 중입니다.",
+      "solution": "맛집 목록을 한 지도에 모으는 서비스를 개발·배포했습니다. 주제를 제안하고 브랜치·PR 규칙과 CI를 구성했습니다.",
+      "evidence": "3인 팀 리드로 주제 제안, 브랜치·PR 규칙과 CI 구성을 맡았습니다. 배포된 웹서비스에서 지도와 길찾기 화면을 공개합니다.",
       "stack": [
         "React",
         "Spring Boot",
         "PostgreSQL"
       ],
-      "github": "https://github.com/taeyoung087007-wq/PinMate",
+      "github": "https://github.com/ChungcheongVibe/PinMate",
       "filter": "service",
       "tagline": "친구의 맛집 목록이 한 지도에서 만납니다.",
-      "coverCaption": "공유 지도를 표현한 개념도"
+      "coverCaption": "공식 브랜드 이미지 · 서비스 배포 완료",
+      "featured": true,
+      "liveUrl": "https://pinmate.kro.kr/",
+      "icon": "/portfolio/projects/pinmate-icon.png",
+      "media": [
+        {
+          "src": "/portfolio/projects/pinmate-brand.png",
+          "width": 1200,
+          "height": 630,
+          "alt": "PinMate 공식 심볼과 친구들과 함께 만드는 지도 소개 이미지",
+          "caption": "저장소의 공식 브랜드 이미지"
+        }
+      ]
     },
     {
       "id": "content",
@@ -208,7 +293,24 @@ export const portfolio: Portfolio = {
       "github": "https://github.com/thisNorm/deepfake_detection_service_backend",
       "filter": "ai",
       "tagline": "온디바이스 딥보이스 탐지 앱의 백엔드·배포.",
-      "coverCaption": "음성 분석을 표현한 개념 그래픽"
+      "coverCaption": "공개 앱 소개 저장소의 실제 화면 · 시연 결과",
+      "icon": "/portfolio/projects/deepvoice-logo.png",
+      "media": [
+        {
+          "src": "/portfolio/projects/deepvoice-main.png",
+          "width": 663,
+          "height": 1466,
+          "alt": "DeepVoice Detection 모바일 앱의 메인 화면",
+          "caption": "공개 앱 소개 저장소의 실제 메인 화면"
+        },
+        {
+          "src": "/portfolio/projects/deepvoice-result.png",
+          "width": 711,
+          "height": 1602,
+          "alt": "DeepVoice Detection 앱의 탐지 결과 시연 화면",
+          "caption": "실제 앱 UI · 탐지 결과 예시"
+        }
+      ]
     }
   ],
   "tools": [
@@ -216,13 +318,20 @@ export const portfolio: Portfolio = {
       "name": "OnlyDM",
       "problem": "사무실에서 인스타그램 DM만 가볍게 쓰고 싶었습니다.",
       "state": "DM 전용 Windows 창에 영어 UI를 추가하고 npm으로 업데이트를 배포합니다.",
-      "github": "https://github.com/thisNorm/OnlyDM"
+      "github": "https://github.com/thisNorm/OnlyDM",
+      "image": {
+        "src": "/portfolio/projects/onlydm-ui.png",
+        "width": 2160,
+        "height": 1350,
+        "alt": "예시 대화를 사용한 OnlyDM 대화 목록과 채팅창",
+        "caption": "실제 제품 화면 · 공개 README의 예시 대화"
+      }
     },
     {
-      "name": "Tailscale 모니터링",
-      "problem": "공유 계정에서 누가 장비를 바꿨는지 알기 어려웠습니다.",
-      "state": "규칙 위반과 변경 이력을 Slack으로 알리며 사무실 전원이 사용 중입니다.",
-      "github": "https://github.com/thisNorm/tailscale-monitor"
+      "name": "Windows Toolkit",
+      "problem": "개발할 때 사용 중인 포트와 IP·게이트웨이를 빠르게 확인할 도구가 필요했습니다.",
+      "state": "PortPeek·NetworkPeek로 포트와 네트워크 상태를 트레이에서 조회하고 복사합니다.",
+      "github": "https://github.com/thisNorm/Windows-Toolkit"
     },
     {
       "name": "AI POT CBT",
@@ -233,8 +342,8 @@ export const portfolio: Portfolio = {
     {
       "name": "Keydesk",
       "problem": "Open API가 늘면서 개인 API 키 관리가 복잡해졌습니다.",
-      "state": "Infisical 기반으로 개발 중이며, API 호출량과 비용을 관리하는 게이트웨이가 목표입니다.",
-      "github": null
+      "state": "Infisical 기반의 한국어 개인용 보관함에서 제공사·용도·사용 프로젝트·만료일을 키와 함께 관리합니다.",
+      "github": "https://github.com/thisNorm/keydesk"
     },
     {
       "name": "thisnorm.dev",
@@ -354,6 +463,8 @@ export const portfolio: Portfolio = {
 };
 
 export const { projects, tools, jobs, skills, awards, education, contact } = portfolio;
+export const featuredProjects = projects.filter((project) => project.featured);
+export const additionalProjects = projects.filter((project) => !project.featured && project.id !== 'sns');
 
 export const activities = [
   {

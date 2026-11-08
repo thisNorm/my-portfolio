@@ -8,7 +8,7 @@ import { HeroScene, useProjectMotion } from "./PortfolioMotion";
 import ThemeToggle from "./ThemeToggle";
 import VisitorCount from "./VisitorCount";
 import {
-  activities, awards, contact, education, homeCopy, jobs, projects, skills, tools,
+  activities, additionalProjects, awards, contact, education, featuredProjects, homeCopy, jobs, projects, skills, tools,
   type Project, type ProjectFilter,
 } from "./portfolioData";
 
@@ -16,7 +16,7 @@ const filters: { value: ProjectFilter; label: string }[] = [
   { value: "all", label: "전체" },
   { value: "automation", label: "자동화" },
   { value: "ai", label: "AI 적용" },
-  { value: "service", label: "서비스·실험" },
+  { value: "service", label: "서비스" },
 ];
 
 export default function PortfolioHome() {
@@ -30,7 +30,7 @@ export default function PortfolioHome() {
   const dialogHashRef = useRef("");
   const mountedRef = useRef(false);
   const tool = tools[toolIndex];
-  const visibleCount = projects.filter((project) => filter === "all" || project.filter === filter).length;
+  const visibleCount = featuredProjects.filter((project) => filter === "all" || project.filter === filter).length;
 
   useProjectMotion(galleryRef);
 
@@ -164,13 +164,13 @@ export default function PortfolioHome() {
               <p id="project-count" aria-live="polite">{visibleCount}개의 작업</p>
             </div>
             <div className={`project-gallery${filter === "all" ? "" : " is-filtered"}`} id="project-gallery" ref={galleryRef}>
-              {projects.map((project) => {
+              {featuredProjects.map((project) => {
                 const tileId = project.id === "harnessvault" ? "harness" : project.id === "aegisview" ? "aegis" : project.id;
                 return (
                   <article className={`project-tile tile-${tileId}`} data-project={project.id} data-category={project.filter} hidden={filter !== "all" && project.filter !== filter} key={project.id}>
                     <a className="project-open" href={`#${project.id}-details`} data-open={project.id} aria-labelledby={`${tileId}-title`} aria-haspopup="dialog" onClick={(event) => handleProjectClick(event, project)}>
                       <ProjectCover project={project} />
-                      <div className="tile-title"><h3 id={`${tileId}-title`}>{project.name}</h3></div>
+                      <div className="tile-title"><div className="project-identity">{project.icon && <Image className="project-icon" src={project.icon} alt="" width={36} height={36} />}<h3 id={`${tileId}-title`}>{project.name}</h3></div></div>
                       <p className="tile-copy">{project.tagline}</p>
                       <p className="tile-meta" data-meta={project.id}>{[project.category, project.status, project.role].filter(Boolean).join(" · ")}</p>
                     </a>
@@ -179,6 +179,16 @@ export default function PortfolioHome() {
               })}
             </div>
             <p className="gallery-footnote">{homeCopy.galleryNote}</p>
+            <details className="additional-projects">
+              <summary>더 살펴볼 작업 <span>{additionalProjects.length}</span></summary>
+              <ul>{additionalProjects.map((project) => <li key={project.id}>
+                <a className="additional-project-open" href={`#${project.id}-details`} aria-haspopup="dialog" onClick={(event) => handleProjectClick(event, project)}>
+                  <span className="project-identity">{project.icon && <Image className="project-icon" src={project.icon} alt="" width={32} height={32} />}<strong>{project.name}</strong></span>
+                  <span className="additional-project-summary">{project.tagline}</span>
+                  <span className="additional-project-meta">{[project.category, project.status, project.role].filter(Boolean).join(" · ")}</span>
+                </a>
+              </li>)}</ul>
+            </details>
           </section>
           <section className="tools-section preview-section" id="tools" data-chapter="profile">
             <div id="tools-root">
@@ -192,6 +202,10 @@ export default function PortfolioHome() {
                   {tool.github && <a className="tools-source" href={tool.github} target="_blank" rel="noreferrer" aria-label={`${tool.name} GitHub 저장소`}>GitHub <span aria-hidden="true">↗</span></a>}
                 </>}
               </div>
+              {tool?.image && <figure className="tools-preview">
+                <a href={tool.image.src} target="_blank" rel="noreferrer" aria-label={`${tool.name} 제품 화면 원본 보기`}><Image src={tool.image.src} alt={tool.image.alt} width={tool.image.width} height={tool.image.height} sizes="(max-width: 780px) calc(100vw - 46px), 960px" /></a>
+                <figcaption>{tool.image.caption}</figcaption>
+              </figure>}
             </div>
           </section>
           <section className="profile-section preview-section" id="about" data-chapter="profile">
@@ -263,19 +277,19 @@ export default function PortfolioHome() {
         <div id="dialog-content">{activeProject && <>
           <header className="dialog-heading">
             <p className="dialog-meta">{[activeProject.category, activeProject.status, activeProject.role].filter(Boolean).join(" · ")}</p>
-            <h2 id="dialog-title">{activeProject.name}</h2><p className="dialog-summary">{activeProject.summary}</p>
+            <div className="dialog-project-title">{activeProject.icon && <Image className="project-icon" src={activeProject.icon} alt="" width={44} height={44} />}<h2 id="dialog-title">{activeProject.name}</h2></div><p className="dialog-summary">{activeProject.summary}</p>
           </header>
-          <div className="dialog-media">
-            {activeProject.id === "aegisview" || activeProject.id === "harnessvault" ? <figure className="dialog-original">
-              <Image src={activeProject.id === "aegisview" ? "/portfolio/aegisview.png" : "/portfolio/harnessvault-dev.png"} alt={`${activeProject.name} · ${activeProject.coverCaption}`} width={activeProject.id === "aegisview" ? 3838 : 1280} height={activeProject.id === "aegisview" ? 2085 : 900} sizes="(max-width: 600px) calc(100vw - 64px), 800px" />
-              <figcaption>{activeProject.coverCaption} · <a href={activeProject.id === "aegisview" ? "/portfolio/aegisview.png" : "/portfolio/harnessvault-dev.png"} target="_blank" rel="noreferrer">원본 크게 보기 ↗</a></figcaption>
-            </figure> : <ProjectCover project={activeProject} />}
+          <div className={`dialog-media${activeProject.id === "deepvoice" ? " dialog-media-phones" : ""}`}>
+            {activeProject.media?.length ? activeProject.media.map((media) => <figure className="dialog-original" key={media.src}>
+              <Image src={media.src} alt={media.alt} width={media.width} height={media.height} sizes={activeProject.id === "deepvoice" ? "(max-width: 600px) 44vw, 380px" : "(max-width: 600px) calc(100vw - 64px), 800px"} />
+              <figcaption>{media.caption} · <a href={media.src} target="_blank" rel="noreferrer">원본 크게 보기 ↗</a></figcaption>
+            </figure>) : <ProjectCover project={activeProject} />}
           </div>
           <div className="dialog-details">
             <div><h3>시작한 이유</h3><p>{activeProject.problem}</p></div>
             <div><h3>구현과 참여</h3><p>{activeProject.solution}</p></div>
             <div><h3>확인한 범위</h3><p>{activeProject.evidence}</p></div>
-            <div className="dialog-foot"><span>{activeProject.stack.join(" / ")}</span>{activeProject.github && <a href={activeProject.github} target="_blank" rel="noreferrer">소스 코드 보기 ↗</a>}</div>
+            <div className="dialog-foot"><span>{activeProject.stack.join(" / ")}</span><div className="dialog-links">{activeProject.liveUrl && <a href={activeProject.liveUrl} target="_blank" rel="noreferrer">서비스 열기 ↗</a>}{activeProject.github && <a href={activeProject.github} target="_blank" rel="noreferrer">소스 코드 보기 ↗</a>}</div></div>
           </div>
         </>}</div>
       </dialog>

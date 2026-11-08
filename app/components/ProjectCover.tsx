@@ -7,6 +7,13 @@ const pinRoute = "M88 210Q196 99 302 220Q324 281 206 315";
 
 export default function ProjectCover({ project }: { project: Project }) {
   const coverId = project.id === "harnessvault" ? "harness" : project.id === "aegisview" ? "aegis" : project.id;
+  const primaryImage = project.media?.[0];
+  if (primaryImage && (project.id === "finance" || project.id === "tailscale" || project.id === "pinmate")) {
+    return <figure className={`project-cover cover-${coverId} has-product-media`}>
+      <Image src={primaryImage.src} alt={primaryImage.alt} width={primaryImage.width} height={primaryImage.height} sizes={`(max-width: 600px) calc(100vw - 46px), (max-width: 1050px) 50vw, ${project.id === "finance" ? "55vw" : "36vw"}`} />
+      <figcaption>{project.coverCaption}</figcaption>
+    </figure>;
+  }
   let artwork: ReactNode;
 
   switch (project.id) {
