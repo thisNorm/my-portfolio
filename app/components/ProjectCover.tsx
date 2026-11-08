@@ -11,7 +11,7 @@ export default function ProjectCover({ project }: { project: Project }) {
 
   switch (project.id) {
     case "finance":
-      artwork = <Image src="/portfolio/finance-art.png" alt="흩어진 종이 자료가 하나의 정돈된 묶음으로 모이는 개념 그래픽" width={1466} height={1073} sizes="(max-width: 600px) calc(100vw - 46px), (max-width: 1050px) 50vw, 610px" />;
+      artwork = <Image src="/portfolio/finance-art.png" alt="흩어진 종이 자료가 하나의 정돈된 묶음으로 모이는 개념 그래픽" width={1466} height={1073} sizes="(max-width: 600px) calc(100vw - 46px), (max-width: 1050px) 50vw, 55vw" />;
       break;
     case "facegate": {
       const metric = project.metric;
@@ -52,11 +52,11 @@ export default function ProjectCover({ project }: { project: Project }) {
     case "harnessvault":
       artwork = <>
         <div className="harness-word">한 사람의 도구를,<br />함께 쓰는 자산으로.</div>
-        <Image src="/portfolio/harnessvault-dev.png" alt="HarnessVault 자산 목록의 실제 개발 화면 일부, 테스트 데이터" width={1280} height={900} sizes="(max-width: 600px) calc(100vw - 80px), (max-width: 1050px) 50vw, 640px" />
+        <Image src="/portfolio/harnessvault-dev.png" alt="HarnessVault 자산 목록의 실제 개발 화면 일부, 테스트 데이터" width={1280} height={900} sizes="(max-width: 600px) calc(100vw - 80px), (max-width: 1050px) 50vw, 36vw" />
       </>;
       break;
     case "aegisview":
-      artwork = <Image src="/portfolio/aegisview.png" alt="CCTV와 로봇 관제 및 이벤트 저장을 보여주는 실제 개발 데모" width={3838} height={2085} sizes="(max-width: 600px) calc(100vw - 46px), (max-width: 1050px) 60vw, 800px" />;
+      artwork = <Image src="/portfolio/aegisview.png" alt="CCTV와 로봇 관제 및 이벤트 저장을 보여주는 실제 개발 데모" width={3838} height={2085} sizes="(max-width: 600px) calc(100vw - 46px), 60vw" />;
       break;
     case "pinmate":
       artwork = <svg className="map-art" viewBox="0 0 430 460" aria-hidden="true">

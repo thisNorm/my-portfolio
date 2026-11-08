@@ -153,7 +153,7 @@ export function HeroScene() {
           width={1604}
           height={980}
           priority
-          sizes="(max-width: 370px) 465px, (max-width: 600px) 490px, (max-width: 1000px) 850px, 1030px"
+          sizes="(max-width: 370px) 465px, (max-width: 600px) 490px, (max-width: 1430px) 850px, (max-width: 2000px) 72vw, 1440px"
         />
         <svg className="hero-flow" viewBox="0 0 1604 980" aria-hidden="true" focusable="false">
           <path

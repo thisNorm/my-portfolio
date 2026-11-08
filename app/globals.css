@@ -680,3 +680,83 @@ dialog{margin:auto}
 .portfolio-visitor{font:12px/1.6 var(--font-mono);color:var(--muted);margin-top:24px}
 .anchor-alias{display:block;scroll-margin-top:24px}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}}
+
+/* Desktop composition follows the viewport; prose keeps its own readable measure. */
+@media (min-width: 1051px) {
+  .shell {
+    max-width: none;
+    padding-inline: clamp(40px, 4vw, 112px);
+  }
+
+  .masthead { height: clamp(80px, 5.2vw, 96px); }
+  .wordmark { font-size: clamp(31px, 2.2vw, 40px); }
+  .masthead nav { gap: clamp(31px, 2.5vw, 56px); font-size: 14px; }
+
+  /* At larger widths, the hero height follows the artwork's aspect ratio. */
+  .hero { min-height: clamp(720px, 44vw, 880px); padding: clamp(104px, 8vw, 164px) 0 112px; }
+  .hero-copy { width: 74%; max-width: 1040px; }
+  .identity { font-size: clamp(12px, .9vw, 16px); }
+  .hero h1 { font-size: clamp(60px, 5vw, 112px); letter-spacing: -.055em; }
+  .hero-description { font-size: clamp(16px, 1.1vw, 20px); }
+  .hero-action { font-size: 14px; }
+  .hero-scene { width: clamp(1030px, 72vw, 1440px); right: 0; top: 0; }
+
+  .work-heading { padding-top: clamp(61px, 4.5vw, 96px); }
+  .work-heading h2 { font-size: clamp(43px, 3.3vw, 68px); }
+  .eyebrow, .work-hint, .work-nav button { font-size: 14px; }
+  .work-nav { margin-bottom: clamp(35px, 3vw, 56px); }
+  .project-gallery { column-gap: clamp(28px, 2.2vw, 56px); row-gap: clamp(76px, 5vw, 112px); }
+  .tile-title h3 { font-size: clamp(25px, 2.1vw, 38px); }
+  .tile-copy { font-size: clamp(14px, 1vw, 18px); }
+  .tile-meta { font-size: clamp(12px, .8vw, 14px); }
+
+  .project-gallery .cover-finance { height: clamp(460px, 33vw, 640px); }
+  .tile-facegate { margin-top: clamp(124px, 9vw, 208px); }
+  .project-gallery .cover-facegate {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: clamp(344px, 25vw, 480px);
+    padding: clamp(24px, 1.7vw, 32px);
+    padding-bottom: 64px;
+  }
+  .project-gallery .metric-main { align-self: center; margin: 12px 0; }
+  .project-gallery .metric-main strong { font-size: clamp(149px, 10vw, 192px); }
+  .project-gallery .metric-main > span { font-size: clamp(25px, 2vw, 34px); }
+  .project-gallery .metric-comparison { margin-top: 0; }
+  .project-gallery .cover-facegate figcaption { left: clamp(24px, 1.7vw, 32px); bottom: 18px; }
+
+  .project-gallery .cover-autoci { height: clamp(354px, 27vw, 520px); }
+  .project-gallery .cover-harness { height: clamp(376px, 27vw, 520px); }
+  .project-gallery .harness-word { font-size: clamp(25px, 2vw, 34px); padding: clamp(25px, 2vw, 32px) clamp(25px, 2vw, 32px) 0; }
+  .project-gallery .cover-harness img {
+    left: clamp(20px, 1.7vw, 32px);
+    width: calc(100% - 2 * clamp(20px, 1.7vw, 32px));
+    height: calc(100% - clamp(166px, 12vw, 210px));
+  }
+  .project-gallery .cover-aegis { height: clamp(416px, 31vw, 600px); }
+  .project-gallery .cover-aegis img { height: calc(100% - 44px); }
+  .project-gallery .cover-pinmate { height: clamp(346px, 25vw, 480px); }
+  .project-gallery .cover-content { height: clamp(390px, 29vw, 520px); padding: clamp(24px, 2vw, 36px); }
+  .project-gallery .draft-sheet { min-height: calc(100% - 38px); padding: clamp(22px, 1.7vw, 32px); }
+  .project-gallery .draft-sheet strong { font-size: clamp(39px, 3vw, 58px); }
+  .project-gallery .cover-sns { height: clamp(350px, 27vw, 520px); padding: clamp(32px, 3vw, 56px); }
+  .project-gallery .cover-sns > p { font-size: clamp(49px, 4.7vw, 84px); }
+  .project-gallery .cover-deepvoice { height: clamp(287px, 21vw, 420px); }
+  .project-gallery .voice-art { height: clamp(150px, 9vw, 190px); }
+  .project-gallery .cover-deepvoice > p { font-size: clamp(28px, 2.3vw, 44px); bottom: clamp(51px, 4.5vw, 72px); }
+  .project-gallery.is-filtered .project-cover { height: clamp(376px, 29vw, 540px); }
+
+  .tools-section .tools-choices { max-width: none; gap: 4px clamp(32px, 3vw, 64px); }
+  .tools-section .tools-choice { font-size: clamp(36px, 3vw, 60px); }
+  .profile-section .profile-overview { gap: clamp(64px, 6vw, 160px); }
+  .profile-section .profile-name { font-size: clamp(44px, 3.4vw, 72px); }
+  .profile-section .profile-direction { font-size: clamp(18px, 1.25vw, 24px); }
+  .profile-section .profile-job h4 { font-size: clamp(19px, 1.4vw, 26px); }
+  .profile-section .profile-job p { max-width: 66ch; }
+  .contact-section .contact-email { font-size: clamp(34px, 3.2vw, 52px); }
+}
+
+/* Compact desktops keep the artwork beside the copy instead of behind its last words. */
+@media (min-width: 1051px) and (max-width: 1430px) {
+  .hero-scene { width: 850px; right: 0; top: 130px; }
+}
