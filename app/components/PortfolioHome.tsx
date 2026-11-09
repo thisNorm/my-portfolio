@@ -385,6 +385,10 @@ export default function PortfolioHome() {
           <div className="dialog-details">
             <div><h3>시작한 이유</h3><p>{activeProject.problem}</p></div>
             <div><h3>구현과 참여</h3><p>{activeProject.solution}</p></div>
+            {activeProject.developmentNote && <div>
+              <h3>{activeProject.developmentNote.title}</h3>
+              <p>{activeProject.developmentNote.body}</p>
+            </div>}
             <div><h3>확인한 범위</h3><p>{activeProject.evidence}</p></div>
             <div className="dialog-foot"><span>{activeProject.stack.join(" / ")}</span><div className="dialog-links">{activeProject.liveUrl && <a href={activeProject.liveUrl} target="_blank" rel="noreferrer">서비스 열기 ↗</a>}{activeProject.github && <a href={activeProject.github} target="_blank" rel="noreferrer">소스 코드 보기 ↗</a>}</div></div>
           </div>

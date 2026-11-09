@@ -8,6 +8,7 @@ export type Project = {
   stack: string[]; github: string | null; filter: Exclude<ProjectFilter, 'all'>;
   tagline: string; coverCaption: string;
   icon?: string; media?: ProjectMedia[]; liveUrl?: string;
+  developmentNote?: { title: string; body: string };
   metric?: { before: number; after: number; unit: string; label: string };
 };
 export type Award = { date: string; title: string; org: string; note: string; image?: string; imageAlt?: string; imageWidth?: number; imageHeight?: number };
@@ -33,6 +34,10 @@ export const portfolio: Portfolio = {
       "problem": "카드·계좌·증권에 흩어진 정보를 모아 결제 방법과 예산 조정안을 판단할 필요가 있었습니다.",
       "solution": "금액·잔액·할부 계산은 서버 코드가 맡고, AI는 의도 해석·거래 분류·설명을 맡습니다. 대화로 요청한 변경안은 적용 전후를 먼저 비교합니다.",
       "evidence": "금융 자료는 로컬에 저장합니다. 화면의 금융 데이터는 공개 README에 사용된 예시이며, 계산 결과와 AI 설명을 분리해 처리합니다.",
+      "developmentNote": {
+        "title": "같은 소비가 두 번 잡히는 문제",
+        "body": "카드 승인액과 나중에 출금된 카드 대금을 합치면 한 번 쓴 돈이 두 번 집계됩니다. 카드 내역은 소비 분석에, 계좌 내역은 잔액과 현금 흐름에 쓰도록 나눴습니다. 할부 계산을 AI에 맡겼을 때도 같은 조건에서 답이 달라져, 금액 계산은 서버 규칙으로 옮겼습니다."
+      },
       "stack": [
         "JavaScript",
         "MCP",
@@ -70,6 +75,10 @@ export const portfolio: Portfolio = {
       "problem": "얼굴인식 API와 게이트 제어를 연결하고, 상시 실행되는 얼굴 검출의 단말 CPU 부담을 줄일 필요가 있었습니다.",
       "solution": "SCRFD 얼굴 검출 모델을 RKNN·INT8로 변환해 Android 단말의 NPU에서 실행합니다. 얼굴 인식은 CPU에 유지하고, 기존 API 형식으로 출입 서버와 연결합니다.",
       "evidence": "동일 단말의 장면 처리 중앙값이 305ms에서 23ms로 줄었습니다. 저장 장면 44장에서 CPU·NPU의 사람 판정이 같았습니다. 사내 PoC 기록이며, 모든 환경의 정확도를 확정한 결과는 아닙니다.",
+      "developmentNote": {
+        "title": "검출만 바꿔 비교한 이유",
+        "body": "단말에서 계속 실행되는 얼굴 검출의 부하를 줄이는 것이 이번 실험의 목표였습니다. 검출을 NPU로 옮기되 인식과 출입 연동은 기존 경로에 남겼습니다. 확인한 수치는 검출 장면의 처리 시간이며, 실제 출입 절차 전체의 응답 시간을 비교한 것은 아닙니다."
+      },
       "metric": {
         "before": 305,
         "after": 23,
@@ -105,6 +114,10 @@ export const portfolio: Portfolio = {
       "problem": "폐쇄망에서도 CI 설정 생성부터 검증·반영까지 자동화할 필요가 있었습니다.",
       "solution": "로컬 LLM이 만든 CI 설정을 샌드박스에서 실행합니다. Smoke test를 통과한 설정만 GitLab Runner에 반영합니다.",
       "evidence": "샌드박스 실행과 smoke test를 통과한 설정만 GitLab Runner에 반영합니다.",
+      "developmentNote": {
+        "title": "로컬 모델이 만든 YAML의 한계",
+        "body": "Gemma 계열 모델은 GitLab CI용 YAML을 안정적으로 생성하지 못했습니다. 생성한 설정을 바로 반영하지 않고 격리 환경에서 실행해, smoke test에서 실패한 설정은 걸렀습니다. YAML 생성 품질 자체는 더 많은 예제나 다른 로컬 모델로 개선할 과제로 남았습니다."
+      },
       "stack": [
         "Python",
         "GitLab CI",
@@ -126,6 +139,10 @@ export const portfolio: Portfolio = {
       "problem": "현장과 사무실 장비가 늘면서 이름·태그가 제각각이 되었고, 공유 계정의 설정 변경을 뒤늦게 알게 됐습니다.",
       "solution": "Tailscale API에서 장비와 설정 변경을 수집해 규칙을 검사합니다. 변경 이력과 알림, 암호화된 연동 설정, 웹 업데이트 흐름을 구현했습니다.",
       "evidence": "사내 장비 관리에 사용합니다. 공유 계정의 변경자는 해당 계정 단위까지만 식별됩니다. 공개 화면은 실제 사내 장비 대신 저장소의 가상 장비 데모를 사용했습니다.",
+      "developmentNote": {
+        "title": "공유 계정에서 알 수 있는 범위",
+        "body": "Tailscale API에 공유 계정만 남으면 실제로 조작한 사람을 특정할 수 없었습니다. 대신 어떤 장비의 이름과 태그가 바뀌었는지, 규칙을 어겼는지를 기록하고 Slack으로 알렸습니다. 사람 단위 식별은 계정 운영 방식의 제약으로 남았습니다."
+      },
       "stack": [
         "Node.js",
         "SQLite",
@@ -187,6 +204,10 @@ export const portfolio: Portfolio = {
       "problem": "폐쇄망에서 CCTV 탐지 이벤트와 로봇 원격 조종을 한곳에서 다룰 관제가 필요했습니다.",
       "solution": "Redis Queue·DLQ로 탐지 이벤트를 처리하고 이벤트를 묶어 DB에 저장합니다. 로봇 제어 통신에는 aiohttp 비동기 처리를 적용했습니다.",
       "evidence": "ETRI 자율형IoT연구실에서 1인 개발했습니다.",
+      "developmentNote": {
+        "title": "객체가 겹치면 추적 ID가 바뀌었습니다",
+        "body": "탐지가 되더라도 객체가 겹칠 때는 같은 대상을 다른 번호로 이어 가는 일이 있었습니다. 영상 스트림이 늘면 추론과 전송 부담도 커졌습니다. 관제에 쓸 수 있는지를 판단하려면 모델 정확도와 별도로 추적 ID, 프레임 드롭, 화면 지연을 봐야 한다는 점을 배웠습니다."
+      },
       "stack": [
         "YOLOv8",
         "FastAPI",
@@ -217,6 +238,10 @@ export const portfolio: Portfolio = {
       "problem": "친구끼리 가진 맛집 목록을 하나의 지도에서 모아 볼 필요가 있었습니다.",
       "solution": "맛집 목록을 한 지도에 모으는 서비스를 개발·배포했습니다. 주제를 제안하고 브랜치·PR 규칙과 CI를 구성했습니다.",
       "evidence": "3인 팀 리드로 주제 제안, 브랜치·PR 규칙과 CI 구성을 맡았습니다. 배포된 웹서비스에서 지도와 길찾기 화면을 공개합니다.",
+      "developmentNote": {
+        "title": "동시에 등록해도 핀은 하나로",
+        "body": "친구 둘이 같은 장소를 등록할 때 지도가 중복 핀으로 채워질 수 있었습니다. 같은 모임의 장소를 카카오 장소 ID 또는 이름과 거리로 대조하고, DB 잠금과 고유 제약을 두어 동시 등록을 처리했습니다. 이미 있는 장소에 대해서는 사람별 추천을 따로 남깁니다."
+      },
       "stack": [
         "React",
         "Spring Boot",
@@ -248,6 +273,10 @@ export const portfolio: Portfolio = {
       "problem": "노션 초안 각색, 썸네일 제작과 채널별 발행을 한 흐름으로 묶을 필요가 있었습니다.",
       "solution": "초안 각색부터 썸네일과 채널 발행까지 파이프라인으로 연결했습니다. 검증에 실패하면 발행을 중단합니다.",
       "evidence": "노션 초안에서 티스토리·X 발행까지 처리하며, 검증 실패 시 발행을 멈추는 동작을 구현했습니다.",
+      "developmentNote": {
+        "title": "자동화가 실패하면 발행을 멈췄습니다",
+        "body": "수업 내용을 노션에 정리하고도 채널마다 다시 쓰는 일이 밀려 꾸준히 올리기 어려웠습니다. 한 초안에서 글과 썸네일을 만들면서 결과가 들쭉날쭉하지 않게 하는 게 까다로웠습니다. 검증에 실패한 글은 발행 단계로 넘어가지 않도록 흐름을 나눴습니다."
+      },
       "stack": [
         "TypeScript",
         "Claude",
@@ -288,6 +317,10 @@ export const portfolio: Portfolio = {
       "problem": "통화 중 딥보이스를 휴대폰 안에서 탐지할 수 있어야 했습니다.",
       "solution": "온디바이스 탐지 앱의 백엔드와 배포를 담당했습니다. 모델 경량화 방향을 제안했습니다.",
       "evidence": "1년 팀 프로젝트에서 백엔드·배포를 맡았으며, DeepVoice Shield로 대상 2회를 포함한 수상을 했습니다.",
+      "developmentNote": {
+        "title": "정확도와 휴대폰의 실행 조건",
+        "body": "통화 중에 동작해야 해서 모델 정확도뿐 아니라 추론 지연과 메모리도 중요했습니다. 모델 경량화 방향을 제안하고 백엔드와 앱을 연결하면서, 모델 성능만으로는 실제 환경에서 쓸 수 있을지 판단하기 어렵다는 점을 배웠습니다."
+      },
       "stack": [
         "NestJS",
         "MySQL",
@@ -474,13 +507,21 @@ export const portfolio: Portfolio = {
       "date": "2025.11",
       "title": "대상",
       "org": "충청권 ICT 이노베이션스퀘어 S/W 개발 분과",
-      "note": "DeepVoice Shield"
+      "note": "DeepVoice Shield",
+      "image": "/portfolio/awards/ict-innovation-grand-prize-board-2025.png",
+      "imageAlt": "2025 충청권 ICT 이노베이션스퀘어 S/W 개발 분과 대상 시상 보드",
+      "imageWidth": 1440,
+      "imageHeight": 1019
     },
     {
       "date": "2025.11",
       "title": "우수상",
       "org": "지역혁신 인재양성 연합 페스티벌",
-      "note": "DeepVoice Shield"
+      "note": "DeepVoice Shield",
+      "image": "/portfolio/awards/regional-innovation-excellence-2025-photo.png",
+      "imageAlt": "2025 지역혁신 인재양성 연합 페스티벌 우수상 수상 현장 사진",
+      "imageWidth": 512,
+      "imageHeight": 683
     },
     {
       "date": "2025.09",
