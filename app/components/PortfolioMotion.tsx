@@ -4,16 +4,18 @@ import Image from "next/image";
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { homeCopy } from "./portfolioData";
 
-const HERO_DURATION = 4200;
-const HERO_TRANSIT = 2800;
-const SHARED_PATH =
-  "C470 691 534 675 581 651Q603 641 601 615V591Q601 574 628 558L871 403Q896 389 919 400L1000 429Q1021 436 1047 420L1372 281";
-const HERO_ROUTES = [
-  `M204 660C290 672 337 710 410 700${SHARED_PATH}`,
-  `M328 832C352 791 364 733 410 700${SHARED_PATH}`,
-  `M168 785C257 810 330 748 410 700${SHARED_PATH}`,
+const HERO_DURATION = 3660;
+const HERO_STREAMS = [
+  { path: "M312 727C340 713 357 700 378 702L446 727Q480 739 480 712V667Q481 651 496 642L548 620", start: 0, duration: 1310 },
+  { path: "M442 773L496 750Q511 743 511 729V679Q511 659 530 647L566 629", start: 150, duration: 1220 },
+  { path: "M910 460L1025 412", start: 1500, duration: 650 },
+  { path: "M1084 389L1131 368Q1147 363 1147 351V346Q1147 334 1164 327L1226 304", start: 2230, duration: 780 },
 ];
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
+const pulse = (time: number, start: number, duration: number) => {
+  const progress = (time - start) / duration;
+  return progress > 0 && progress < 1 ? Math.sin(progress * Math.PI) : 0;
+};
 
 export function HeroScene() {
   const sceneRef = useRef<HTMLElement>(null);
@@ -33,14 +35,14 @@ export function HeroScene() {
     const output = outputRef.current;
     if (!scene || !replay || !trace || !gate || !output) return;
 
-    const packets = HERO_ROUTES.flatMap((_, index) => {
+    const packets = HERO_STREAMS.flatMap(({ start, duration }, index) => {
       const route = routeRefs.current[index];
       const node = packetRefs.current[index];
       return route && node
-        ? [{ route, node, delay: index * 600, length: route.getTotalLength() }]
+        ? [{ route, node, start, duration, length: route.getTotalLength() }]
         : [];
     });
-    if (packets.length !== HERO_ROUTES.length) return;
+    if (packets.length !== HERO_STREAMS.length) return;
 
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     let disposed = false;
@@ -51,30 +53,21 @@ export function HeroScene() {
 
     const render = (time: number) => {
       for (const packet of packets) {
-        const progress = (time - packet.delay) / HERO_TRANSIT;
+        const progress = (time - packet.start) / packet.duration;
         const t = clamp(progress);
         const point = packet.route.getPointAtLength(t * packet.length);
         const fade = clamp(t / 0.07) * clamp((1 - t) / 0.12);
-        packet.node.style.transform =
-          `translate(${point.x}px, ${point.y}px) scale(${1.15 - t * 0.35})`;
+        packet.node.style.transform = `translate(${point.x}px, ${point.y}px)`;
         packet.node.style.opacity =
           progress >= 0 && progress <= 1 ? String(fade * 0.88) : "0";
       }
-      const head = clamp(time / HERO_TRANSIT);
-      trace.style.strokeDasharray = `75 ${packets[0].length}`;
-      trace.style.strokeDashoffset = String(-head * packets[0].length + 75);
-      trace.style.opacity = time > 100 && time < HERO_TRANSIT ? "0.4" : "0";
-      gate.style.opacity = packets.some((packet) => {
-        const progress = (time - packet.delay) / HERO_TRANSIT;
-        return progress > 0.52 && progress < 0.68;
-      }) ? "0.46" : "0";
-      const arrival = Math.max(0, ...packets.map((packet) => {
-        const elapsed = time - packet.delay - HERO_TRANSIT;
-        return elapsed >= -150 && elapsed < 380
-          ? Math.sin(clamp((elapsed + 150) / 530) * Math.PI)
-          : 0;
-      }));
-      output.style.opacity = String(arrival * 0.65);
+      const first = packets[0];
+      const head = clamp(time / first.duration);
+      trace.style.strokeDasharray = `60 ${first.length}`;
+      trace.style.strokeDashoffset = String(-head * first.length + 60);
+      trace.style.opacity = String(pulse(time, 0, first.duration) * 0.62);
+      gate.style.opacity = String(pulse(time, 1930, 620) * 0.8);
+      output.style.opacity = String(pulse(time, 2910, 650) * 0.72);
     };
 
     const finish = () => {
@@ -145,46 +138,48 @@ export function HeroScene() {
       <figure
         ref={sceneRef}
         className="hero-scene"
-        aria-label="흩어진 수작업이 하나의 흐름이 되는 개념 그래픽"
+        aria-label="흩어진 입력이 층을 따라 합쳐지고 검증을 거치는 개념 그래픽"
       >
         <Image
-          src="/portfolio/hero-everyday.png"
+          src="/portfolio/hero-spatial.png"
           alt=""
-          width={1604}
-          height={980}
+          width={1536}
+          height={1024}
           priority
-          sizes="(max-width: 370px) 465px, (max-width: 600px) 490px, (max-width: 1430px) 850px, (max-width: 2000px) 72vw, 1440px"
+          sizes="(max-width: 600px) 100vw, (max-width: 980px) 90vw, (max-width: 1430px) 850px, (max-width: 1900px) 71vw, 1320px"
         />
-        <svg className="hero-flow" viewBox="0 0 1604 980" aria-hidden="true" focusable="false">
+        <svg className="hero-flow" viewBox="0 0 1536 1024" aria-hidden="true" focusable="false">
           <path
             ref={traceRef}
             className="flow-trace"
-            d={HERO_ROUTES[0]}
+            d={HERO_STREAMS[0].path}
             fill="none"
-            stroke="#e0e4e9"
-            strokeWidth="2.1"
+            stroke="#bcecdf"
+            strokeWidth="3"
             strokeLinecap="round"
             opacity="0"
           />
           <path
             ref={gateRef}
             className="flow-gate"
-            d="M789 296Q802 293 819 300L884 327Q906 337 907 359V485"
+            d="M1005 361l13 17 24-22"
             fill="none"
-            stroke="#e3e8ed"
-            strokeWidth="2"
+            stroke="#d9fff2"
+            strokeWidth="5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             opacity="0"
           />
           <path
             ref={outputRef}
             className="flow-output"
-            d="M1193 164L1270 137Q1288 131 1304 137L1370 160Q1392 168 1372 177L1301 201Q1284 207 1269 202L1193 177Q1178 171 1193 164Z"
+            d="M1204 207L1247 192Q1259 187 1271 192L1325 207Q1340 213 1324 220L1278 239Q1267 244 1256 240L1205 225Q1190 219 1204 207Z"
             fill="none"
-            stroke="#d8dfe6"
+            stroke="#bcecdf"
             strokeWidth="2"
             opacity="0"
           />
-          {HERO_ROUTES.map((route, index) => (
+          {HERO_STREAMS.map(({ path: route }, index) => (
             <g key={route}>
               <path
                 ref={(node) => { routeRefs.current[index] = node; }}
@@ -197,13 +192,7 @@ export function HeroScene() {
                 className="flow-unit"
                 opacity="0"
               >
-                <path
-                  d="M-22-10L9-17L25-6L-8 8Z"
-                  fill={index === 1 ? "#b4bfcd" : "#e3e5e6"}
-                  stroke="#f1f2f3"
-                  strokeWidth="1"
-                />
-                <path d="M-9-5L9-9M-3 0L14-5" stroke="#69778b" strokeWidth="1.3" />
+                <circle r="5.8" fill="#d6f8ea" stroke="#6eb2ab" strokeWidth="1.6" />
               </g>
             </g>
           ))}

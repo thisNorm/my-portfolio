@@ -8,7 +8,7 @@ import { HeroScene, useProjectMotion } from "./PortfolioMotion";
 import ThemeToggle from "./ThemeToggle";
 import VisitorCount from "./VisitorCount";
 import {
-  activities, additionalProjects, awards, contact, education, featuredProjects, homeCopy, jobs, projects, skills, tools,
+  activities, additionalProjects, aiWorkflow, awards, contact, education, featuredGroups, featuredProjects, homeCopy, jobs, projects, skills, tools,
   type Project, type ProjectFilter,
 } from "./portfolioData";
 
@@ -30,7 +30,9 @@ export default function PortfolioHome() {
   const dialogHashRef = useRef("");
   const mountedRef = useRef(false);
   const tool = tools[toolIndex];
-  const visibleCount = featuredProjects.filter((project) => filter === "all" || project.filter === filter).length;
+  const matchesFilter = (project: Project) => filter === "all" || project.filter === filter;
+  const visibleCount = featuredProjects.filter(matchesFilter).length;
+  const ProjectTitle = filter === "all" ? "h4" : "h3";
 
   useProjectMotion(galleryRef);
 
@@ -139,7 +141,14 @@ export default function PortfolioHome() {
         <header className="masthead">
           <a className="wordmark" href="#top" aria-label="thisnorm 처음으로">thisnorm<span>.</span></a>
           <div className="masthead-actions">
-            <nav aria-label="주 메뉴"><a href="#work">만든 것들</a><a href="#about">소개</a><a href="#contact">연락</a></nav>
+            <nav aria-label="주 메뉴">
+              <a href="#career">경력</a>
+              <a href="#work">프로젝트</a>
+              <a href="#ai-workflow">AI 활용</a>
+              <a href="#about">소개</a>
+              <a href="#skills">기술</a>
+              <a href="#contact">연락</a>
+            </nav>
             <ThemeToggle />
           </div>
         </header>
@@ -153,30 +162,57 @@ export default function PortfolioHome() {
             </div>
             <HeroScene />
           </section>
+          <section className="profile-section career-section preview-section" id="career" data-chapter="profile" aria-labelledby="career-title">
+            <h2 id="career-title">경력</h2>
+            <div className="career-jobs">
+              {jobs.map((job) => (
+                <article className="profile-job" key={job.company}>
+                  <h3>{job.company}</h3>
+                  <div className="profile-job-meta"><span>{job.role}</span><span>{job.period}</span></div>
+                  <p>{job.summary}</p>
+                  {job.lines.length > 0 && (
+                    <details className="profile-details">
+                      <summary aria-label={`${job.company} 경력 상세`}>경력 상세</summary>
+                      <ul className="profile-records">{job.lines.map((line) => <li key={line}>{line}</li>)}</ul>
+                    </details>
+                  )}
+                </article>
+              ))}
+            </div>
+          </section>
           <section className="work-section preview-section" id="projects" data-chapter="work" aria-labelledby="work-title">
             <span id="work" aria-hidden="true" />
             <header className="work-heading">
-              <div><p className="eyebrow">{homeCopy.workEyebrow}</p><h2 id="work-title">{homeCopy.workTitle}</h2></div>
-              <p className="work-hint">{homeCopy.workHint.split(" ").slice(0, 2).join(" ")}<br />{homeCopy.workHint.split(" ").slice(2).join(" ")}</p>
+              <h2 id="work-title">{homeCopy.workTitle}</h2>
+              <p className="work-hint">{homeCopy.workHint}</p>
             </header>
             <div className="work-nav">
               <nav aria-label="프로젝트 분야">{filters.map((item) => <button key={item.value} type="button" data-filter={item.value} aria-pressed={filter === item.value} onClick={() => setFilter(item.value)}>{item.label}</button>)}</nav>
               <p id="project-count" aria-live="polite">{visibleCount}개의 작업</p>
             </div>
             <div className={`project-gallery${filter === "all" ? "" : " is-filtered"}`} id="project-gallery" ref={galleryRef}>
-              {featuredProjects.map((project) => {
-                const tileId = project.id === "harnessvault" ? "harness" : project.id === "aegisview" ? "aegis" : project.id;
-                return (
-                  <article className={`project-tile tile-${tileId}`} data-project={project.id} data-category={project.filter} hidden={filter !== "all" && project.filter !== filter} key={project.id}>
-                    <a className="project-open" href={`#${project.id}-details`} data-open={project.id} aria-labelledby={`${tileId}-title`} aria-haspopup="dialog" onClick={(event) => handleProjectClick(event, project)}>
-                      <ProjectCover project={project} />
-                      <div className="tile-title"><div className="project-identity">{project.icon && <Image className="project-icon" src={project.icon} alt="" width={36} height={36} />}<h3 id={`${tileId}-title`}>{project.name}</h3></div></div>
-                      <p className="tile-copy">{project.tagline}</p>
-                      <p className="tile-meta" data-meta={project.id}>{[project.category, project.status, project.role].filter(Boolean).join(" · ")}</p>
-                    </a>
-                  </article>
-                );
-              })}
+              {featuredGroups.map((group) => (
+                <div className="project-group" data-group={group.id} hidden={!group.projects.some(matchesFilter)} key={group.id}>
+                  <h3 className="project-group-title">{group.label}</h3>
+                  <div className="project-pair">
+                    {group.projects.map((project) => (
+                      <article className="project-tile" data-project={project.id} data-category={project.filter} hidden={!matchesFilter(project)} key={project.id}>
+                        <a className="project-open" href={`#${project.id}-details`} data-open={project.id} aria-labelledby={`${project.id}-title`} aria-haspopup="dialog" onClick={(event) => handleProjectClick(event, project)}>
+                          <div className="project-intro">
+                            <div className="tile-title project-identity">
+                              {project.icon && <Image className="project-icon" src={project.icon} alt="" width={36} height={36} />}
+                              <ProjectTitle id={`${project.id}-title`}>{project.name}</ProjectTitle>
+                            </div>
+                            <p className="tile-copy">{project.tagline}</p>
+                            <p className="tile-meta" data-meta={project.id}>{[project.category, project.status, project.role].filter(Boolean).join(" · ")}</p>
+                          </div>
+                          <ProjectCover project={project} />
+                        </a>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
             <p className="gallery-footnote">{homeCopy.galleryNote}</p>
             <details className="additional-projects">
@@ -189,6 +225,50 @@ export default function PortfolioHome() {
                 </a>
               </li>)}</ul>
             </details>
+          </section>
+          <section className="ai-workflow preview-section" id="ai-workflow" aria-labelledby="workflow-title">
+            <header className="workflow-heading">
+              <h2 id="workflow-title">{aiWorkflow.title}</h2>
+              <p>{aiWorkflow.intro}</p>
+            </header>
+            <div className="workflow-map">
+              <ol className="workflow-stages" role="list" aria-label="개발 흐름">
+                {aiWorkflow.stages.map((stage, index) => (
+                  <li className="workflow-station" data-stage={stage.id} key={stage.id}>
+                    <div className="workflow-rail">
+                      <span className="workflow-index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+                      <span>{stage.label}</span>
+                      {index < aiWorkflow.stages.length - 1 && <span className="workflow-arrow" aria-hidden="true" />}
+                    </div>
+                    <h3>{stage.heading}</h3>
+                    <p className="workflow-description">{stage.description}</p>
+                    <div className="workflow-return">
+                      <svg aria-hidden="true" width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M15.5 4.5v4a4 4 0 0 1-4 4h-7m3-3-3 3 3 3" />
+                      </svg>
+                      <p><span>{stage.condition}</span><strong>{stage.action}</strong></p>
+                    </div>
+                    <details className="workflow-detail" name="portfolio-ai-step" data-step={stage.id}>
+                      <summary>
+                        <span>{stage.detailLabel}</span>
+                        <span className="workflow-toggle" aria-hidden="true" />
+                      </summary>
+                      <p>{stage.detail}</p>
+                    </details>
+                  </li>
+                ))}
+              </ol>
+              <div className="workflow-handoff">
+                <p className="workflow-handoff-route">
+                  <span>기준 충족</span>
+                  <span aria-hidden="true">→</span>
+                  <strong>결과 보고</strong>
+                  <span aria-hidden="true">→</span>
+                  <strong>다음 계획 결정</strong>
+                </p>
+                <p>{aiWorkflow.handoff}</p>
+              </div>
+            </div>
           </section>
           <section className="tools-section preview-section" id="tools" data-chapter="profile">
             <div id="tools-root">
@@ -209,27 +289,12 @@ export default function PortfolioHome() {
             </div>
           </section>
           <section className="profile-section preview-section" id="about" data-chapter="profile">
-            <div id="profile-root">
-              <div className="profile-overview">
-                <div className="profile-intro">
-                  <p className="profile-role">{homeCopy.profileRole}</p>
-                  <h2 className="profile-name">{homeCopy.profileName}</h2>
-                  <p className="profile-direction">{homeCopy.profileDirection}</p>
-                  <p className="profile-aspiration">{homeCopy.profileAspiration}</p>
-                </div>
-                <div className="profile-experience">
-                  <h3 className="profile-label">경력</h3>
-                  {jobs.map((job) => <article className="profile-job" key={job.company}>
-                    <h4>{job.company}</h4>
-                    <div className="profile-job-meta"><span>{job.role}</span><span>{job.period}</span></div>
-                    <p>{job.summary}</p>
-                    {job.lines.length > 0 && <details className="profile-details"><summary>경력 상세</summary><ul className="profile-records">{job.lines.map((line) => <li key={line}>{line}</li>)}</ul></details>}
-                  </article>)}
-                </div>
-              </div>
-              <div className="profile-skills" id="skills">
-                <h3 className="profile-label">기술</h3>
-                <dl className="profile-skill-groups">{skills.map((skill) => <div key={skill.label}><dt>{skill.label}</dt><dd>{skill.items}</dd></div>)}</dl>
+            <div id="profile-root" className="profile-overview">
+              <div className="profile-intro">
+                <p className="profile-role">{homeCopy.profileRole}</p>
+                <h2 className="profile-name">{homeCopy.profileName}</h2>
+                <p className="profile-direction">{homeCopy.profileDirection}</p>
+                <p className="profile-aspiration">{homeCopy.profileAspiration}</p>
               </div>
               <div className="profile-background">
                 <details className="profile-details" id="awards">
@@ -254,6 +319,38 @@ export default function PortfolioHome() {
                   </li>)}</ul>
                 </details>
               </div>
+            </div>
+          </section>
+          <section className="tech-stack preview-section" id="skills" aria-labelledby="tech-title">
+            <header className="tech-heading">
+              <h2 id="tech-title">기술</h2>
+              <p>프로젝트와 실무에서 사용한 기술을 모았습니다.</p>
+            </header>
+            <div className="tech-groups">
+              {skills.map((group) => (
+                <div className="tech-group" key={group.label}>
+                  <h3>{group.label}</h3>
+                  <ul role="list">
+                    {group.items.map((item) => (
+                      <li key={item.name}>
+                        {item.logo && (
+                          <Image
+                            className={item.darkLogo ? "tech-logo tech-logo-light" : "tech-logo"}
+                            data-logo={item.logo}
+                            src={`/portfolio/stack/${item.logo}.svg`}
+                            width={18}
+                            height={18}
+                            alt=""
+                            unoptimized
+                          />
+                        )}
+                        {item.darkLogo && <Image className="tech-logo tech-logo-dark" src={`/portfolio/stack/${item.darkLogo}.svg`} width={18} height={18} alt="" unoptimized />}
+                        <span>{item.name}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </section>
         </main>

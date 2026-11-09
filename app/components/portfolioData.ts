@@ -7,7 +7,7 @@ export type Project = {
   summary: string; problem: string; solution: string; evidence: string;
   stack: string[]; github: string | null; filter: Exclude<ProjectFilter, 'all'>;
   tagline: string; coverCaption: string;
-  featured?: boolean; icon?: string; media?: ProjectMedia[]; liveUrl?: string;
+  icon?: string; media?: ProjectMedia[]; liveUrl?: string;
   metric?: { before: number; after: number; unit: string; label: string };
 };
 export type Award = { date: string; title: string; org: string; note: string; image?: string; imageAlt?: string; imageWidth?: number; imageHeight?: number };
@@ -15,7 +15,7 @@ type Portfolio = {
   projects: Project[];
   tools: {name: string; problem: string; state: string; github: string | null; image?: ProjectMedia}[];
   jobs: {company: string; role: string; period: string; summary: string; lines: string[]}[];
-  skills: {label: string; items: string}[];
+  skills: {label: string; items: { name: string; logo?: string; darkLogo?: string }[]}[];
   awards: Award[];
   education: {title: string; note: string}[];
   contact: {email: string; github: string; blog: string; resume: string};
@@ -42,7 +42,6 @@ export const portfolio: Portfolio = {
       "filter": "automation",
       "tagline": "흩어진 재무 정보를 한곳으로.",
       "coverCaption": "실제 앱 UI · 공개 README의 예시 금융 데이터",
-      "featured": true,
       "icon": "/portfolio/projects/finance-icon.png",
       "media": [
         {
@@ -85,8 +84,16 @@ export const portfolio: Portfolio = {
       "github": "https://github.com/thisNorm/facegate",
       "filter": "ai",
       "tagline": "모델의 판단을 출입 단말에서도.",
-      "coverCaption": "동일 단말 비교 · 저장 장면 44장 판정 확인",
-      "featured": true
+      "coverCaption": "게이트 단말 대기 화면 · 예시 인물",
+      "media": [
+        {
+          "src": "/portfolio/projects/facegate-terminal.png",
+          "width": 1448,
+          "height": 1086,
+          "alt": "얼굴 위치 안내와 방문객 호출·QR 버튼이 보이는 FaceGate 단말 대기 화면",
+          "caption": "FaceGate README의 게이트 단말 대기 화면 · 예시 인물"
+        }
+      ]
     },
     {
       "id": "autoci",
@@ -107,8 +114,7 @@ export const portfolio: Portfolio = {
       "github": "https://github.com/thisNorm/Air-gapped_DevOps",
       "filter": "automation",
       "tagline": "폐쇄망에서도 반복 설정을 줄이도록.",
-      "coverCaption": "샌드박스 검증 흐름의 개념도",
-      "featured": true
+      "coverCaption": "샌드박스 검증 흐름의 개념도"
     },
     {
       "id": "tailscale",
@@ -131,7 +137,6 @@ export const portfolio: Portfolio = {
       "filter": "automation",
       "tagline": "누군가 바꾼 장비 설정, 먼저 알 수 있도록.",
       "coverCaption": "실제 웹 UI · 가상 장비와 예시 이력",
-      "featured": true,
       "media": [
         {
           "src": "/portfolio/projects/tailscale-demo.png",
@@ -192,7 +197,6 @@ export const portfolio: Portfolio = {
       "filter": "ai",
       "tagline": "영상 수집부터 로봇 제어까지, 하나의 시스템에.",
       "coverCaption": "공개 README의 실제 개발 데모",
-      "featured": true,
       "media": [
         {
           "src": "/portfolio/aegisview.png",
@@ -222,7 +226,6 @@ export const portfolio: Portfolio = {
       "filter": "service",
       "tagline": "친구의 맛집 목록이 한 지도에서 만납니다.",
       "coverCaption": "공식 브랜드 이미지 · 서비스 배포 완료",
-      "featured": true,
       "liveUrl": "https://pinmate.kro.kr/",
       "icon": "/portfolio/projects/pinmate-icon.png",
       "media": [
@@ -381,19 +384,73 @@ export const portfolio: Portfolio = {
   "skills": [
     {
       "label": "언어",
-      "items": "TypeScript, Python, JavaScript, Java, C#"
+      "items": [
+        { name: "TypeScript", logo: "typescript" },
+        { name: "Python", logo: "python" },
+        { name: "JavaScript", logo: "javascript" },
+        { name: "Java", logo: "java" },
+      ],
     },
     {
-      "label": "백엔드·데이터",
-      "items": "Node.js, NestJS, FastAPI, Spring Boot · PostgreSQL(pgvector), MySQL, SQLite, Redis, MQTT, WebSocket"
+      "label": "백엔드",
+      "items": [
+        { name: "Node.js", logo: "nodejs" },
+        { name: "NestJS", logo: "nestjs" },
+        { name: "FastAPI", logo: "fastapi" },
+        { name: "Spring Boot (경험)", logo: "spring" },
+      ],
     },
     {
-      "label": "AI",
-      "items": "LLM 에이전트, MCP, RAG, 로컬 LLM(Ollama), 모델 경량화(ONNX, RKNN, TFLite, INT8), YOLOv8"
+      "label": "데이터·통신",
+      "items": [
+        { name: "PostgreSQL · pgvector", logo: "postgresql" },
+        { name: "MySQL", logo: "mysql" },
+        { name: "SQLite", logo: "sqlite" },
+        { name: "Redis", logo: "redis" },
+        { name: "MQTT", logo: "mqtt", darkLogo: "mqtt-dark" },
+        { name: "WebSocket" },
+        { name: "WebRTC", logo: "webrtc" },
+        { name: "RTSP" },
+      ],
     },
     {
-      "label": "인프라",
-      "items": "Linux, Docker, GitLab CI, GitHub Actions, AWS, Firebase, Tailscale, Jetson"
+      "label": "AI 활용 도구",
+      "items": [
+        { name: "Claude" },
+        { name: "Codex" },
+      ],
+    },
+    {
+      "label": "비전 모델",
+      "items": [
+        { name: "YOLOv8", logo: "ultralytics" },
+        { name: "ResNet50" },
+        { name: "LVFace-T" },
+      ],
+    },
+    {
+      "label": "AI 연동·실행",
+      "items": [
+        { name: "MCP", logo: "mcp" },
+        { name: "RAG" },
+        { name: "Ollama", logo: "ollama" },
+        { name: "ONNX", logo: "onnx" },
+        { name: "TensorFlow Lite", logo: "tensorflow" },
+        { name: "RKNN" },
+      ],
+    },
+    {
+      "label": "인프라·운영",
+      "items": [
+        { name: "Linux", logo: "linux" },
+        { name: "Docker", logo: "docker" },
+        { name: "GitLab CI", logo: "gitlab" },
+        { name: "GitHub Actions", logo: "githubactions" },
+        { name: "AWS", logo: "aws", darkLogo: "aws-dark" },
+        { name: "Firebase", logo: "firebase" },
+        { name: "Tailscale", logo: "tailscale" },
+        { name: "Jetson (엣지 실행)", logo: "nvidia" },
+      ],
     }
   ],
   "awards": [
@@ -463,8 +520,54 @@ export const portfolio: Portfolio = {
 };
 
 export const { projects, tools, jobs, skills, awards, education, contact } = portfolio;
-export const featuredProjects = projects.filter((project) => project.featured);
-export const additionalProjects = projects.filter((project) => !project.featured && project.id !== 'sns');
+export const featuredGroups = [
+  { id: "field", label: "현장 시스템", members: ["aegisview", "facegate"] },
+  { id: "operations", label: "운영 자동화", members: ["autoci", "tailscale"] },
+  { id: "products", label: "제품·서비스", members: ["finance", "pinmate"] },
+].map(({ id, label, members }) => ({
+  id, label,
+  projects: members.flatMap((member) => projects.filter((project) => project.id === member)),
+}));
+export const featuredProjects = featuredGroups.flatMap((group) => group.projects);
+export const additionalProjects = projects.filter((project) => !featuredProjects.includes(project) && project.id !== "sns");
+
+export const aiWorkflow = {
+  title: "AI와 일하는 방식",
+  intro: "기능을 맡기기 전에, 무엇을 확인하고 어떤 결과면 통과인지 정합니다.",
+  stages: [
+    {
+      id: "docs",
+      label: "문서 작성",
+      heading: "기대 동작과 성공 사례",
+      description: "아는 것부터 docs/에 적고, AI의 질문에 답하며 기대 동작과 성공 사례를 정리합니다.",
+      condition: "요구사항이 빠졌으면",
+      action: "인터뷰 → 답을 문서에 반영",
+      detailLabel: "인터뷰 방식",
+      detail: "AI에게 문서의 틀을 잡게 한 뒤, 지금 설명할 수 있는 상황과 문제, 목표부터 말합니다. 초안에 빠져 있거나 제가 미처 생각하지 못한 조건은 질문에 답하며 채웁니다.",
+    },
+    {
+      id: "eval",
+      label: "개발 계획 · Eval",
+      heading: "기능별 통과 기준",
+      description: "기능의 우선순위를 정하고, 성공 사례를 바탕으로 확인할 동작과 통과 조건을 적습니다.",
+      condition: "기준이 없거나 모호하면",
+      action: "AI가 다시 질문 → 답을 계획에 반영",
+      detailLabel: "통과 기준을 정하는 법",
+      detail: "계획을 세울 때 기능마다 어떤 조건에서 확인할지, 어떤 결과면 통과인지 정합니다. 문서만으로 판정할 수 없다면 AI가 먼저 다시 묻고, 제 답을 반영해 기준을 정한 뒤 구현합니다.",
+    },
+    {
+      id: "verify",
+      label: "기능 개발",
+      heading: "같은 기준으로 검증",
+      description: "기능마다 하네스를 정해 하나씩 구현하고, 계획에 적어 둔 통과 기준으로 테스트합니다.",
+      condition: "기준에 못 미치면",
+      action: "기능 수정 → 같은 기준으로 재테스트",
+      detailLabel: "하네스와 테스트",
+      detail: "이번 기능에 맞는 문서, 작업 범위와 규칙, 실행 도구를 정합니다. 문제가 생기면 실패한 지점을 찾아 구현을 고치고, 계획에서 정한 목표가 충족될 때까지 다시 확인합니다.",
+    },
+  ],
+  handoff: "실행한 테스트, 실패한 지점, 수정과 재테스트 결과를 보고받습니다. 제가 확인한 뒤 다음 기능의 계획으로 돌아갑니다.",
+};
 
 export const activities = [
   {
@@ -496,9 +599,8 @@ export const homeCopy = {
   "action": "만든 도구 살펴보기",
   "motionReplay": "흐름 다시 보기",
   "motionStop": "모션 멈추기",
-  "workEyebrow": "직접 만들어 바꾼 것들",
   "workTitle": "불편이 도구가 된 기록.",
-  "workHint": "작업을 고르면 시작한 이유와 구현을 볼 수 있습니다.",
+  "workHint": "프로젝트를 고르면 맡은 역할과 구현 내용을 볼 수 있습니다.",
   "galleryNote": "실제 화면과 개념 그래픽을 구분해 표기했습니다. 각 작업에서 역할과 구현 범위를 확인할 수 있습니다.",
   "profileRole": "Backend Engineer",
   "profileName": "thisNorm",

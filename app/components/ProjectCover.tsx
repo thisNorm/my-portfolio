@@ -8,9 +8,10 @@ const pinRoute = "M88 210Q196 99 302 220Q324 281 206 315";
 export default function ProjectCover({ project }: { project: Project }) {
   const coverId = project.id === "harnessvault" ? "harness" : project.id === "aegisview" ? "aegis" : project.id;
   const primaryImage = project.media?.[0];
-  if (primaryImage && (project.id === "finance" || project.id === "tailscale" || project.id === "pinmate")) {
-    return <figure className={`project-cover cover-${coverId} has-product-media`}>
-      <Image src={primaryImage.src} alt={primaryImage.alt} width={primaryImage.width} height={primaryImage.height} sizes={`(max-width: 600px) calc(100vw - 46px), (max-width: 1050px) 50vw, ${project.id === "finance" ? "55vw" : "36vw"}`} />
+  if (primaryImage && (project.id === "finance" || project.id === "tailscale" || project.id === "pinmate" || project.id === "facegate")) {
+    const mediaCoverId = project.id === "facegate" ? "terminal" : coverId;
+    return <figure className={`project-cover cover-${mediaCoverId} has-product-media`}>
+      <Image src={primaryImage.src} alt={primaryImage.alt} width={primaryImage.width} height={primaryImage.height} sizes={`(max-width: 720px) calc(100vw - 46px), ${project.id === "finance" ? "55vw" : project.id === "tailscale" ? "50vw" : "44vw"}`} />
       <figcaption>{project.coverCaption}</figcaption>
     </figure>;
   }
@@ -63,7 +64,7 @@ export default function ProjectCover({ project }: { project: Project }) {
       </>;
       break;
     case "aegisview":
-      artwork = <Image src="/portfolio/aegisview.png" alt="CCTV와 로봇 관제 및 이벤트 저장을 보여주는 실제 개발 데모" width={3838} height={2085} sizes="(max-width: 600px) calc(100vw - 46px), 60vw" />;
+      artwork = <Image src="/portfolio/aegisview.png" alt="CCTV와 로봇 관제 및 이벤트 저장을 보여주는 실제 개발 데모" width={3838} height={2085} sizes="(max-width: 720px) calc(100vw - 46px), 55vw" />;
       break;
     case "pinmate":
       artwork = <svg className="map-art" viewBox="0 0 430 460" aria-hidden="true">
