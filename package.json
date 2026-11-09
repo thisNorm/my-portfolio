@@ -13,8 +13,8 @@
     "@portabletext/react": "^8.0.1",
     "@sanity/client": "^8.14.1",
     "@vercel/analytics": "^2.0.1",
-    "lucide-react": "^1.66.0",
-    "next": "^16.4.3",
+    "lucide-react": "^1.69.0",
+    "next": "^16.4.5",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },
@@ -24,7 +24,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^10",
-    "eslint-config-next": "^16.4.3",
+    "eslint-config-next": "^16.4.5",
     "postcss": "^8.5.32",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.3"
