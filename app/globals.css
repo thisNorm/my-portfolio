@@ -65,7 +65,12 @@ body.is-modal-open{overflow:hidden}dialog{width:min(880px,calc(100vw - 44px));ma
 .contact-section {
   color: #edf0f6;
   background: #0b1422;
-  border-top: 1px solid #303d50;
+}
+
+.tools-section,
+.career-section,
+.contact-section {
+  border-top: 1px solid var(--line);
 }
 
 .tools-section {
@@ -139,7 +144,6 @@ body.is-modal-open{overflow:hidden}dialog{width:min(880px,calc(100vw - 44px));ma
   min-height: 104px;
   margin-top: 28px;
   padding-top: 20px;
-  border-top: 1px solid #303d50;
 }
 
 .tools-section .tools-current p {
@@ -245,7 +249,6 @@ body.is-modal-open{overflow:hidden}dialog{width:min(880px,calc(100vw - 44px));ma
 
 .profile-section .profile-details {
   min-width: 0;
-  border-top: 1px solid #303d50;
 }
 
 .profile-section .profile-details summary {
@@ -552,7 +555,7 @@ body.is-modal-open{overflow:hidden}dialog{width:min(880px,calc(100vw - 44px));ma
 :root[data-palette] .voice-art path:last-child { stroke: var(--light-muted); }
 :root[data-palette] .tools-section,
 :root[data-palette] .profile-section,
-:root[data-palette] .contact-section { background: var(--bg); color: var(--ink); border-color: var(--line); }
+:root[data-palette] .contact-section { background: var(--bg); color: var(--ink); }
 :root[data-palette] .tools-section .tools-choice,
 :root[data-palette] .tools-section .tools-current p,
 :root[data-palette] .profile-section .profile-label,
@@ -571,8 +574,6 @@ body.is-modal-open{overflow:hidden}dialog{width:min(880px,calc(100vw - 44px));ma
 :root[data-palette] .tools-section .tools-choice:hover,
 :root[data-palette] .tools-section .tools-source:hover,
 :root[data-palette] .contact-section a:hover { color: var(--accent); }
-:root[data-palette] .tools-section .tools-current,
-:root[data-palette] .profile-section .profile-details { border-color: var(--line); }
 :root[data-palette] .profile-section .profile-details summary::marker { color: var(--muted); }
 :root[data-palette] dialog,
 :root[data-palette] .dialog-close-form { background: var(--bg); border-color: var(--line); }
@@ -870,7 +871,6 @@ dialog{margin:auto}
 .tools-section .tools-heading { margin-bottom: 20px; }
 
 .tech-stack {
-  border-top: 1px solid var(--line);
   padding-block: clamp(38px, 5.2vw, 84px);
 }
 
@@ -887,7 +887,6 @@ dialog{margin:auto}
   align-items: start;
   gap: 10px 18px;
   padding-block: clamp(14px, 1.45vw, 22px);
-  border-top: 1px solid var(--line);
 }
 
 .tech-group h3 {
@@ -958,7 +957,7 @@ dialog{margin:auto}
   gap: clamp(20px, 3vw, 56px);
 }
 
-.career-section .profile-details { margin-top: 15px; }
+.career-section .profile-details { margin-top: 15px; border-top: 1px solid var(--line); }
 
 .work-hint { max-width: 36ch; }
 .work-nav { margin-bottom: clamp(24px, 2.5vw, 38px); }
