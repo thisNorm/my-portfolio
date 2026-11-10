@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>thisnorm 리뉴얼 시안</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+@font-face { font-family: "Pretendard"; src: url("../../app/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+/* Layout: one 3D conveyor runs through the hero; every section hangs off a sticky left index rail. */
+:root {
+  /* shortcut: palette is a stand-in until the ohmydesign values are known — swap these 8 tokens only. */
+  --bg: #eef1ee; --surface: #e1e8e4; --ink: #17211e; --muted: #4c5b56; --line: #c2ccc7;
+  --accent: #1d5a52; --signal: #b06a22; --deep: #17211e; --deep-ink: #e6ede9;
+  --belt-a: #2a3632; --belt-b: #34433e; --box-top: #f4f6f4; --box-front: #cbd5d0; --box-side: #aab8b2;
+  --sans: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --wrap: 1240px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1614; --surface: #16201d; --ink: #e5ece8; --muted: #a3b2ac; --line: #2b3834;
+  --accent: #7cc4b6; --signal: #e09d55; --deep: #0a100e; --deep-ink: #e5ece8;
+  --belt-a: #1f2926; --belt-b: #283430; --box-top: #dfe6e2; --box-front: #a9b8b2; --box-side: #869690; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0f1614; --surface: #16201d; --ink: #e5ece8; --muted: #a3b2ac; --line: #2b3834;
+  --accent: #7cc4b6; --signal: #e09d55; --deep: #0a100e; --deep-ink: #e5ece8;
+  --belt-a: #1f2926; --belt-b: #283430; --box-top: #dfe6e2; --box-front: #a9b8b2; --box-side: #869690; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.7 var(--sans); letter-spacing: -0.01em; word-break: keep-all;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+a { color: inherit; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; letter-spacing: -0.035em; line-height: 1.2; }
+p { margin: 0; }
+.wrap { max-width: var(--wrap); margin: 0 auto; }
+.mono { font-family: var(--mono); letter-spacing: 0; }
+
+/* top bar + belt progress */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px); margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px)); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 60px; }
+.wordmark { font-weight: 800; font-size: 22px; text-decoration: none; letter-spacing: -0.05em; }
+.wordmark span { color: var(--accent); }
+.top nav { display: flex; gap: 22px; font-size: 14px; flex-wrap: wrap; }
+.top nav a { text-decoration: none; color: var(--muted); }
+.top nav a[aria-current="true"] { color: var(--ink); font-weight: 600; }
+.progress { height: 4px; background: var(--line); }
+.progress i { display: block; height: 100%; width: calc(var(--read, 0) * 100%);
+  background: repeating-linear-gradient(90deg, var(--accent) 0 10px, color-mix(in srgb, var(--accent) 55%, var(--bg)) 10px 14px); }
+
+/* hero */
+.hero { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: 24px; align-items: center; padding-block: 56px 24px; }
+.identity { font-size: 15px; color: var(--muted); margin-bottom: 18px; }
+.hero h1 { font-size: clamp(36px, 4.4vw, 62px); font-weight: 760; line-height: 1.08; letter-spacing: -0.055em; }
+.hero h1 .lead { font-weight: 360; color: var(--muted); }
+.hero-desc { margin-top: 24px; color: var(--muted); font-size: 18px; }
+.hero-cta { display: inline-flex; gap: 10px; margin-top: 32px; padding: 12px 18px; border: 1px solid var(--ink); border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 15px; }
+.hero-cta:hover { background: var(--ink); color: var(--bg); }
+
+.stage { position: relative; height: 470px; perspective: 1600px; perspective-origin: 50% 20%; overflow: hidden; }
+.world { position: absolute; left: 56%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; transform: rotateX(58deg) rotateZ(-34deg) scale(.86); }
+.belt { position: absolute; left: -380px; top: -55px; width: 760px; height: 110px; transform-style: preserve-3d;
+  background: repeating-linear-gradient(90deg, var(--belt-a) 0 22px, var(--belt-b) 22px 44px); background-position-x: var(--belt-shift, 0px); border-radius: 4px; }
+.belt::after { content: ""; position: absolute; left: 0; top: 100%; width: 100%; height: 26px; background: var(--deep); transform-origin: top; transform: rotateX(-90deg); }
+.belt::before { content: ""; position: absolute; inset: 14px -26px -26px 14px; background: color-mix(in srgb, var(--ink) 14%, transparent); filter: blur(14px); transform: translateZ(-40px); }
+.box { position: absolute; left: 0; top: -30px; width: 96px; height: 60px; transform-style: preserve-3d; transform: translate3d(var(--x, 0px), 0, 0); }
+.box > i { position: absolute; display: block; }
+.box .t { inset: 0; background: var(--box-top); transform: translateZ(44px); display: grid; place-items: center; font: 650 12px/1.2 var(--sans); color: #1d2925; text-align: center; padding: 4px; letter-spacing: -0.02em; }
+.box .f { left: 0; top: 100%; width: 96px; height: 44px; background: var(--box-front); transform-origin: top; transform: rotateX(90deg); }
+.box .s { left: 0; top: 0; width: 44px; height: 60px; background: var(--box-side); transform-origin: left; transform: rotateY(-90deg); }
+.box.ok .t { background: color-mix(in srgb, var(--accent) 30%, var(--box-top)); }
+.box.ok .t::after { content: " ✓"; color: var(--accent); }
+/* gate stands across the belt: element x → world y, element y → world -z */
+.gate { position: absolute; left: 90px; top: 0; width: 170px; height: 150px; transform-origin: 0 0; transform: matrix3d(0,1,0,0, 0,0,-1,0, -1,0,0,0, 0,-85,150,1); pointer-events: none; }
+.gate-frame { position: absolute; inset: 0; border: 8px solid var(--accent); border-bottom: 0; }
+.gate-label { position: absolute; left: 50%; top: -34px; transform: translateX(-50%); font: 500 13px var(--mono); color: var(--accent); white-space: nowrap; }
+.tray { position: absolute; left: 400px; top: -80px; width: 110px; height: 160px; border: 2px dashed var(--line); }
+.stage-key { position: absolute; left: 0; right: 0; bottom: 6px; display: flex; justify-content: space-between; font: 12px var(--mono); color: var(--muted); }
+.stage-key b { color: var(--accent); font-weight: 500; }
+
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); margin-top: 8px; }
+.facts div { padding: 20px 20px 4px 0; display: grid; gap: 2px; }
+.facts strong { font-size: 26px; font-weight: 700; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.facts span { color: var(--muted); font-size: 14px; }
+
+/* chapters */
+.chapter { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 48px; padding-block: 96px; border-top: 1px solid var(--line); }
+.rail { position: sticky; top: 92px; align-self: start; display: grid; gap: 6px; }
+.rail h2 { font-size: 30px; font-weight: 700; }
+.rail p { color: var(--muted); font-size: 14px; }
+.body { display: grid; gap: 56px; min-width: 0; }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 45%; }
+    @keyframes rise { from { opacity: .3; transform: translateY(32px); } to { opacity: 1; transform: none; } }
+  }
+}
+
+/* career */
+.timeline { display: grid; gap: 14px; }
+.tl-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.tl-head strong { font-size: 44px; font-weight: 750; letter-spacing: -0.05em; }
+.tl-head span { color: var(--muted); font-size: 14px; }
+.tl-track { position: relative; display: grid; grid-template-columns: repeat(11, 1fr); height: 40px; border-bottom: 1px solid var(--line); }
+.tl-track i { position: absolute; top: 6px; height: 28px; border-radius: 3px; }
+.tl-track .train { left: 0; width: calc(2 / 11 * 100%); background: var(--signal); }
+.tl-track .work { left: calc(5 / 11 * 100%); width: calc(6 / 11 * 100%); background: var(--accent);
+  background-image: linear-gradient(90deg, transparent 85%, var(--bg)); }
+.tl-scale { display: grid; grid-template-columns: repeat(11, 1fr); font: 11px var(--mono); color: var(--muted); }
+.jobs { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 40px; }
+.job { display: grid; gap: 14px; align-content: start; }
+.job-k { font: 12px var(--mono); display: inline-flex; gap: 8px; align-items: center; color: var(--muted); }
+.job-k::before { content: ""; width: 10px; height: 10px; border-radius: 2px; background: var(--c); }
+.job h3 { font-size: 22px; }
+.job .role { color: var(--muted); font-size: 14px; }
+.job dl { margin: 0; display: grid; gap: 14px; }
+.job dt { font-weight: 650; font-size: 15px; }
+.job dd { margin: 2px 0 0; color: var(--muted); font-size: 15px; }
+
+/* projects */
+.group-label { font: 12px var(--mono); color: var(--muted); display: flex; gap: 12px; align-items: center; }
+.group-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.project { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 36px; }
+.p-meta { position: sticky; top: 92px; align-self: start; display: grid; gap: 10px; }
+.p-meta h3 { font-size: 30px; font-weight: 720; display: flex; align-items: center; gap: 10px; }
+.p-meta h3 img { width: 32px; height: 32px; border-radius: 7px; }
+.p-meta .tags { color: var(--muted); font-size: 14px; }
+.p-meta .sum { font-size: 16px; }
+.stack { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 4px 0 0; list-style: none; }
+.stack li { font: 12px var(--mono); border: 1px solid var(--line); padding: 2px 8px; border-radius: 4px; color: var(--muted); }
+.links { display: flex; gap: 16px; font-size: 14px; font-weight: 600; }
+.links a { text-decoration-color: var(--line); text-underline-offset: 4px; }
+.p-body { display: grid; gap: 20px; min-width: 0; }
+.shot { margin: 0; background: var(--surface); border-radius: 6px; overflow: hidden; }
+.shot img { display: block; width: 100%; height: auto; max-height: 420px; object-fit: contain; }
+.shot figcaption { font-size: 12px; color: var(--muted); padding: 8px 12px; }
+.notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 28px; }
+.note h4 { font: 500 12px var(--mono); color: var(--muted); margin: 0 0 6px; }
+.note p { font-size: 15px; }
+.note.trial { grid-column: 1 / -1; background: color-mix(in srgb, var(--signal) 10%, var(--bg)); border-left: 3px solid var(--signal); padding: 16px 20px; border-radius: 0 6px 6px 0; }
+.note.trial h4 { color: var(--signal); }
+.note.trial strong { display: block; font-size: 17px; margin-bottom: 6px; }
+.metric { display: grid; gap: 8px; padding: 18px 20px; background: var(--surface); border-radius: 6px; }
+.metric-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) 72px; gap: 12px; align-items: center; font: 13px var(--mono); }
+.metric-row i { height: 14px; border-radius: 2px; background: var(--muted); }
+.metric-row.npu i { background: var(--accent); }
+.metric-row b { text-align: right; font-weight: 500; font-variant-numeric: tabular-nums; }
+.metric p { font-size: 12px; color: var(--muted); }
+.flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding: 24px; background: var(--deep); color: var(--deep-ink); border-radius: 6px; font-size: 14px; }
+.flow span { border: 1px solid color-mix(in srgb, var(--deep-ink) 30%, transparent); border-radius: 4px; padding: 12px; display: grid; gap: 4px; }
+.flow small { font: 11px var(--mono); opacity: .7; }
+.flow .stop { grid-column: 2 / 4; border-style: dashed; color: var(--signal); border-color: var(--signal); }
+.more { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 15px; color: var(--muted); }
+.more strong { color: var(--ink); }
+
+/* eval */
+.loop { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.loop li { list-style: none; padding: 22px; display: grid; gap: 8px; align-content: start; }
+.loop li + li { border-left: 1px solid var(--line); }
+.loop li.key { background: color-mix(in srgb, var(--accent) 10%, var(--bg)); }
+.loop small { font: 12px var(--mono); color: var(--muted); }
+.loop li.key small { color: var(--accent); }
+.loop h3 { font-size: 20px; }
+.loop p { font-size: 15px; color: var(--muted); }
+.loop .back { font-size: 13px; color: var(--ink); border-top: 1px dashed var(--line); padding-top: 10px; }
+.evals-wrap { overflow-x: auto; }
+.evals { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 640px; }
+.evals caption { text-align: left; font-weight: 650; font-size: 16px; padding-bottom: 12px; }
+.evals th { text-align: left; font: 500 12px var(--mono); color: var(--muted); padding: 8px 12px 8px 0; border-bottom: 1px solid var(--ink); }
+.evals td { padding: 14px 12px 14px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.evals td:first-child { font-weight: 650; white-space: nowrap; }
+.evals td:last-child { color: var(--signal); }
+
+/* awards */
+.awards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.award { display: grid; gap: 8px; align-content: start; }
+.award img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px; background: var(--surface); }
+.award .when { font: 12px var(--mono); color: var(--muted); }
+.award strong { font-size: 20px; }
+.award.grand strong { color: var(--accent); }
+.award p { font-size: 14px; color: var(--muted); }
+.award-list { display: grid; gap: 0; padding: 0; margin: 0; list-style: none; }
+.award-list li { display: grid; grid-template-columns: 90px 90px minmax(0, 1fr); gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); font-size: 15px; }
+.award-list .mono { color: var(--muted); font-size: 13px; }
+
+/* skills */
+.skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 48px; }
+.skills h3 { font: 500 12px var(--mono); color: var(--muted); margin-bottom: 10px; letter-spacing: 0; }
+.skills ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.skills li { display: inline-flex; gap: 7px; align-items: center; font-size: 15px; }
+.skills img { width: 16px; height: 16px; }
+
+/* misc */
+.cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.cols h3 { font-size: 17px; margin-bottom: 10px; }
+.cols ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; font-size: 14px; }
+.cols li span { display: block; color: var(--muted); font-size: 13px; }
+.contact { padding-block: 96px 64px; border-top: 1px solid var(--line); display: grid; gap: 18px; }
+.contact h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 700; user-select: all; }
+.contact nav { display: flex; gap: 22px; font-weight: 600; }
+.mock-note { font: 12px var(--mono); color: var(--muted); }
+
+@media (max-width: 900px) {
+  .hero, .chapter, .project, .jobs { grid-template-columns: minmax(0, 1fr); }
+  .rail, .p-meta { position: static; }
+  .stage { height: 330px; }
+  .world { transform: rotateX(58deg) rotateZ(-34deg) scale(.6); }
+  .awards, .cols, .skills, .loop, .notes { grid-template-columns: minmax(0, 1fr); }
+  .loop li + li { border-left: 0; border-top: 1px solid var(--line); }
+  .facts { grid-template-columns: minmax(0, 1fr); }
+  .top nav { display: none; }
+  .chapter { padding-block: 64px; gap: 24px; }
+  .award-list li { grid-template-columns: 70px minmax(0, 1fr); }
+  .award-list li > :last-child { grid-column: 2; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="wordmark" href="#top">thisnorm<span>.</span></a>
+    <nav aria-label="주 메뉴">
+      <a href="#career">경력</a><a href="#work">프로젝트</a><a href="#eval">AI와 일하는 방식</a><a href="#awards">수상</a><a href="#skills">기술</a><a href="#contact">연락</a>
+    </nav>
+  </div>
+  <div class="progress" aria-hidden="true"><i></i></div>
+</header>
+
+<main id="top" class="wrap">
+  <section class="hero" aria-labelledby="hero-title">
+    <div>
+      <p class="identity">백엔드 개발자 황규범</p>
+      <h1 id="hero-title"><span class="lead">불편해서,</span><br>직접 만들었습니다.</h1>
+      <p class="hero-desc">반복하는 일은 자동화하고,<br>손으로 하던 일은 시스템으로 바꿉니다.</p>
+      <a class="hero-cta" href="#work">만든 것 살펴보기 <span aria-hidden="true">↓</span></a>
+    </div>
+    <figure class="stage" aria-label="현장 데이터와 설정이 컨베이어를 따라 이동해 Eval 게이트를 통과한 것만 반영되는 개념 모션. 스크롤하면 벨트가 움직입니다." style="margin:0">
+      <div class="world" id="world">
+        <div class="belt" id="belt"></div>
+        <div class="gate"><div class="gate-frame"></div><span class="gate-label">EVAL</span></div>
+        <div class="tray" aria-hidden="true"></div>
+      </div>
+      <figcaption class="stage-key"><span>입력 · 현장 데이터와 초안</span><b>통과 기준을 지난 것만</b><span>운영 반영</span></figcaption>
+    </figure>
+  </section>
+  <div class="facts">
+    <div><strong>농가 3곳</strong><span>엣지 서버 운영 · 농가별 소리수집기 8~20대, 카메라 12~15대</span></div>
+    <div><strong class="mono">305 → 23ms</strong><span>FaceGate 얼굴 검출 장면 처리 중앙값 · NPU INT8</span></div>
+    <div><strong>대상 2회</strong><span>DeepVoice Shield · 2025 경진대회</span></div>
+  </div>
+
+  <section class="chapter" id="career" aria-labelledby="career-title">
+    <div class="rail"><h2 id="career-title">경력</h2><p>연구연수에서 실무로</p></div>
+    <div class="body">
+      <div class="timeline reveal">
+        <div class="tl-head"><strong>약 7개월</strong><span>연구연수 2개월 + 실무 약 5개월 · 2026.11 기준</span></div>
+        <div class="tl-track" role="img" aria-label="2026년 1월부터 2월까지 ETRI 연구연수, 2026년 6월부터 현재까지 인포벨리코리아 실무"><i class="train"></i><i class="work"></i></div>
+        <div class="tl-scale mono" aria-hidden="true"><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span><span>07</span><span>08</span><span>09</span><span>10</span><span>11</span></div>
+      </div>
+      <div class="jobs">
+        <article class="job reveal" style="--c: var(--signal)">
+          <span class="job-k">연구연수 · 2026.01 — 2026.02</span>
+          <h3>ETRI 자율형IoT연구실</h3>
+          <p class="role">연구연수생 · Research Trainee</p>
+          <p>폐쇄망에서 CCTV 탐지 이벤트와 로봇 원격 조종을 한곳에서 다루는 관제 시스템 AegisView를 1인 개발했습니다.</p>
+          <dl>
+            <div><dt>탐지 이벤트 처리와 저장</dt><dd>Redis Queue로 탐지 이벤트를 받고 실패한 건은 DLQ에 남겼습니다. 이벤트는 묶어서 저장해 DB 쓰기 횟수를 줄였습니다.</dd></div>
+            <div><dt>로봇 원격 조종 응답 개선</dt><dd>로봇 제어 통신에 aiohttp 비동기 처리를 적용했습니다. 프로젝트 내 비교에서 원격 조종의 제어 지연을 약 90% 줄였습니다.</dd></div>
+          </dl>
+        </article>
+        <article class="job reveal" style="--c: var(--accent)">
+          <span class="job-k">실무 · 2026.06 — 현재</span>
+          <h3>인포벨리코리아 (INVAKO)</h3>
+          <p class="role">Backend Engineer</p>
+          <p>농가에 설치된 Jetson 엣지 서버와 중앙 매니저 서버를 개발·운영합니다. 현장 장비 연결과 데이터 수집부터 원격 업데이트, 신규 설치 검증까지 맡고 있습니다.</p>
+          <dl>
+            <div><dt>현장 데이터 수집과 장애 대응</dt><dd>농가 3곳에서 소리수집기 8~20대와 카메라 12~15대를 농가별로 연결해 운영합니다. 중앙 서버가 두 차례 약 하루씩 중단됐을 때도 현장 수집 데이터는 유실되지 않았습니다.</dd></div>
+            <div><dt>농가별 상태 확인과 원격 업데이트</dt><dd>매니저 서버에 농가별 상태 신호(Heartbeat)를 모아 엣지 서버를 확인하고, 농가 네트워크에 포트를 추가로 열지 않고도 원격으로 업데이트할 수 있도록 구현했습니다.</dd></div>
+            <div><dt>엣지 서버 교체와 신규 설치 검증</dt><dd>같은 Jetson에서 기존 서버와 새 서버를 병행 가동하며 수집을 유지한 채 교체하고 있습니다. 신규 설치를 6단계로 자동 검증하고, 하루 약 7GB에 달한 로그로 발생한 장애도 해결했습니다.</dd></div>
+          </dl>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="work" aria-labelledby="work-title">
+    <div class="rail"><h2 id="work-title">프로젝트</h2><p>문제 · 시행착오 · 확인한 범위를 카드에서 바로 봅니다</p></div>
+    <div class="body" id="projects"></div>
+  </section>
+
+  <section class="chapter" id="eval" aria-labelledby="eval-title">
+    <div class="rail"><h2 id="eval-title">AI와 일하는 방식</h2><p>구현 전에 통과 기준부터</p></div>
+    <div class="body">
+      <ol class="loop reveal" style="margin:0;padding:0">
+        <li><small>1 · 문서</small><h3>기대 동작과 성공 사례</h3><p>아는 것부터 docs/에 적고, AI의 질문에 답하며 기대 동작과 성공 사례를 정리합니다.</p><p class="back">요구사항이 빠졌으면 → 인터뷰 후 문서에 반영</p></li>
+        <li class="key"><small>2 · 개발 계획 · Eval</small><h3>기능별 통과 기준</h3><p>기능의 우선순위를 정하고, 확인할 동작과 통과 조건을 구현 전에 적습니다.</p><p class="back">기준이 모호하면 → AI가 다시 질문, 답을 계획에 반영</p></li>
+        <li><small>3 · 기능 개발</small><h3>같은 기준으로 검증</h3><p>기능마다 하네스를 정해 구현하고, 계획에 적어 둔 기준으로 테스트합니다.</p><p class="back">기준에 못 미치면 → 수정 후 같은 기준으로 재테스트</p></li>
+      </ol>
+      <div class="evals-wrap reveal">
+        <table class="evals">
+          <caption>프로젝트에서 실제로 둔 통과 기준</caption>
+          <thead><tr><th>프로젝트</th><th>확인할 동작</th><th>통과 조건</th><th>실패하면</th></tr></thead>
+          <tbody>
+            <tr><td>Content Agent</td><td>AI 각색 후 코드 블록·이미지 위치 보존</td><td>임시 표식이 하나도 빠지지 않고, 소제목이 지나치게 줄지 않음</td><td>발행 중단</td></tr>
+            <tr><td>Air-gapped AutoCI</td><td>로컬 LLM이 만든 CI 설정</td><td>샌드박스 실행과 smoke test 통과</td><td>GitLab Runner에 반영하지 않음</td></tr>
+            <tr><td>FaceGate</td><td>얼굴 검출을 NPU로 교체</td><td>저장 장면 44장에서 CPU·NPU의 사람 판정 일치</td><td>기존 CPU 경로 유지</td></tr>
+            <tr><td>알아서</td><td>할부·잔액 계산</td><td>같은 조건이면 같은 결과</td><td>AI가 아닌 서버 규칙으로 계산</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mock-note">결과 보고: 실행한 테스트, 실패한 지점, 수정과 재테스트 결과를 받아 직접 확인한 뒤 다음 기능 계획으로 넘어갑니다.</p>
+    </div>
+  </section>
+
+  <section class="chapter" id="awards" aria-labelledby="awards-title">
+    <div class="rail"><h2 id="awards-title">수상</h2><p>대상 2회 · 5건</p></div>
+    <div class="body">
+      <div class="awards">
+        <figure class="award grand reveal" style="margin:0"><img src="../../public/portfolio/awards/biohealth-grand-prize-2025.jpg" alt="2025 디지털 바이오헬스 종합설계 경진대회 대상 수상 현장 단체 사진" loading="lazy"><span class="when">2025.12</span><strong>대상</strong><p>디지털 바이오헬스 종합설계 경진대회 · DeepVoice Shield</p></figure>
+        <figure class="award grand reveal" style="margin:0"><img src="../../public/portfolio/awards/ict-innovation-grand-prize-board-2025.png" alt="2025 충청권 ICT 이노베이션스퀘어 S/W 개발 분과 대상 시상 보드" loading="lazy"><span class="when">2025.11</span><strong>대상</strong><p>충청권 ICT 이노베이션스퀘어 S/W 개발 분과 · DeepVoice Shield</p></figure>
+        <figure class="award reveal" style="margin:0"><img src="../../public/portfolio/awards/regional-innovation-excellence-2025-photo.png" alt="2025 지역혁신 인재양성 연합 페스티벌 우수상 수상 현장 사진" loading="lazy" style="object-position: 50% 30%"><span class="when">2025.11</span><strong>우수상</strong><p>지역혁신 인재양성 연합 페스티벌 · DeepVoice Shield</p></figure>
+      </div>
+      <ul class="award-list reveal">
+        <li><span class="mono">2026.01</span><strong>총장상</strong><span>홍익대학교 · 교내외 기술 성과</span></li>
+        <li><span class="mono">2025.09</span><strong>최우수상</strong><span>OpenCV Zoo 영상분석 실무 프로젝트 · 멀티프레임 반사광 제거 (3인 팀)</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="chapter" id="skills" aria-labelledby="skills-title">
+    <div class="rail"><h2 id="skills-title">기술</h2><p>프로젝트와 실무에서 사용</p></div>
+    <div class="body"><div class="skills reveal" id="skill-list"></div></div>
+  </section>
+
+  <section class="chapter" id="more" aria-labelledby="more-title">
+    <div class="rail"><h2 id="more-title">그 밖에</h2><p>작은 도구 · 자격 · 활동</p></div>
+    <div class="body">
+      <div class="cols reveal">
+        <div><h3>작은 도구들</h3><ul>
+          <li>OnlyDM<span>인스타그램 DM 전용 Windows 창 · npm 배포</span></li>
+          <li>Windows Toolkit<span>포트·IP·게이트웨이를 트레이에서 조회</span></li>
+          <li>AI POT CBT<span>직접 만든 CBT로만 풀어 1급 취득</span></li>
+          <li>Keydesk<span>Infisical 기반 개인 API 키 보관함</span></li>
+        </ul></div>
+        <div><h3>교육·자격</h3><ul>
+          <li>홍익대학교 소프트웨어융합학과<span>빅데이터비즈니스융합 복수전공 · 2026.08 졸업</span></li>
+          <li>AI-POT 프롬프트 엔지니어링 1급<span>2026.02</span></li>
+          <li>AI를 활용한 DevOps 전문가 양성 교육<span>2026.04 · Docker·Kubernetes 기반 CI/CD</span></li>
+          <li>메타버스 융합 SW 아카데미<span>2024.12 ~ 2025.06 · 과기부 주관</span></li>
+          <li>SQLD<span>2024.09</span></li>
+        </ul></div>
+        <div><h3>활동</h3><ul>
+          <li>데일리 AI 브리핑<span>매일 오전 9시 Threads·LinkedIn 게시</span></li>
+          <li>AINOW AI 세미나 &amp; 네트워킹<span>2026.10.17 · Intel 후원 행사</span></li>
+          <li>기술 블로그<span>thisnorm.tistory.com · Content Agent로 발행</span></li>
+        </ul></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap contact" id="contact">
+  <p class="mono" style="color:var(--muted)">연락</p>
+  <h2>kisook2557@gmail.com</h2>
+  <nav aria-label="외부 링크"><a href="https://github.com/thisNorm">GitHub ↗</a><a href="https://thisnorm.tistory.com">Blog ↗</a></nav>
+  <p class="mock-note">데스크탑 시안 · 운영 사이트(thisnorm.dev)에는 반영하지 않았습니다. 색 토큰은 임시 값입니다.</p>
+</footer>
+
+<script>
+const projects = [
+  { group: "현장 시스템", id: "aegisview", name: "AegisView", tags: "폐쇄망 영상 AI · ETRI · 1인 개발", sum: "CCTV 탐지 이벤트와 로봇 원격 조종을 폐쇄망에서 통합합니다.",
+    img: ["../../public/portfolio/aegisview.png", "공개 README의 실제 개발 데모", "CCTV·로봇 통합 관제와 이벤트 처리를 보여 주는 AegisView 개발 데모"],
+    problem: "폐쇄망에서 CCTV 탐지 이벤트와 로봇 원격 조종을 한곳에서 다룰 관제가 필요했습니다.",
+    solution: "Redis Queue·DLQ로 탐지 이벤트를 처리하고 이벤트를 묶어 DB에 저장합니다. 로봇 제어 통신에는 aiohttp 비동기 처리를 적용했습니다.",
+    trial: ["완전히 겹치면 ID를 이어 가지 못했습니다", "객체가 화면에 들어오면 번호를 부여하고, 화면 안에 머무는 동안 같은 번호를 유지하도록 했습니다. 두 객체가 완전히 겹쳤다 흩어지면 어느 쪽에 이전 번호를 이어야 할지 구별하지 못했습니다. 이후 ETRI 연구진에게 스마트돈사에서는 카메라를 위에서 내려다보도록 배치해 가림을 줄인다는 설명을 들었고, 추적 로직과 함께 촬영 구도도 봐야 한다는 걸 배웠습니다."],
+    evidence: "ETRI 자율형IoT연구실에서 1인 개발했습니다.", stack: ["YOLOv8", "FastAPI", "C#", "Redis"], github: "https://github.com/thisNorm/lab-guardian" },
+  { group: "현장 시스템", id: "facegate", name: "FaceGate", tags: "현장 엣지 AI · 사내 PoC · 1인 개발", sum: "AI팀 인식 경로를 Android 출입 단말에 통합하고, 얼굴 검출을 NPU로 옮겼습니다.",
+    img: ["../../public/portfolio/projects/facegate-terminal.png", "FaceGate README의 게이트 단말 대기 화면 · 예시 인물", "얼굴 위치 안내와 방문객 호출·QR 버튼이 보이는 FaceGate 단말 대기 화면"],
+    metric: true,
+    problem: "얼굴인식 API와 게이트 제어를 연결하고, 상시 실행되는 얼굴 검출의 단말 CPU 부담을 줄일 필요가 있었습니다.",
+    solution: "SCRFD 얼굴 검출 모델을 RKNN·INT8로 변환해 NPU에서 실행합니다. 얼굴 인식은 CPU에 유지하고, 기존 API 형식으로 출입 서버와 연결합니다.",
+    trial: ["검출만 바꿔 비교한 이유", "단말에서 계속 실행되는 얼굴 검출의 부하를 줄이는 것이 목표였습니다. 검출을 NPU로 옮기되 인식과 출입 연동은 기존 경로에 남겼습니다. 확인한 수치는 검출 장면의 처리 시간이며, 출입 절차 전체의 응답 시간을 비교한 것은 아닙니다."],
+    evidence: "저장 장면 44장에서 CPU·NPU의 사람 판정이 같았습니다. 사내 PoC 기록이며, 모든 환경의 정확도를 확정한 결과는 아닙니다.", stack: ["TypeScript", "Android", "RKNN"], github: "https://github.com/thisNorm/facegate" },
+  { group: "운영 자동화", id: "autoci", name: "Air-gapped AutoCI", tags: "폐쇄망 CI/CD 자동화 · PoC · 2인 팀 리드", sum: "폐쇄망에서 로컬 LLM으로 CI 설정을 생성합니다.",
+    flow: true,
+    problem: "폐쇄망에서도 CI 설정 생성부터 검증·반영까지 자동화할 필요가 있었습니다.",
+    solution: "로컬 LLM이 만든 CI 설정을 샌드박스에서 실행합니다. Smoke test를 통과한 설정만 GitLab Runner에 반영합니다.",
+    trial: ["로컬 모델이 만든 YAML의 한계", "Gemma 계열 모델은 GitLab CI용 YAML을 안정적으로 생성하지 못했습니다. 생성한 설정을 바로 반영하지 않고 격리 환경에서 실행해, smoke test에서 실패한 설정은 걸렀습니다. YAML 생성 품질 자체는 더 많은 예제나 다른 로컬 모델로 개선할 과제로 남았습니다."],
+    evidence: "샌드박스 실행과 smoke test를 통과한 설정만 GitLab Runner에 반영합니다.", stack: ["Python", "GitLab CI", "Docker", "Ollama"], github: "https://github.com/thisNorm/Air-gapped_DevOps" },
+  { group: "운영 자동화", id: "tailscale", name: "Tailscale 모니터링", tags: "사내 운영 자동화 · 사내 사용 · 1인 개발", sum: "장비 이름·태그 규칙과 설정 변경을 확인하고, 이력을 웹과 Slack·Telegram으로 전달합니다.",
+    img: ["../../public/portfolio/projects/tailscale-demo.png", "실제 웹 UI · 저장소의 가상 장비 데모", "가상 장비의 태그 위반과 변경 이력을 표시한 Tailscale 모니터링 데모"],
+    problem: "현장과 사무실 장비가 늘면서 이름·태그가 제각각이 되었고, 공유 계정의 설정 변경을 뒤늦게 알게 됐습니다.",
+    solution: "Tailscale API에서 장비와 설정 변경을 수집해 규칙을 검사합니다. 변경 이력과 알림, 암호화된 연동 설정, 웹 업데이트 흐름을 구현했습니다.",
+    trial: ["공유 계정에서 알 수 있는 범위", "공유 계정만 남으면 실제로 조작한 사람을 특정할 수 없었습니다. 대신 어떤 장비의 이름과 태그가 바뀌었는지, 규칙을 어겼는지를 기록하고 Slack으로 알렸습니다. 사람 단위 식별은 계정 운영 방식의 제약으로 남았습니다."],
+    evidence: "사내 장비 관리에 사용합니다. 공개 화면은 실제 사내 장비 대신 저장소의 가상 장비 데모입니다.", stack: ["Node.js", "SQLite", "Tailscale API", "Slack", "Telegram"], github: "https://github.com/thisNorm/tailscale-monitor" },
+  { group: "제품·서비스", id: "finance", name: "알아서", icon: "../../public/portfolio/projects/finance-icon.png", tags: "개인 재무 에이전트 · 로컬 앱 · 1인 개발", sum: "수입·지출·보유 자산을 모아 결제 계획과 예산 변경안을 제안하는 개인 재무 도구입니다.",
+    img: ["../../public/portfolio/projects/finance-plan.png", "실제 앱 UI · 공개 README의 예시 금융 데이터", "이번 달 계획과 대화 기반 예산 변경안을 보여 주는 알아서 앱 화면"],
+    problem: "카드·계좌·증권에 흩어진 정보를 모아 결제 방법과 예산 조정안을 판단할 필요가 있었습니다.",
+    solution: "금액·잔액·할부 계산은 서버 코드가 맡고, AI는 의도 해석·거래 분류·설명을 맡습니다. 대화로 요청한 변경안은 적용 전후를 먼저 비교합니다.",
+    trial: ["같은 소비가 두 번 잡히는 문제", "카드 승인액과 나중에 출금된 카드 대금을 합치면 한 번 쓴 돈이 두 번 집계됩니다. 카드 내역은 소비 분석에, 계좌 내역은 잔액과 현금 흐름에 쓰도록 나눴습니다. 할부 계산을 AI에 맡겼을 때도 같은 조건에서 답이 달라져, 금액 계산은 서버 규칙으로 옮겼습니다."],
+    evidence: "금융 자료는 로컬에 저장합니다. 화면의 금융 데이터는 공개 README의 예시입니다.", stack: ["JavaScript", "MCP", "LLM"], github: "https://github.com/thisNorm/finance-agent" },
+  { group: "제품·서비스", id: "pinmate", name: "PinMate", icon: "../../public/portfolio/projects/pinmate-icon.png", tags: "팀 웹 서비스 · 배포 완료 · 3인 팀 리드", sum: "친구끼리 맛집 목록을 한 지도에 모으는 웹 서비스입니다.",
+    img: ["../../public/portfolio/projects/pinmate-brand.png", "저장소의 공식 브랜드 이미지", "PinMate 공식 심볼과 친구들과 함께 만드는 지도 소개 이미지"],
+    problem: "친구끼리 가진 맛집 목록을 하나의 지도에서 모아 볼 필요가 있었습니다.",
+    solution: "맛집 목록을 한 지도에 모으는 서비스를 개발·배포했습니다. 주제를 제안하고 브랜치·PR 규칙과 CI를 구성했습니다.",
+    trial: ["동시에 등록해도 핀은 하나로", "친구 둘이 같은 장소를 등록하면 지도가 중복 핀으로 채워질 수 있었습니다. 카카오 장소 ID 또는 이름과 거리로 대조하고, DB 잠금과 고유 제약을 두어 동시 등록을 처리했습니다. 이미 있는 장소에는 사람별 추천을 따로 남깁니다."],
+    evidence: "배포된 웹서비스에서 지도와 길찾기 화면을 공개합니다.", stack: ["React", "Spring Boot", "PostgreSQL"], github: "https://github.com/ChungcheongVibe/PinMate", live: "https://pinmate.kro.kr/" },
+];
+const skills = [
+  ["언어", [["TypeScript","typescript"],["Python","python"],["JavaScript","javascript"],["Java","java"]]],
+  ["백엔드", [["Node.js","nodejs"],["NestJS","nestjs"],["FastAPI","fastapi"],["Spring Boot (경험)","spring"]]],
+  ["데이터·통신", [["PostgreSQL · pgvector","postgresql"],["MySQL","mysql"],["SQLite","sqlite"],["Redis","redis"],["MQTT"],["WebSocket"],["WebRTC","webrtc"],["RTSP"]]],
+  ["인프라·운영", [["Linux","linux"],["Docker","docker"],["GitLab CI","gitlab"],["GitHub Actions","githubactions"],["AWS"],["Tailscale"],["Jetson (엣지 실행)","nvidia"]]],
+  ["AI 연동·실행", [["MCP"],["RAG"],["Ollama"],["ONNX","onnx"],["TensorFlow Lite","tensorflow"],["RKNN"]]],
+  ["비전 모델 · AI 도구", [["YOLOv8","ultralytics"],["ResNet50"],["LVFace-T"],["Claude"],["Codex"]]],
+];
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+let lastGroup = "";
+document.getElementById("projects").innerHTML = projects.map((p) => {
+  const head = p.group !== lastGroup ? `<p class="group-label">${esc(lastGroup = p.group)}</p>` : "";
+  const media = p.flow
+    ? `<div class="flow" role="img" aria-label="생성, 샌드박스 실행, smoke test를 거쳐 통과한 설정만 Runner에 반영하고 실패하면 반영하지 않는 흐름"><span><small>1</small>로컬 LLM 생성</span><span><small>2</small>샌드박스 실행</span><span><small>3</small>smoke test</span><span><small>4</small>Runner 반영</span><span class="stop"><small>실패</small>반영하지 않음</span></div>`
+    : `<figure class="shot"><img src="${p.img[0]}" alt="${esc(p.img[2])}" loading="lazy"><figcaption>${esc(p.img[1])}</figcaption></figure>`;
+  const metric = p.metric ? `<div class="metric" role="img" aria-label="얼굴 검출 장면 처리 중앙값 CPU 305ms, NPU INT8 23ms">
+      <div class="metric-row"><span>CPU</span><i style="width:100%"></i><b>305ms</b></div>
+      <div class="metric-row npu"><span>NPU</span><i style="width:${(23 / 305 * 100).toFixed(1)}%"></i><b>23ms</b></div>
+      <p>동일 단말 · 얼굴 검출 장면 처리 중앙값 · 같은 축척</p></div>` : "";
+  const links = [p.github && `<a href="${p.github}">소스 코드 ↗</a>`, p.live && `<a href="${p.live}">서비스 열기 ↗</a>`].filter(Boolean).join("");
+  return `${head}<article class="project reveal" id="${p.id}">
+    <div class="p-meta">
+      <h3>${p.icon ? `<img src="${p.icon}" alt="">` : ""}${esc(p.name)}</h3>
+      <p class="tags">${esc(p.tags)}</p><p class="sum">${esc(p.sum)}</p>
+      <ul class="stack">${p.stack.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
+      <div class="links">${links}</div>
+    </div>
+    <div class="p-body">${media}${metric}
+      <div class="notes">
+        <div class="note"><h4>시작한 이유</h4><p>${esc(p.problem)}</p></div>
+        <div class="note"><h4>구현과 참여</h4><p>${esc(p.solution)}</p></div>
+        <div class="note trial"><h4>시행착오</h4><strong>${esc(p.trial[0])}</strong><p>${esc(p.trial[1])}</p></div>
+        <div class="note"><h4>확인한 범위</h4><p>${esc(p.evidence)}</p></div>
+      </div>
+    </div>
+  </article>`;
+}).join("") + `<p class="more"><strong>더 살펴볼 작업</strong><span>DeepVoice Shield · 백엔드·배포</span><span>Content Agent · 콘텐츠 자동화</span><span>HarnessVault · AI 거버넌스 MVP</span></p>`;
+
+document.getElementById("skill-list").innerHTML = skills.map(([label, items]) => `<div><h3>${esc(label)}</h3><ul>${items.map(([n, logo]) =>
+  `<li>${logo ? `<img src="../../public/portfolio/stack/${logo}.svg" alt="">` : ""}${esc(n)}</li>`).join("")}</ul></div>`).join("");
+
+// Conveyor: boxes ride the belt; scrolling advances it, and boxes past the EVAL gate turn green.
+const labels = ["소리수집기 데이터", "카메라 프레임", "CI 설정 YAML", "노션 초안", "카드 내역", "장비 태그 변경"];
+const world = document.getElementById("world"), belt = document.getElementById("belt");
+const BELT_START = -380, BELT_LEN = 760, GATE = 90, BOX = 96, GAP = (BELT_LEN - BOX) / labels.length;
+const boxes = labels.map((label) => {
+  const el = document.createElement("div");
+  el.className = "box";
+  el.innerHTML = `<i class="t">${label}</i><i class="f"></i><i class="s"></i>`;
+  world.appendChild(el);
+  return el;
+});
+const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+const bar = document.querySelector(".progress i");
+const place = (shift) => {
+  boxes.forEach((el, i) => {
+    const x = BELT_START + ((i * GAP + shift) % BELT_LEN + BELT_LEN) % (BELT_LEN - BOX);
+    el.style.setProperty("--x", `${x}px`);
+    el.classList.toggle("ok", x > GATE);
+  });
+  belt.style.setProperty("--belt-shift", `${shift}px`);
+};
+let frame = 0;
+const onScroll = () => {
+  if (frame) return;
+  frame = requestAnimationFrame(() => {
+    frame = 0;
+    const max = document.documentElement.scrollHeight - innerHeight;
+    bar.parentElement.style.setProperty("--read", max > 0 ? (scrollY / max).toFixed(4) : 0);
+    if (!reduce.matches) place(scrollY * 0.6);
+  });
+};
+place(0);
+addEventListener("scroll", onScroll, { passive: true });
+onScroll();
+
+// Highlight the nav item for the chapter in view.
+const navLinks = [...document.querySelectorAll(".top nav a")];
+const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+  if (e.isIntersecting) navLinks.forEach((a) => a.setAttribute("aria-current", String(a.hash === `#${e.target.id}`)));
+}), { rootMargin: "-40% 0px -55% 0px" });
+document.querySelectorAll(".chapter, .contact").forEach((s) => io.observe(s));
+</script>
+</body>
+</html>
