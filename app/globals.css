@@ -948,20 +948,54 @@ dialog{margin:auto}
 }
 
 .career-section {
-  display: grid;
-  grid-template-columns: clamp(126px, 14vw, 228px) minmax(0, 1fr);
-  align-items: start;
-  gap: clamp(24px, 3vw, 50px);
   padding-block: clamp(40px, 4.3vw, 74px);
 }
 
-.career-jobs {
+.career-heading {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(20px, 3vw, 56px);
+  grid-template-columns: clamp(126px, 14vw, 228px) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(20px, 3vw, 50px);
+  margin-bottom: clamp(32px, 4vw, 56px);
 }
 
-.career-section .profile-details { margin-top: 15px; border-top: 1px solid var(--line); }
+.career-overview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 22px clamp(24px, 3.6vw, 56px);
+}
+
+.career-tenure { display: flex; flex-wrap: wrap; gap: 12px clamp(22px, 3vw, 48px); }
+.career-tenure dt { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 13px; }
+.career-tenure dd {
+  margin-top: 5px;
+  color: var(--ink);
+  font-size: clamp(23px, 2.6vw, 39px);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -.045em;
+  font-variant-numeric: tabular-nums;
+}
+.career-tenure dd small { margin-right: 4px; color: var(--muted); font-size: .49em; font-weight: 500; }
+.career-tenure-mark { width: 10px; height: 6px; flex: none; border-radius: 1px; }
+.career-timeline { flex: 1 1 210px; min-width: min(100%, 190px); max-width: 400px; }
+.career-timeline-track { display: grid; grid-template-rows: 8px; }
+.career-timeline-range { grid-row: 1; border-radius: 1px; }
+.career-tenure-mark[data-kind="work"], .career-timeline-range[data-kind="work"] { background: var(--accent); }
+.career-tenure-mark[data-kind="training"], .career-timeline-range[data-kind="training"] { background: var(--muted); }
+.career-timeline figcaption { display: flex; justify-content: space-between; gap: 12px; margin-top: 6px; color: var(--muted); font-size: 12px; }
+
+.career-jobs {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(30px, 4.5vw, 72px);
+}
+
+.career-contributions { display: grid; gap: 17px; margin-top: 20px; }
+.career-contributions dt { color: var(--ink); font-size: 14px; font-weight: 600; }
+.career-contributions dd { margin-top: 3px; color: var(--muted); font-size: 14px; line-height: 1.75; word-break: keep-all; overflow-wrap: anywhere; }
 
 .work-hint { max-width: 36ch; }
 .work-nav { margin-bottom: clamp(24px, 2.5vw, 38px); }
@@ -1039,7 +1073,8 @@ dialog{margin:auto}
 }
 
 @media (max-width: 760px) {
-  .career-section, .career-jobs { grid-template-columns: minmax(0, 1fr); }
+  .career-heading, .career-jobs { grid-template-columns: minmax(0, 1fr); }
+  .career-timeline { flex-basis: 100%; max-width: none; }
 }
 
 @media (max-width: 720px) {

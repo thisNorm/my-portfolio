@@ -1,3 +1,5 @@
+import type { CareerPeriod } from "../lib/career";
+
 // Approved portfolio copy. Keep project roles and evidence in sync with the resume.
 export type ProjectId = 'finance' | 'facegate' | 'autoci' | 'tailscale' | 'harnessvault' | 'aegisview' | 'pinmate' | 'content' | 'sns' | 'deepvoice';
 export type ProjectFilter = 'all' | 'automation' | 'ai' | 'service';
@@ -15,7 +17,7 @@ export type Award = { date: string; title: string; org: string; note: string; im
 type Portfolio = {
   projects: Project[];
   tools: {name: string; problem: string; state: string; github: string | null; image?: ProjectMedia}[];
-  jobs: {company: string; role: string; period: string; summary: string; lines: string[]}[];
+  jobs: (CareerPeriod & { company: string; role: string; summary: string; contributions: { title: string; description: string }[] })[];
   skills: {label: string; items: { name: string; logo?: string; darkLogo?: string }[]}[];
   awards: Award[];
   education: {title: string; note: string}[];
@@ -392,25 +394,41 @@ export const portfolio: Portfolio = {
     {
       "company": "인포벨리코리아 (INVAKO)",
       "role": "Backend Engineer",
-      "period": "2026.06 — 현재",
-      "summary": "농가 엣지 서버와 매니저 서버를 운영하며 레거시 서버를 같은 Jetson에서 병행 교체하고 있습니다. 농가 Heartbeat 집계, 포트 개방 없는 원격 업데이트와 자동 설치 검증을 담당합니다.",
-      "lines": [
-        "3개 농가(농가당 소리수집기 8~20대, 카메라 12~15대) 엣지 서버, 20개 농가 추가 예정",
-        "메인 서버가 두 번, 각각 약 하루 멈췄을 때도 데이터 유실 없음",
-        "레거시 서버를 운영 중단 없이 교체 중 (같은 Jetson에서 병행 가동)",
-        "매니저 서버: 농가 Heartbeat 집계, 포트 개방 없는 원격 업데이트",
-        "6단계 자동 설치 검증, 하루 약 7GB 로그 장애 해결"
+      "kind": "work",
+      "startMonth": "2026-06",
+      "endMonth": null,
+      "summary": "농가에 설치된 Jetson 엣지 서버와 중앙 매니저 서버를 개발·운영합니다. 현장 장비 연결과 데이터 수집부터 원격 업데이트, 신규 설치 검증까지 맡고 있습니다.",
+      "contributions": [
+        {
+          "title": "현장 데이터 수집과 장애 대응",
+          "description": "농가 3곳에서 소리수집기 8~20대와 카메라 12~15대를 농가별로 연결해 운영합니다. 중앙 서버가 두 차례 약 하루씩 중단됐을 때도 현장 수집 데이터는 유실되지 않았습니다."
+        },
+        {
+          "title": "농가별 상태 확인과 원격 업데이트",
+          "description": "매니저 서버에 농가별 상태 신호(Heartbeat)를 모아 엣지 서버를 확인하고, 농가 네트워크에 포트를 추가로 열지 않고도 원격으로 업데이트할 수 있도록 구현했습니다."
+        },
+        {
+          "title": "엣지 서버 교체와 신규 설치 검증",
+          "description": "같은 Jetson에서 기존 서버와 새 서버를 병행 가동하며 수집을 유지한 채 교체하고 있습니다. 신규 설치를 6단계로 자동 검증하고, 하루 약 7GB에 달한 로그로 발생한 장애도 해결했습니다."
+        }
       ]
     },
     {
       "company": "ETRI 자율형IoT연구실",
-      "role": "Research Trainee",
-      "period": "2026.01 — 2026.02",
-      "summary": "CCTV·로봇 통합 관제 시스템 AegisView를 1인 개발했습니다. Redis Queue·DLQ, 이벤트 묶음 저장과 aiohttp 비동기 통신을 적용했습니다.",
-      "lines": [
-        "CCTV·로봇 통합 관제 시스템 AegisView 1인 개발",
-        "Redis Queue·DLQ로 탐지 이벤트 유실 방지, 이벤트 묶음으로 DB 쓰기 부하 감소",
-        "aiohttp 비동기 통신으로 로봇 원격 조종 제어 지연 90% 개선"
+      "role": "연구연수생 · Research Trainee",
+      "kind": "training",
+      "startMonth": "2026-01",
+      "endMonth": "2026-02",
+      "summary": "폐쇄망에서 CCTV 탐지 이벤트와 로봇 원격 조종을 한곳에서 다루는 관제 시스템 AegisView를 1인 개발했습니다.",
+      "contributions": [
+        {
+          "title": "탐지 이벤트 처리와 저장",
+          "description": "Redis Queue로 탐지 이벤트를 받고 실패한 건은 DLQ에 남겼습니다. 이벤트는 묶어서 저장해 DB 쓰기 횟수를 줄였습니다."
+        },
+        {
+          "title": "로봇 원격 조종 응답 개선",
+          "description": "로봇 제어 통신에 aiohttp 비동기 처리를 적용했습니다. 프로젝트 내 비교에서 원격 조종의 제어 지연을 약 90% 줄였습니다."
+        }
       ]
     }
   ],

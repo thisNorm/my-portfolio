@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import { Fragment, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { MouseEvent, RefObject } from "react";
+import type { MouseEvent, ReactNode, RefObject } from "react";
 import ProjectCover from "./ProjectCover";
 import { HeroScene, useProjectMotion } from "./PortfolioMotion";
 import ThemeToggle from "./ThemeToggle";
 import VisitorCount from "./VisitorCount";
 import {
-  activities, additionalProjects, aiWorkflow, awards, contact, education, featuredGroups, featuredProjects, homeCopy, jobs, projects, skills, tools,
+  activities, additionalProjects, aiWorkflow, awards, contact, education, featuredGroups, featuredProjects, homeCopy, projects, skills, tools,
   type Project, type ProjectFilter,
 } from "./portfolioData";
 
@@ -21,9 +21,10 @@ const filters: { value: ProjectFilter; label: string }[] = [
 
 type PortfolioHomeProps = {
   archiveLinks: { href: string; title: string }[];
+  career: ReactNode;
 };
 
-export default function PortfolioHome({ archiveLinks }: PortfolioHomeProps) {
+export default function PortfolioHome({ archiveLinks, career }: PortfolioHomeProps) {
   const [filter, setFilter] = useState<ProjectFilter>("all");
   const [toolIndex, setToolIndex] = useState(() => Math.max(0, tools.findIndex((tool) => tool.name === "OnlyDM")));
   const [activeProject, setActiveProject] = useState<Project | null>(null);
@@ -166,24 +167,7 @@ export default function PortfolioHome({ archiveLinks }: PortfolioHomeProps) {
             </div>
             <HeroScene />
           </section>
-          <section className="profile-section career-section preview-section" id="career" data-chapter="profile" aria-labelledby="career-title">
-            <h2 id="career-title">경력</h2>
-            <div className="career-jobs">
-              {jobs.map((job) => (
-                <article className="profile-job" key={job.company}>
-                  <h3>{job.company}</h3>
-                  <div className="profile-job-meta"><span>{job.role}</span><span>{job.period}</span></div>
-                  <p>{job.summary}</p>
-                  {job.lines.length > 0 && (
-                    <details className="profile-details">
-                      <summary aria-label={`${job.company} 경력 상세`}>경력 상세</summary>
-                      <ul className="profile-records">{job.lines.map((line) => <li key={line}>{line}</li>)}</ul>
-                    </details>
-                  )}
-                </article>
-              ))}
-            </div>
-          </section>
+          {career}
           <section className="work-section preview-section" id="projects" data-chapter="work" aria-labelledby="work-title">
             <span id="work" aria-hidden="true" />
             <header className="work-heading">
