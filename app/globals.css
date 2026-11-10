@@ -963,7 +963,7 @@ dialog{margin:auto}
   display: flex;
   flex-wrap: wrap;
   align-items: end;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 22px clamp(24px, 3.6vw, 56px);
 }
 
