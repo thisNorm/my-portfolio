@@ -3,8 +3,8 @@ import { jobs } from "./portfolioData";
 
 const showMonth = (month: string) => month.replace("-", ".");
 const tenureKinds = [
-  { kind: "work", label: "실무 경력" },
   { kind: "training", label: "연구연수" },
+  { kind: "work", label: "실무 경력" },
 ] as const;
 
 export default function CareerSection() {
