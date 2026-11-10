@@ -1,35 +1,42 @@
-import { formatCareerMonths, getCareerTimeline } from "../lib/career";
+import { formatCareerMonths, getCareerTenure } from "../lib/career";
 import { jobs } from "./portfolioData";
 
 const showMonth = (month: string) => month.replace("-", ".");
+const tenureKinds = [
+  { kind: "work", label: "실무 경력" },
+  { kind: "training", label: "연구연수" },
+] as const;
 
 export default function CareerSection() {
-  const timeline = getCareerTimeline(jobs, new Date());
+  const { asOfMonth, totals, totalMonths } = getCareerTenure(jobs, new Date());
 
   return (
     <section className="profile-section career-section preview-section" id="career" data-chapter="profile" aria-labelledby="career-title">
       <header className="career-heading">
         <h2 id="career-title">경력</h2>
         <div className="career-overview">
-          <dl className="career-tenure">
-            <div>
-              <dt><i className="career-tenure-mark" data-kind="work" aria-hidden="true" />실무 경력</dt>
-              <dd>{timeline.totals.work > 0 ? <small>약{" "}</small> : null}{formatCareerMonths(timeline.totals.work)}</dd>
-            </div>
-            <div>
-              <dt><i className="career-tenure-mark" data-kind="training" aria-hidden="true" />연구연수</dt>
-              <dd>{formatCareerMonths(timeline.totals.training)}</dd>
-            </div>
-          </dl>
-          <figure className="career-timeline">
-            <div className="career-timeline-track" aria-hidden="true" style={{ gridTemplateColumns: "repeat(" + timeline.columns + ", minmax(0, 1fr))" }}>
-              {timeline.ranges.map((range, index) => range.end > range.start && (
-                <span className="career-timeline-range" data-kind={range.kind} key={jobs[index].company} style={{ gridColumn: range.start + " / " + range.end }} />
-              ))}
-            </div>
+          <div className="career-total">
+            <p className="career-total-label">총 경력 <small>연구연수 포함</small></p>
+            <p className="career-total-value">{totalMonths > 0 ? <small>약{" "}</small> : null}{formatCareerMonths(totalMonths)}</p>
+            <p className="career-total-date"><time dateTime={asOfMonth}>{showMonth(asOfMonth)}</time> 기준</p>
+          </div>
+          <figure className="career-breakdown">
+            {totalMonths > 0 && (
+              <div className="career-breakdown-bar" aria-hidden="true">
+                {tenureKinds.map(({ kind }) => (
+                  <span className="career-breakdown-segment" data-kind={kind} key={kind} style={{ flexGrow: totals[kind] }} />
+                ))}
+              </div>
+            )}
             <figcaption>
-              <time dateTime={timeline.firstMonth}>{showMonth(timeline.firstMonth)}</time>
-              <span><time dateTime={timeline.asOfMonth}>{showMonth(timeline.asOfMonth)}</time> 기준</span>
+              <dl className="career-breakdown-key">
+                {tenureKinds.map(({ kind, label }) => (
+                  <div key={kind}>
+                    <dt><span className="career-breakdown-mark" data-kind={kind} aria-hidden="true" />{label}</dt>
+                    <dd>{kind === "work" && totals.work > 0 ? "약 " : ""}{formatCareerMonths(totals[kind])}</dd>
+                  </div>
+                ))}
+              </dl>
             </figcaption>
           </figure>
         </div>

@@ -15,30 +15,22 @@ function monthIndex(month: string) {
   return year * 12 + number - 1;
 }
 
-export function getCareerTimeline(periods: CareerPeriod[], now: Date) {
+export function getCareerTenure(periods: CareerPeriod[], now: Date) {
   const parts = seoulCalendarMonth.formatToParts(now);
   const year = parts.find((part) => part.type === "year")!.value;
   const month = parts.find((part) => part.type === "month")!.value;
   const asOfMonth = year + "-" + month;
   const asOf = monthIndex(asOfMonth);
-  const firstMonth = periods.map((period) => period.startMonth).sort()[0] ?? asOfMonth;
-  const first = monthIndex(firstMonth);
   const totals = { work: 0, training: 0 };
-  let columns = Math.max(1, asOf - first);
 
-  const ranges = periods.map((period) => {
+  for (const period of periods) {
     const from = monthIndex(period.startMonth);
     // Completed roles include their last recorded month; ongoing work is approximate.
     const to = period.endMonth ? monthIndex(period.endMonth) + 1 : asOf;
-    const months = Math.max(0, to - from);
-    const start = from - first + 1;
-    const end = start + months;
-    totals[period.kind] += months;
-    columns = Math.max(columns, end - 1);
-    return { kind: period.kind, start, end };
-  });
+    totals[period.kind] += Math.max(0, to - from);
+  }
 
-  return { asOfMonth, firstMonth, columns, ranges, totals };
+  return { asOfMonth, totals, totalMonths: totals.work + totals.training };
 }
 
 export function formatCareerMonths(months: number) {
