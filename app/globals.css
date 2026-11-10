@@ -684,6 +684,10 @@ dialog{margin:auto}
 .additional-project-open strong { font-size: 18px; font-weight: 500; }
 .additional-project-summary { font-size: 14px; color: var(--muted); word-break: keep-all; }
 .additional-project-meta { grid-column: 2; font-size: 12px; color: var(--muted); }
+.project-archive { margin-top: 24px; }
+.project-archive h3 { color: var(--muted); font-size: 14px; font-weight: 600; }
+.project-archive ul { display: flex; flex-wrap: wrap; column-gap: 24px; margin-top: 8px; }
+.project-archive a { display: flex; align-items: center; min-height: 44px; font-size: 14px; overflow-wrap: anywhere; }
 .tools-preview { max-width: 960px; margin-top: 24px; }
 .tools-preview a { display: block; }
 .tools-preview img { width: 100%; height: auto; }

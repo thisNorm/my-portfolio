@@ -19,7 +19,11 @@ const filters: { value: ProjectFilter; label: string }[] = [
   { value: "service", label: "서비스" },
 ];
 
-export default function PortfolioHome() {
+type PortfolioHomeProps = {
+  archiveLinks: { href: string; title: string }[];
+};
+
+export default function PortfolioHome({ archiveLinks }: PortfolioHomeProps) {
   const [filter, setFilter] = useState<ProjectFilter>("all");
   const [toolIndex, setToolIndex] = useState(() => Math.max(0, tools.findIndex((tool) => tool.name === "OnlyDM")));
   const [activeProject, setActiveProject] = useState<Project | null>(null);
@@ -216,7 +220,7 @@ export default function PortfolioHome() {
             </div>
             <p className="gallery-footnote">{homeCopy.galleryNote}</p>
             <details className="additional-projects">
-              <summary>더 살펴볼 작업 <span>{additionalProjects.length}</span></summary>
+              <summary>더 살펴볼 작업 <span>{additionalProjects.length + archiveLinks.length}</span></summary>
               <ul>{additionalProjects.map((project) => <li key={project.id}>
                 <a className="additional-project-open" href={`#${project.id}-details`} aria-haspopup="dialog" onClick={(event) => handleProjectClick(event, project)}>
                   <span className="project-identity">{project.icon && <Image className="project-icon" src={project.icon} alt="" width={32} height={32} />}<strong>{project.name}</strong></span>
@@ -224,6 +228,14 @@ export default function PortfolioHome() {
                   <span className="additional-project-meta">{[project.category, project.status, project.role].filter(Boolean).join(" · ")}</span>
                 </a>
               </li>)}</ul>
+              {archiveLinks.length > 0 && (
+                <nav className="project-archive" aria-labelledby="project-archive-title">
+                  <h3 id="project-archive-title">이전 프로젝트 기록</h3>
+                  <ul>{archiveLinks.map(({ href, title }) => (
+                    <li key={href}><a href={href}>{title}</a></li>
+                  ))}</ul>
+                </nav>
+              )}
             </details>
           </section>
           <section className="ai-workflow preview-section" id="ai-workflow" aria-labelledby="workflow-title">
