@@ -9,7 +9,6 @@ import {
 } from "./portfolioData";
 
 type PortfolioHomeProps = {
-  archiveLinks: { href: string; title: string }[];
   career: ReactNode;
 };
 
@@ -71,7 +70,7 @@ function Media({ project, index = 0, sizes }: { project: Project; index?: number
   );
 }
 
-export default function PortfolioHome({ archiveLinks, career }: PortfolioHomeProps) {
+export default function PortfolioHome({ career }: PortfolioHomeProps) {
   const hv = projectById("harnessvault");
   const ca = projectById("content");
   const fg = projectById("facegate");
@@ -290,12 +289,6 @@ export default function PortfolioHome({ archiveLinks, career }: PortfolioHomePro
                   </article>
                 ))}
               </div>
-              {archiveLinks.length > 0 && (
-                <nav className="archive" aria-labelledby="archive-title">
-                  <h4 id="archive-title">{homeCopy.archiveTitle}</h4>
-                  <ul>{archiveLinks.map(({ href, title }) => <li key={href}><a href={href}>{title}</a></li>)}</ul>
-                </nav>
-              )}
             </div>
           </div>
         </section>

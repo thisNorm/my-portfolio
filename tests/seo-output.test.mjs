@@ -61,16 +61,13 @@ test("sitemap lists only www URLs with real lastmod dates", async () => {
   for (const date of lastmods) assert.ok(!Number.isNaN(Date.parse(date)), `bad lastmod: ${date}`);
 });
 
-test("sitemap project pages have crawlable links in the home HTML", async () => {
+test("sitemap lists only the home page now that older project pages are unlinked", async () => {
   const html = await readBuilt("server/app/index.html");
   const xml = await readBuilt("server/app/sitemap.xml.body");
-  const links = new Set([...html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g)].map((m) => m[1]));
-  const projectPaths = [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)]
-    .map((m) => new URL(m[1]).pathname)
-    .filter((path) => path.startsWith("/projects/"));
+  const locs = [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map((m) => m[1]);
 
-  const unlinked = projectPaths.filter((path) => !links.has(path) && !links.has(origin + path));
-  assert.deepEqual(unlinked, [], "project pages must be discoverable from the home page");
+  assert.deepEqual(locs, [`${origin}/`]);
+  assert.doesNotMatch(html, /href="\/projects\//, "home must not link the noindex project pages");
 });
 
 test("removed /projects index permanently redirects to the home section", async () => {

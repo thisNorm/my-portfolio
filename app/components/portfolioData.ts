@@ -788,7 +788,6 @@ export const homeCopy = {
   resume: "이력서",
   contactLabel: "연락",
   otherTitle: "그 밖의 프로젝트",
-  archiveTitle: "이전 프로젝트 기록",
   awardsLead: "DeepVoice Shield로 대상 2회, 우수상 1회를 받았습니다.",
   toolsLead: "일하다 불편했던 것을 직접 만든 도구입니다.",
 };

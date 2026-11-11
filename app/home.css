@@ -725,11 +725,6 @@ section[id]{scroll-margin-top:60px}
 body{background:var(--paper);color:var(--ink)}
 .home{background:var(--paper);color:var(--ink)}
 .role-work>div+div{margin-top:2px}
-.archive{margin-top:clamp(3rem,6vw,5rem)}
-.archive h4{font-size:15px;font-weight:700;color:#46544a}
-.archive ul{display:flex;flex-wrap:wrap;gap:6px 22px;margin:10px 0 0;padding:0;list-style:none}
-.archive a{text-decoration:underline;text-decoration-color:#9aa596;text-underline-offset:4px}
-.archive a:hover{color:var(--accent);text-decoration-color:currentColor}
 .more-study .more-study__sub{margin-top:clamp(2.5rem,5vw,4rem);font-size:clamp(1.4rem,2vw,1.8rem)}
 .fg .work-study__media figcaption{color:#cdd8cb}
 .study-foot{flex-wrap:wrap}

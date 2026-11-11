@@ -52,6 +52,8 @@ export async function generateMetadata({
   return {
     title: project.title,
     description: project.description,
+    // Older write-ups kept reachable for existing links, but no longer linked from home or listed in the sitemap.
+    robots: { index: false, follow: true },
     alternates: { canonical: `/projects/${slug}` },
     openGraph: {
       title: project.title,
