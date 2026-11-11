@@ -4,14 +4,13 @@ Working contract for coding agents in this repository.
 
 ## Project
 
-Personal portfolio at https://www.thisnorm.dev — Next.js 16 App Router, React 19, Tailwind v4, Sanity (content only; no Studio in this repo). Deployed on Vercel.
+Personal portfolio at https://www.thisnorm.dev — Next.js 16 App Router, React 19, Tailwind v4, three.js, Sanity (visitor counter only; no Studio in this repo). Deployed on Vercel.
 
-- `app/page.tsx` → `app/components/PortfolioHome.tsx` renders the whole home page (client component).
+- `app/page.tsx` → `app/components/PortfolioHome.tsx` renders the whole home page as a server component; `app/components/home/HomeMotion.tsx` is the client island that mounts the conveyor (`conveyor.js`) and scroll scenes (`scenes.js`). Home styles live in `app/home.css`.
 - Home content is static in `app/components/portfolioData.ts`; edit copy there, not in JSX.
-- `app/projects/[slug]/page.tsx` renders Sanity `project` documents; unknown slugs must call `notFound()`.
+- The site is a single page: `/projects` and `/projects/:slug` permanently redirect to `/#projects`, and `app/sitemap.ts` lists only the home URL.
 - `app/api/visit/route.ts` is the visitor counter (Sanity `visitor` document, needs `SANITY_API_TOKEN`).
 - Site-wide title and description live once in `app/site.ts`; `app/layout.tsx` and `app/opengraph-image.tsx` (generated OG image, fetches a Noto Sans KR subset at build time) read them.
-- `app/sitemap.ts` and the project page read Sanity through `sanity/lib/client.ts`.
 
 ## Commands
 

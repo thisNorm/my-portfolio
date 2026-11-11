@@ -8,15 +8,13 @@ const nextConfig: NextConfig = {
         destination: "/#projects",
         permanent: true,
       },
-    ];
-  },
-  images: {
-    remotePatterns: [
+      // The older Sanity project write-ups were removed; keep their links landing on the projects section.
       {
-        protocol: "https",
-        hostname: "cdn.sanity.io",
+        source: "/projects/:slug",
+        destination: "/#projects",
+        permanent: true,
       },
-    ],
+    ];
   },
 };
 

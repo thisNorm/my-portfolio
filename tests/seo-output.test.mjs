@@ -61,7 +61,7 @@ test("sitemap lists only www URLs with real lastmod dates", async () => {
   for (const date of lastmods) assert.ok(!Number.isNaN(Date.parse(date)), `bad lastmod: ${date}`);
 });
 
-test("sitemap lists only the home page now that older project pages are unlinked", async () => {
+test("sitemap lists only the home page and the home links no project pages", async () => {
   const html = await readBuilt("server/app/index.html");
   const xml = await readBuilt("server/app/sitemap.xml.body");
   const locs = [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map((m) => m[1]);
@@ -70,11 +70,13 @@ test("sitemap lists only the home page now that older project pages are unlinked
   assert.doesNotMatch(html, /href="\/projects\//, "home must not link the noindex project pages");
 });
 
-test("removed /projects index permanently redirects to the home section", async () => {
+test("removed /projects index and project pages permanently redirect to the home section", async () => {
   const { redirects } = JSON.parse(await readBuilt("routes-manifest.json"));
-  const redirect = redirects.find((r) => r.source === "/projects");
-  assert.equal(redirect?.destination, "/#projects");
-  assert.equal(redirect?.statusCode, 308);
+  for (const source of ["/projects", "/projects/:slug"]) {
+    const redirect = redirects.find((r) => r.source === source);
+    assert.equal(redirect?.destination, "/#projects", source);
+    assert.equal(redirect?.statusCode, 308, source);
+  }
 });
 
 test("app source has no mis-decoded Korean text", async () => {
