@@ -18,16 +18,33 @@ export type Project = {
   pipeline?: { who: "human" | "code" | "ai" | "gate"; title: string; detail: string }[];
 };
 export type ProjectNote = { label: string; title?: string; body: string };
+// Every skill names where it was used; `href` points at the section on the home page.
+export type SkillUse = { label: string; href: string };
+export type Skill = { name: string; logos?: string[]; note?: string; where: SkillUse[] };
+type SkillGroups = { primary: Skill[]; secondary: Skill[]; models: Skill[]; tools: string[] };
 export type Award = { date: string; title: string; org: string; note: string; image?: string; imageAlt?: string; imageWidth?: number; imageHeight?: number };
 type Portfolio = {
   projects: Project[];
   tools: {name: string; problem: string; state: string; github: string | null; image?: ProjectMedia}[];
   jobs: (CareerPeriod & { company: string; role: string; summary: string; contributions: { title: string; description: string }[] })[];
-  skills: {label: string; items: { name: string; logo?: string; darkLogo?: string; note?: string }[]}[];
+  skills: SkillGroups;
   awards: Award[];
   education: {title: string; note: string}[];
   contact: {email: string; github: string; blog: string; resume: string};
 };
+
+const use = {
+  field: { label: "실무", href: "#field" },
+  hv: { label: "HarnessVault", href: "#harnessvault-details" },
+  ca: { label: "Content Agent", href: "#content-details" },
+  fg: { label: "FaceGate", href: "#facegate-details" },
+  dv: { label: "DeepVoice", href: "#deepvoice-details" },
+  av: { label: "AegisView", href: "#aegisview-details" },
+  ci: { label: "AutoCI", href: "#autoci-details" },
+  ts: { label: "Tailscale 모니터링", href: "#tailscale-details" },
+  fin: { label: "알아서", href: "#finance-details" },
+  pm: { label: "PinMate", href: "#pinmate-details" },
+} satisfies Record<string, SkillUse>;
 
 export const portfolio: Portfolio = {
   "projects": [
@@ -446,6 +463,11 @@ export const portfolio: Portfolio = {
         "title": "기본 전화 앱에서는 통화 음성에 접근할 수 없었습니다",
         "body": "당시 Android의 통화 음성 접근 제약으로 팀이 포기를 고민했습니다. 목표는 통화 중 탐지가 동작함을 보여 주는 것이었기에, 자체 VoIP 통화 앱에서 시연하자고 제안했습니다."
       },
+      "split": [
+        { "label": "백엔드에서 만든 것", "text": "JWT 인증과 역할별 권한, 1:1 통화를 위한 WebRTC 시그널링(Socket.IO)을 만들었습니다." },
+        { "label": "AI와 연결한 부분", "text": "앱이 올린 음성 파일을 AI 추론 서버(FastAPI)로 넘겨 결과를 돌려주고, 통화 중 탐지 확률을 상대방에게 실시간으로 전달합니다." },
+        { "label": "배포", "text": "NestJS 서버와 MySQL을 AWS에 배포했습니다." }
+      ],
       "secondNote": {
         "label": "제 역할과 팀 성과",
         "title": "추론 지연이 병목일 때 경량화를 제안했습니다",
@@ -534,59 +556,40 @@ export const portfolio: Portfolio = {
       ]
     }
   ],
-  "skills": [
-    { label: "언어", items: [
-      { name: "TypeScript", logo: "typescript" },
-      { name: "Python", logo: "python" },
-      { name: "JavaScript", logo: "javascript" },
-      { name: "Java", logo: "java" },
-    ] },
-    { label: "런타임·프레임워크", items: [
-      { name: "Node.js", logo: "nodejs", note: "런타임" },
-      { name: "NestJS", logo: "nestjs" },
-      { name: "FastAPI", logo: "fastapi" },
-      { name: "Spring Boot", logo: "spring", note: "경험" },
-    ] },
-    { label: "데이터", items: [
-      { name: "PostgreSQL · pgvector", logo: "postgresql" },
-      { name: "MySQL", logo: "mysql" },
-      { name: "SQLite", logo: "sqlite" },
-      { name: "Redis", logo: "redis" },
-    ] },
-    { label: "실시간 통신", items: [
-      { name: "MQTT", logo: "mqtt" },
-      { name: "WebSocket" },
-      { name: "WebRTC", logo: "webrtc" },
-      { name: "RTSP" },
-    ] },
-    { label: "AI 연동·실행", items: [
-      { name: "MCP", logo: "mcp" },
-      { name: "RAG" },
-      { name: "Ollama", logo: "ollama" },
-      { name: "ONNX", logo: "onnx" },
-      { name: "TensorFlow Lite", logo: "tensorflow" },
-      { name: "RKNN" },
-    ] },
-    { label: "비전 모델", items: [
-      { name: "YOLOv8", logo: "ultralytics", note: "객체 탐지" },
-      { name: "ResNet50" },
-      { name: "LVFace-T", note: "얼굴 인식" },
-    ] },
-    { label: "인프라·운영", items: [
-      { name: "Linux", logo: "linux" },
-      { name: "Docker", logo: "docker" },
-      { name: "GitLab CI", logo: "gitlab" },
-      { name: "GitHub Actions", logo: "githubactions" },
-      { name: "AWS", logo: "aws" },
-      { name: "Firebase", logo: "firebase" },
-      { name: "Tailscale", logo: "tailscale" },
-      { name: "Jetson", logo: "nvidia", note: "엣지 장비·배포" },
-    ] },
-    { label: "개발에 쓰는 AI 도구", items: [
-      { name: "Claude" },
-      { name: "Codex" },
-    ] },
-  ],
+  "skills": {
+    // Verified against each repository's dependency files, CI config, and the owner's confirmation (2026-11).
+    primary: [
+      { name: "TypeScript · Node.js · NestJS", logos: ["typescript", "nodejs", "nestjs"], where: [use.hv, use.dv, use.av] },
+      { name: "Python · FastAPI", logos: ["python", "fastapi"], where: [use.av, use.ci] },
+      { name: "PostgreSQL · pgvector", logos: ["postgresql"], where: [use.hv, use.pm] },
+      { name: "Redis", logos: ["redis"], where: [use.av] },
+      { name: "WebRTC 시그널링 · Socket.IO", logos: ["webrtc"], where: [use.dv, use.av] },
+      { name: "RTSP · MQTT", logos: ["mqtt"], note: "스마트돈사 대시보드", where: [use.field] },
+      { name: "Jetson · Linux", logos: ["nvidia", "linux"], note: "엣지 장비·배포", where: [use.field] },
+      { name: "Docker", logos: ["docker"], where: [use.ci] },
+      { name: "MCP", logos: ["mcp"], where: [use.hv, use.fin] },
+    ],
+    secondary: [
+      { name: "Spring Boot · Java", note: "경험", where: [use.pm] },
+      { name: "MySQL · TypeORM", where: [use.dv] },
+      { name: "SQLite", where: [use.ts] },
+      { name: "JavaScript", where: [use.ts, use.fin] },
+      { name: "RKNN · ONNX Runtime", where: [use.fg] },
+      { name: "TensorFlow Lite", where: [use.dv] },
+      { name: "Ollama", where: [use.ci] },
+      { name: "GitLab CI", where: [use.ci] },
+      { name: "GitHub Actions", where: [use.pm] },
+      { name: "AWS", where: [use.dv] },
+      { name: "Playwright", where: [use.ca] },
+      { name: "Tailscale API", where: [use.ts] },
+    ],
+    models: [
+      { name: "YOLOv8", note: "객체 탐지", where: [use.av] },
+      { name: "LVFace-T", note: "얼굴 인식", where: [use.fg] },
+      { name: "ResNet50", note: "음성 모델", where: [use.dv] },
+    ],
+    tools: ["Claude", "Codex"],
+  },
   "awards": [
     {
       "date": "2026.01",
@@ -671,6 +674,20 @@ export const projectMeta = (project: Project) => [project.role, project.status, 
 export const otherProjectIds: ProjectId[] = ["tailscale", "finance", "autoci", "aegisview", "pinmate"];
 
 // How repetitive work gets split: what AI does, what code and rules fix, what stays with a person.
+// Current job, shown first among the projects. Facts are from `jobs`; RTSP/MQTT confirmed by the owner.
+export const fieldWork = {
+  meta: "실무 · 인포벨리코리아 · 2026.06–현재",
+  name: "스마트돈사 엣지 운영",
+  headline: "농가 3곳의 Jetson 엣지 서버와 중앙 매니저 서버를 개발·운영합니다",
+  split: [
+    { label: "사람 손에서 뺀 것", text: "신규 설치 확인을 6단계 자동 검증으로 바꿨습니다. 농가 네트워크에 포트를 더 열지 않고 원격으로 업데이트하고, 농가별 상태 신호(Heartbeat)를 매니저 서버에 모읍니다." },
+    { label: "운영에서 지킨 것", text: "중앙 서버가 두 차례 약 하루씩 멈췄을 때도 현장 수집 데이터는 유실되지 않았습니다. 같은 Jetson에서 기존·새 서버를 병행 가동하며 수집을 유지한 채 교체하고 있습니다." },
+    { label: "연결하는 장비", text: "농가별 카메라 12~15대와 소리수집기 8~20대를 연결합니다. 스마트돈사 대시보드 시스템에서 RTSP와 MQTT를 씁니다." },
+  ],
+  note: { label: "장애 대응", body: "하루 약 7GB까지 쌓이던 로그 때문에 생긴 장애를 해결했습니다." },
+  link: { label: "경력에서 맡은 일 보기", href: "#career" },
+};
+
 export const perspective = {
   label: "일을 보는 관점",
   title: ["손을 뗄 일과", "남겨 둘 일을 나눕니다"],
@@ -708,16 +725,18 @@ export const perspective = {
 export const aiMethod = {
   label: "AI와 일하는 방식",
   title: ["구현 전에", "통과 기준부터"],
-  lead: "Codex와 Claude Code에 기능을 맡기기 전에, 어떤 결과면 통과인지 먼저 정합니다. 오른쪽 인용은 HarnessVault의 실제 에이전트 규약입니다.",
+  lead: "Codex와 Claude Code에 기능을 맡기기 전에, 어떤 결과면 통과인지 먼저 정합니다. 인용은 HarnessVault의 실제 에이전트 규약이고, 사례는 공개 저장소에서 확인할 수 있습니다.",
   loop: ["docs", "eval", "구현", "보고"],
   loopNote: "↻ 통과할 때까지 반복",
   steps: [
     { title: "docs 먼저", body: "아는 문제와 목표, 현재 상황과 제약, 기대 동작과 성공 사례를 먼저 적습니다. 제가 놓쳤거나 지금 답할 수 없는 부분은 AI가 인터뷰하듯 묻고, 답을 문서에 채웁니다. 구현 뒤에 오류를 찾는 절차가 아니라 구현 전에 요구를 설계하는 단계입니다.",
       quote: "문서 계약과 다른 구현을 임의로 만들지 않는다.", cite: "모듈별 설계 문서는 docs/에 둡니다" },
     { title: "개발 계획과 eval을 함께", key: true, body: "우선순위와 기능·모듈 단위로 계획을 짜면서, 문서의 기대 동작에서 통과 기준을 가져옵니다. 기준이 애매하거나 없으면 구현부터 하지 않고 다시 묻습니다. 기능마다 어떤 환경과 하네스로 검증할지도 이때 정합니다.",
-      quote: "Resolver · Policy · Approval은 명세의 필수 테스트 케이스를 그대로 테스트 파일로 옮겨 회귀를 막는다.", cite: "현재 지정된 Phase만 구현하고, 다음 Phase는 선행 구현하지 않습니다" },
+      quote: "Resolver · Policy · Approval은 명세의 필수 테스트 케이스를 그대로 테스트 파일로 옮겨 회귀를 막는다.", cite: "현재 지정된 Phase만 구현하고, 다음 Phase는 선행 구현하지 않습니다",
+      example: { label: "이 사이트에서", text: "완료 기준을 저장소의 AGENTS.md에 먼저 적었습니다. lint·테스트·빌드 통과에 더해, 바꾼 화면은 실제 출력으로 확인해야 끝납니다. 테스트는 빌드 결과의 메타데이터·sitemap·리다이렉트와 한글 깨짐을 검사합니다." } },
     { title: "구현, 테스트, 수정, 재검증", body: "우선순위대로 한 기능을 만들고 정해 둔 하네스와 eval로 확인합니다. 실패하면 원인을 찾아 고친 뒤 같은 기준으로 다시 돌립니다. 목표가 확인될 때까지 이 루프를 반복합니다.",
-      quote: "어떤 흐름도 Mock 성공으로 대체하지 않는다.", cite: "커밋 전 typecheck → lint → test → build가 통과해야 합니다" },
+      quote: "어떤 흐름도 Mock 성공으로 대체하지 않는다.", cite: "커밋 전 typecheck → lint → test → build가 통과해야 합니다",
+      example: { label: "자동화 안에 남긴 기준", text: "같은 방식으로 만든 도구는 실행 중에도 기준을 지킵니다. Content Agent는 표식이 하나라도 빠지면 발행을 멈추고, AutoCI는 샌드박스 실행과 smoke test를 통과한 설정만 Runner에 반영합니다." } },
     { title: "결과 보고 후 다음 기능", body: "무엇을 만들었고, 어떤 테스트에서 무슨 문제가 나와 어떻게 고쳐 재검증했는지 보고받습니다. 결과를 확인한 뒤 다음 기능 계획으로 넘어갈지 정합니다.",
       report: ["변경 파일", "구현 내용", "검증 명령과 결과", "미검증 사항", "다음 Phase blocker"] },
   ],
@@ -759,7 +778,10 @@ export const homeCopy = {
   autoStop: "자동 재생 멈추기",
   autoResume: "자동 재생 다시 시작",
   workLabel: "대표 프로젝트",
-  workTitle: ["만들고,", "운영한 것들"],
+  workTitle: ["만들고,", "검증한 것들"],
+  heroFacts: ["농가 3곳 엣지 서버 운영", "얼굴 검출 305ms → 23ms", "경진대회 대상 2회"],
+  resume: "이력서",
+  contactLabel: "연락",
   otherTitle: "그 밖의 프로젝트",
   archiveTitle: "이전 프로젝트 기록",
   awardsLead: "DeepVoice Shield로 대상 2회, 우수상 1회를 받았습니다.",

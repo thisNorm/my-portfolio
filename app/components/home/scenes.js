@@ -242,7 +242,8 @@ function jumpNav({ raf, on }) {
   const nav = document.querySelector(".jump");
   const intro = document.getElementById("top");
   if (!nav || !intro) return;
-  const links = [...nav.querySelectorAll(".jump__links a")];
+  // Only in-page anchors take part in section tracking; the resume link points at a file.
+  const links = [...nav.querySelectorAll('.jump__links a[href^="#"]')];
   const sections = links.map((a) => document.querySelector(a.getAttribute("href")));
   let pending = 0;
   function paint() {

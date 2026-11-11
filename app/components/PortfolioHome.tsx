@@ -4,8 +4,8 @@ import "../home.css";
 import HomeMotion from "./home/HomeMotion";
 import VisitorCount from "./VisitorCount";
 import {
-  activities, aiMethod, awards, contact, education, homeCopy, otherProjectIds, perspective, projectById, projectMeta, skills, tools,
-  type Project, type ProjectNote,
+  activities, aiMethod, awards, contact, education, fieldWork, homeCopy, otherProjectIds, perspective, projectById, projectMeta, skills, tools,
+  type Project, type ProjectNote, type Skill,
 } from "./portfolioData";
 
 type PortfolioHomeProps = {
@@ -20,7 +20,20 @@ const nav = [
   { href: "#method", label: "AI와 일하는 방식" },
   { href: "#skills", label: "기술" },
   { href: "#awards", label: "수상" },
+  { href: "#contact", label: homeCopy.contactLabel },
 ];
+
+// Section links plus the resume, which interviewers look for first.
+function NavLinks() {
+  return <>
+    {nav.map((item) => <a key={item.href} href={item.href}>{item.label}</a>)}
+    <a className="nav-resume" href={contact.resume} target="_blank" rel="noopener">{homeCopy.resume} <span aria-hidden="true">↗</span></a>
+  </>;
+}
+
+function SkillWhere({ skill }: { skill: Skill }) {
+  return <span className="skill-where">{skill.where.map((use) => <a key={use.href} href={use.href}>{use.label}</a>)}</span>;
+}
 
 function Note({ note, className = "note" }: { note?: ProjectNote; className?: string }) {
   if (!note) return null;
@@ -70,14 +83,14 @@ export default function PortfolioHome({ archiveLinks, career }: PortfolioHomePro
       <a className="home-skip" href="#work">프로젝트로 건너뛰기</a>
       <nav className="jump" aria-label="섹션 바로가기" hidden>
         <a className="home-wordmark" href="#top" aria-label="thisnorm 첫 화면">thisnorm<span>.</span></a>
-        <div className="jump__links">{nav.map((item) => <a key={item.href} href={item.href}>{item.label}</a>)}</div>
+        <div className="jump__links"><NavLinks /></div>
       </nav>
       <main>
         <section className="intro" id="top" aria-labelledby="intro-title" data-phase="0">
           <div className="intro-pin">
             <header className="home-masthead wrap">
               <a className="home-wordmark" href="#top" aria-label="thisnorm 첫 화면">thisnorm<span>.</span></a>
-              <nav aria-label="포트폴리오">{nav.map((item) => <a key={item.href} href={item.href}>{item.label}</a>)}</nav>
+              <nav aria-label="포트폴리오"><NavLinks /></nav>
             </header>
             <figure className="scene" aria-hidden="true">
               <Image className="scene-poster" src="/portfolio/hero-conveyor.webp" alt="" width={1100} height={800} priority />
@@ -88,6 +101,7 @@ export default function PortfolioHome({ archiveLinks, career }: PortfolioHomePro
                 <p className="intro-name">{homeCopy.name} <span>{homeCopy.role}</span></p>
                 <h1 id="intro-title">{homeCopy.title[0]}<br />{homeCopy.title[1]}</h1>
                 <p className="intro-description">{homeCopy.description[0]}<br />{homeCopy.description[1]}</p>
+                <ul className="intro-facts">{homeCopy.heroFacts.map((fact) => <li key={fact}>{fact}</li>)}</ul>
                 <a className="intro-link" href="#work">{homeCopy.action} <span aria-hidden="true">↓</span></a>
               </div>
             </div>
@@ -163,6 +177,16 @@ export default function PortfolioHome({ archiveLinks, career }: PortfolioHomePro
 
           <div id="work-list" className="work-study__lead">
             <div className="wrap">
+              <article id="field" className="field" aria-labelledby="field-title">
+                <div className="field__head">
+                  <p className="work-study__meta">{fieldWork.meta}</p>
+                  <h3 id="field-title">{fieldWork.name}</h3>
+                  <p className="work-study__headline">{fieldWork.headline}</p>
+                  <a className="work-study__link" href={fieldWork.link.href}>{fieldWork.link.label} <span aria-hidden="true">↑</span></a>
+                </div>
+                <dl className="split">{fieldWork.split.map(({ label, text }) => <div key={label}><dt>{label}</dt><dd>{text}</dd></div>)}</dl>
+                <Note note={fieldWork.note} />
+              </article>
               <article id={`${hv.id}-details`} className="work-study__poster" aria-labelledby="work-hv-title">
                 <div className="work-study__feature-copy">
                   <p className="work-study__meta">{projectMeta(hv)}</p>
@@ -233,6 +257,7 @@ export default function PortfolioHome({ archiveLinks, career }: PortfolioHomePro
                 <h3 id="work-deepvoice-title">{dv.name}</h3>
                 <p className="work-study__headline">{dv.headline}</p>
                 <p className="work-study__summary">{dv.summary}</p>
+                <Split project={dv} stack />
                 <div className="band-notes"><Note note={dv.developmentNote} /><Note note={dv.secondNote} /></div>
                 <RepoLink href={dv.github}>백엔드 저장소</RepoLink>
               </div>
@@ -299,6 +324,7 @@ export default function PortfolioHome({ archiveLinks, career }: PortfolioHomePro
                     <div className="method__body">
                       <p>{step.body}</p>
                       {step.quote && <blockquote>{step.quote}<cite>{step.cite}</cite></blockquote>}
+                      {step.example && <div className="method__case"><p className="note__label">{step.example.label}</p><p>{step.example.text}</p></div>}
                       {step.report && <ol className="report">{step.report.map((item) => <li key={item}>{item}</li>)}</ol>}
                     </div>
                   </li>
@@ -310,20 +336,40 @@ export default function PortfolioHome({ archiveLinks, career }: PortfolioHomePro
 
         <section id="skills" className="skills-study" aria-labelledby="skills-title">
           <div className="wrap skills-study__grid">
-            <h2 id="skills-title">기술</h2>
-            <dl className="skills-list">
-              {skills.map((group) => (
-                <div key={group.label}>
-                  <dt>{group.label}</dt>
-                  <dd>{group.items.map((item) => (
-                    <span key={item.name}>
-                      {item.logo && <Image src={`/portfolio/stack/${item.logo}.svg`} alt="" width={20} height={20} unoptimized />}
-                      {item.name}{item.note && <small>{item.note}</small>}
+            <div>
+              <h2 id="skills-title">기술</h2>
+              <p className="skills-study__lead">기술마다 쓴 곳을 붙였습니다. 이름을 누르면 해당 프로젝트로 이동합니다.</p>
+            </div>
+            <div>
+              <h3 className="skills-study__label">주로 쓰는 기술</h3>
+              <ul className="skills-primary" role="list">
+                {skills.primary.map((skill) => (
+                  <li key={skill.name}>
+                    <span className="skill-name">
+                      {skill.logos?.map((logo) => <Image key={logo} src={`/portfolio/stack/${logo}.svg`} alt="" width={20} height={20} unoptimized />)}
+                      {skill.name}{skill.note && <small>{skill.note}</small>}
                     </span>
-                  ))}</dd>
+                    <SkillWhere skill={skill} />
+                  </li>
+                ))}
+              </ul>
+              <div className="skills-more">
+                <div>
+                  <h3 className="skills-study__label">프로젝트에서 써 본 기술</h3>
+                  <ul role="list">{skills.secondary.map((skill) => (
+                    <li key={skill.name}><span>{skill.name}{skill.note && <small>{skill.note}</small>}</span><SkillWhere skill={skill} /></li>
+                  ))}</ul>
                 </div>
-              ))}
-            </dl>
+                <div>
+                  <h3 className="skills-study__label">사용한 AI 모델</h3>
+                  <ul role="list">{skills.models.map((skill) => (
+                    <li key={skill.name}><span>{skill.name}<small>{skill.note}</small></span><SkillWhere skill={skill} /></li>
+                  ))}</ul>
+                  <h3 className="skills-study__label">개발에 쓰는 AI 도구</h3>
+                  <p className="skills-tools">{skills.tools.join(" · ")}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
