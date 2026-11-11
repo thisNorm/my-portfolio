@@ -176,7 +176,12 @@ function workChapter({ raf, on }) {
     pending = 0;
     const bounds = chapter.getBoundingClientRect();
     const distance = bounds.height - pin.getBoundingClientRect().height;
-    if (distance > 0) chapter.style.setProperty("--work-chapter-progress", String(clamp(-bounds.top / distance)));
+    // The fill completes at 85% of the pinned range so the title rests fully filled instead of leaving a sliver.
+    if (distance <= 0) return;
+    const p = clamp(-bounds.top / distance / .85);
+    chapter.style.setProperty("--work-chapter-progress", String(p));
+    // The overlay and the base line differ by a few pixels in width; once full, the base takes the fill color.
+    chapter.toggleAttribute("data-filled", p >= 1);
   }
   const schedule = () => { if (query.matches && !pending) pending = raf(paint); };
   const sync = () => { chapter.toggleAttribute("data-work-motion", query.matches); schedule(); };
