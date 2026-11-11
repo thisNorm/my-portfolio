@@ -161,12 +161,12 @@ export const portfolio: Portfolio = {
       "id": "tailscale",
       "name": "Tailscale 모니터링",
       "category": "사내 운영 자동화",
-      "status": "사내에서 사용 중",
+      "status": "사무실 장비 39대 관리 중",
       "role": "1인 개발",
       "summary": "장비 이름·태그 규칙과 설정 변경을 확인하고, 이력을 웹과 Slack·Telegram으로 전달합니다.",
       "problem": "현장과 사무실 장비가 늘면서 이름·태그가 제각각이 되었고, 공유 계정의 설정 변경을 뒤늦게 알게 됐습니다.",
       "solution": "Tailscale API에서 장비와 설정 변경을 수집해 규칙을 검사합니다. 변경 이력과 알림, 암호화된 연동 설정, 웹 업데이트 흐름을 구현했습니다.",
-      "evidence": "사내 장비 관리에 사용합니다. 공유 계정의 변경자는 해당 계정 단위까지만 식별됩니다. 공개 화면은 실제 사내 장비 대신 저장소의 가상 장비 데모를 사용했습니다.",
+      "evidence": "사무실의 Tailscale 장비 39대를 관리하는 데 쓰고 있습니다. 공유 계정의 변경자는 해당 계정 단위까지만 식별됩니다. 공개 화면은 실제 사내 장비 대신 저장소의 가상 장비 데모를 사용했습니다.",
       "stack": [
         "Node.js",
         "SQLite",
@@ -187,7 +187,7 @@ export const portfolio: Portfolio = {
           "caption": "실제 웹 UI · 저장소의 가상 장비 데모"
         }
       ],
-      "brief": "장비가 늘며 이름·태그가 제각각이 되고, 공유 계정의 설정 변경을 뒤늦게 알게 됐습니다. 규칙 검사와 변경 이력을 자동으로 돌리고 Slack·Telegram으로 알립니다.",
+      "brief": "장비가 늘며 이름·태그가 제각각이 되고, 공유 계정의 설정 변경을 뒤늦게 알게 됐습니다. 사무실 장비 39대의 규칙 검사와 변경 이력을 자동으로 돌리고 Slack·Telegram으로 알립니다.",
       "developmentNote": {
         "label": "한계",
         "body": "공유 계정만 남으면 실제로 조작한 사람은 특정할 수 없었습니다. 대신 어떤 장비가 바뀌었고 규칙을 어겼는지를 기록해 알립니다."
@@ -318,7 +318,7 @@ export const portfolio: Portfolio = {
       "id": "content",
       "name": "Content Agent",
       "category": "콘텐츠 자동화",
-      "status": "기술 블로그에 직접 사용",
+      "status": "블로그 글 6편 발행",
       "role": "1인 개발",
       "summary": "노션 초안부터 각색·썸네일·티스토리·X 발행까지 연결하는 콘텐츠 파이프라인입니다.",
       "problem": "노션 초안 각색, 썸네일 제작과 채널별 발행을 한 흐름으로 묶을 필요가 있었습니다.",
@@ -698,6 +698,11 @@ export const perspective = {
     { id: "human", label: "사람이 확인" },
   ],
   examples: [
+    { name: "스마트돈사 엣지 운영", caption: "개발과 Mock 장비 테스트는 AI와 나누고, 무엇을 만들지와 어떤 결과면 통과인지는 제가 정합니다. 현장에서 반복되는 확인은 규칙으로 고정했습니다.", items: {
+      ai: [{ text: "기능 구현" }, { text: "제가 놓칠 수 있는 부분 짚기" }, { text: "Mock 장비로 UI 테스트" }],
+      code: [{ text: "신규 설치 6단계 자동 검증" }, { text: "농가별 상태 신호(Heartbeat) 수집" }, { text: "포트를 더 열지 않는 원격 업데이트" }],
+      human: [{ text: "최초 문서 작성" }, { text: "AI가 짠 구현 계획 확인" }, { text: "작업 범위 할당" }, { text: "eval 기준 작성" }],
+    } },
     { name: "Content Agent", caption: "글은 제가 쓰고, 옮기고 꾸미는 반복은 파이프라인이 합니다. 잘못된 글이 나가느니 멈추는 쪽을 택했습니다.", items: {
       ai: [{ text: "교재 문체를 블로그 문체로 각색", tool: "Claude" }, { text: "썸네일 이미지 생성", tool: "Gemini" }],
       code: [{ text: "제목·HTML 구조·X 초안은 로컬 규칙" }, { text: "코드 블록·이미지 표식이 빠지면 발행 중단" }, { text: "티스토리·X 발행과 실행 로그 기록" }],
@@ -755,7 +760,7 @@ export const activities = [
   },
   {
     "name": "기술 블로그",
-    "why": "Docker·Kubernetes·CI/CD 학습 내용을 정리해 Content Agent로 발행",
+    "why": "Docker·Kubernetes·CI/CD 학습 내용을 정리했습니다. 6편은 Content Agent로 발행했고, 이후로는 피드 글 작성에 집중하고 있습니다",
     "now": "thisnorm.tistory.com",
     "href": "https://thisnorm.tistory.com"
   }
