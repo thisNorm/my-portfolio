@@ -4,7 +4,6 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { siteDescription, siteTitle, siteUrl } from "./site";
-import { themeBootstrap } from "./components/themePreference";
 
 const sans = localFont({ src: "./fonts/PretendardVariable.woff2", display: "swap", weight: "45 920", variable: "--font-sans" });
 
@@ -46,10 +45,9 @@ export default function RootLayout({
   const allowLocalhost = process.env.NODE_ENV !== "production";
 
   return (
-    <html lang="ko" data-theme="light" data-palette="paper" suppressHydrationWarning>
+    <html lang="ko">
       <head>
-        <meta name="theme-color" content="#e9e6dd" suppressHydrationWarning />
-        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+        <meta name="theme-color" content="#f4f2eb" />
       </head>
       <body className={`${sans.className} ${sans.variable}`}>
         {/* ✅ 기존 <script defer ...>와 동일 목적: 분석 스크립트 주입 */}
