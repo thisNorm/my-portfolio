@@ -21,6 +21,11 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
   },
 
+  // Naver Search Advisor ownership check for https://www.thisnorm.dev.
+  verification: {
+    other: { "naver-site-verification": "46bf9f80117c182f1a6326a9549ad9ca758ff9a1" },
+  },
+
   openGraph: {
     title: siteTitle,
     description: siteDescription,

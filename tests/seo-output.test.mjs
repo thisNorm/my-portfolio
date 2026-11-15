@@ -32,6 +32,7 @@ test("home page emits consistent indexable metadata", async () => {
   assert.equal(meta(html, "name", "twitter:title"), title);
   assert.ok(meta(html, "property", "og:image")?.startsWith(`${origin}/opengraph-image`));
   assert.ok(meta(html, "name", "twitter:image")?.startsWith(`${origin}/opengraph-image`));
+  assert.equal(meta(html, "name", "naver-site-verification"), "46bf9f80117c182f1a6326a9549ad9ca758ff9a1");
   assert.doesNotMatch(html, MOJIBAKE);
 });
 
